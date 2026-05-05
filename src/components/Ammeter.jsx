@@ -1,39 +1,46 @@
+import a1Img from '../assets/A1.png'
+import a2Img from '../assets/A2.png'
+import a3Img from '../assets/A3.png'
+import needleImg from '../assets/needle.png'
+
 const meterMax = {
   A1: 5,
   A2: 2.5,
   A3: 2.5,
 }
 
-const scaleMarks = ['0', '1', '2', '3', '4', '5']
+const ammeterImages = {
+  A1: a1Img,
+  A2: a2Img,
+  A3: a3Img,
+}
 
-const Ammeter = ({ label, value }) => {
-  const ratio = Math.min(Math.max(value / meterMax[label], 0), 1)
+const Ammeter = ({ label, value = 0 }) => {
+  const max = meterMax[label] || 5
+
+  const ratio = Math.min(Math.max(value / max, 0), 1)
   const angle = 180 + ratio * 180
 
   return (
-    <article aria-label={`${label} ammeter`} className="ammeter">
-      <div className="ammeter__title">AMMETER</div>
-      <div className="ammeter__face">
-        <div className="ammeter__gauge">
-          {scaleMarks.map((mark) => (
-            <span className={`ammeter__mark ammeter__mark--${mark}`} key={mark}>
-              {mark}
-            </span>
-          ))}
-        </div>
-        <div
-          aria-hidden="true"
-          className="ammeter__needle"
-          style={{ '--needle-angle': `${angle}deg` }}
+    <article className={`ammeter ammeter--${label}`} aria-label={`${label} ammeter`}>
+      <img
+        src={ammeterImages[label]}
+        alt={`${label} ammeter`}
+        className="ammeter__image"
+      />
+
+      <div
+        className="ammeter__needle"
+        style={{
+          transform: `rotate(${angle}deg)`,
+        }}
+      >
+        <img
+          src={needleImg}
+          alt="Needle"
+          className="ammeter__needle-image"
         />
-        <div aria-hidden="true" className="ammeter__pivot" />
-        <div className="ammeter__name">{label}</div>
-        <div className="ammeter__terminal ammeter__terminal--plus" />
-        <div className="ammeter__terminal ammeter__terminal--minus" />
-        <span className="ammeter__polarity ammeter__polarity--plus">+</span>
-        <span className="ammeter__polarity ammeter__polarity--minus">-</span>
       </div>
-      <span className="ammeter__value">{value.toFixed(2)} A</span>
     </article>
   )
 }

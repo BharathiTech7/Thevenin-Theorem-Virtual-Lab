@@ -13,8 +13,6 @@ const terminalLabels = [
 
 const CircuitDiagram = ({ r1, r2, r3 }) => (
   <section className="circuit-panel">
-    <h2 className="circuit-panel__title">CIRCUIT DIAGRAM</h2>
-
     <div className="circuit-panel__stage">
       <img alt="Kirchhoff current law circuit diagram" className="circuit-panel__image" src={circuitImage} />
 

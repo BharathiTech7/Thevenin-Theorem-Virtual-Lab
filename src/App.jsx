@@ -12,13 +12,18 @@ import { calculateReadings } from './utils/circuitMath.js'
 
 const BASE_WIDTH = 1440
 const BASE_HEIGHT = 960
+const PANEL_MAX_SCALE = 0.9
+const PANEL_VIEWPORT_MARGIN = 24
 
 const getScale = () => {
   if (typeof window === 'undefined') {
     return 1
   }
 
-  return window.innerWidth / BASE_WIDTH
+  const widthScale = (window.innerWidth - PANEL_VIEWPORT_MARGIN) / BASE_WIDTH
+  const heightScale = (window.innerHeight - PANEL_VIEWPORT_MARGIN) / BASE_HEIGHT
+
+  return Math.max(Math.min(widthScale, heightScale, PANEL_MAX_SCALE), 0.1)
 }
 
 const App = () => {
