@@ -34,6 +34,18 @@ export const PrintIcon = () => (
     <path d="M21 16h2" stroke="currentColor" strokeLinecap="round" strokeWidth="2.8" />
   </svg>
 )
+export const AutoConnectIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 32 32">
+    <path d="M10 12V6h12v6M10 22H7v-8h18v8h-3M10 18h12v8H10z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2.8" />
+    <path d="M21 16h2" stroke="currentColor" strokeLinecap="round" strokeWidth="2.8" />
+  </svg>
+)
+export const AiGuide = () => (
+  <svg aria-hidden="true" viewBox="0 0 32 32">
+    <path d="M10 12V6h12v6M10 22H7v-8h18v8h-3M10 18h12v8H10z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2.8" />
+    <path d="M21 16h2" stroke="currentColor" strokeLinecap="round" strokeWidth="2.8" />
+  </svg>
+)
 
 export const SlidersIcon = () => (
   <svg aria-hidden="true" viewBox="0 0 32 32">

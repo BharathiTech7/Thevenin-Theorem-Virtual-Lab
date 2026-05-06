@@ -1,6 +1,8 @@
 import SectionCard from './SectionCard.jsx'
 import {
   AddIcon,
+  AiGuide,
+  AutoConnectIcon,
   CheckIcon,
   PlotIcon,
   PrintIcon,
@@ -12,52 +14,74 @@ const buttons = [
     label: 'CHECK',
     tone: 'action-button--green',
     Icon: CheckIcon,
-    handler: 'onCheck',
+    handlerName: 'onCheck',
   },
   {
     label: 'ADD',
     tone: 'action-button--blue',
     Icon: AddIcon,
-    handler: 'onAdd',
+    handlerName: 'onAdd',
   },
   {
     label: 'PLOT',
     tone: 'action-button--orange',
     Icon: PlotIcon,
-    handler: 'onPlot',
+    handlerName: 'onPlot',
   },
   {
     label: 'RESET',
     tone: 'action-button--red',
     Icon: ResetIcon,
-    handler: 'onReset',
+    handlerName: 'onReset',
   },
   {
     label: 'PRINT',
     tone: 'action-button--purple',
     Icon: PrintIcon,
-    handler: 'onPrint',
+    handlerName: 'onPrint',
+  },
+  {
+    label: 'AUTO CONNECT',
+    tone: 'action-button--teal',
+    Icon: AutoConnectIcon,
+    handlerName: 'onAutoConnect',
+  },
+  {
+    label: 'AI GUIDE',
+    tone: 'action-button--cyan',
+    Icon: AiGuide,
+    handlerName: 'onAiGuide',
   },
 ]
 
-const ActionButtons = ({ onAdd, onCheck, onPlot, onPrint, onReset }) => {
+const ActionButtons = ({
+  onAdd,
+  onCheck,
+  onPlot,
+  onPrint,
+  onReset,
+  onAutoConnect,
+  onAiGuide,
+}) => {
   const handlers = {
     onAdd,
     onCheck,
     onPlot,
     onPrint,
     onReset,
+    onAutoConnect,
+    onAiGuide,
   }
 
   return (
-    <SectionCard className="h-[154px]" icon="buttons" title="ACTION BUTTONS">
-      <div className="flex h-full items-center justify-between px-[22px] pt-[18px]">
-        {buttons.map(({ label, tone, Icon, handler }) => (
+    <SectionCard className="h-[176px]" icon="buttons" title="ACTION BUTTONS">
+      <div className="action-buttons__grid">
+        {buttons.map(({ label, tone, Icon, handlerName }) => (
           <button
-            className={`action-button ${tone}`}
             key={label}
-            onClick={handlers[handler]}
             type="button"
+            className={`action-button ${tone}`}
+            onClick={handlers[handlerName]}
           >
             <Icon />
             <span>{label}</span>

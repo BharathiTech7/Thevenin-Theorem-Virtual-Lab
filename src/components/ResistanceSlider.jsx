@@ -19,9 +19,7 @@ const ResistanceSlider = ({ label, onChange, value }) => (
       />
     </div>
 
-    <output className="resistance-slider__value" htmlFor={`${label}-slider`}>
-      {value}
-    </output>
+    
   </div>
 )
 

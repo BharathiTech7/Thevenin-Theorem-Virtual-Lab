@@ -13,7 +13,31 @@ const PowerSupply = ({ powerOn, setPowerOn, setVoltage, voltage }) => {
       />
 
       <div className="power-supply__display">{displayedVoltage.toFixed(1)} V</div>
+      <span
+        id="1-endpoint"
+        className="connection-terminal connection-terminal--power connection-terminal--power-plus"
+        data-polarity="plus"
+        aria-label="Power supply positive terminal 1"
+      />
+      <span
+        className="terminal-number-label terminal-number-label--power-plus"
+        data-terminal-id="1-endpoint"
+      >
+        1
+      </span>
 
+      <span
+        id="2-endpoint"
+        className="connection-terminal connection-terminal--power connection-terminal--power-minus"
+        data-polarity="minus"
+        aria-label="Power supply negative terminal 2"
+      />
+      <span
+        className="terminal-number-label terminal-number-label--power-minus"
+        data-terminal-id="2-endpoint"
+      >
+        2
+      </span>
       <button
         aria-label={powerOn ? 'Switch power supply off' : 'Switch power supply on'}
         aria-pressed={powerOn}
@@ -27,14 +51,15 @@ const PowerSupply = ({ powerOn, setPowerOn, setVoltage, voltage }) => {
         <input
           aria-label="Voltage"
           className="voltage-range"
-          max="30"
+          max="20"
           min="0"
           onChange={(event) => setVoltage(Number(event.target.value))}
           step="0.5"
           type="range"
           value={voltage}
         />
-      </label>
+        </label>
+        
     </article>
   )
 }

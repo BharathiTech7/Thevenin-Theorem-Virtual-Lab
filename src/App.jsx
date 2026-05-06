@@ -1,17 +1,19 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import './App.css'
-
+import ConnectionLab from './components/ConnectionLab.jsx'
 import ActionButtons from './components/ActionButtons.jsx'
-import CircuitDiagram from './components/CircuitDiagram.jsx'
 import ControlPanel from './components/ControlPanel.jsx'
-import EquipmentPanel from './components/EquipmentPanel.jsx'
+import GraphPanel from './components/GraphPanel.jsx'
 import HeaderBoard from './components/HeaderBoard.jsx'
 import InstructionsTab from './components/InstructionsTab.jsx'
-import StatusBar from './components/StatusBar.jsx'
+ 
 import { calculateReadings } from './utils/circuitMath.js'
 
 const BASE_WIDTH = 1440
 const BASE_HEIGHT = 960
+const GRAPH_SECTION_GAP = 28
+const GRAPH_SECTION_HEIGHT = 430
+const CONTENT_HEIGHT = BASE_HEIGHT + GRAPH_SECTION_GAP + GRAPH_SECTION_HEIGHT
 const PANEL_MAX_SCALE = 0.9
 const PANEL_VIEWPORT_MARGIN = 24
 
@@ -34,7 +36,13 @@ const App = () => {
   const [voltage, setVoltage] = useState(10)
   const [powerOn, setPowerOn] = useState(false)
   const [observations, setObservations] = useState([])
-  const [status, setStatus] = useState('Adjust the sliders, click CHECK and observe the readings.')
+  const [showGraph, setShowGraph] = useState(false)
+  const [, setStatus] = useState('Adjust the sliders, click CHECK and observe the readings.')
+
+  const [autoConnect, setAutoConnect] = useState(false)
+  const [checkRequest, setCheckRequest] = useState(0)
+  const [resetRequest, setResetRequest] = useState(0)
+  const [, setConnectionsVerified] = useState(false)
 
   useEffect(() => {
     const handleResize = () => setScale(getScale())
@@ -68,20 +76,25 @@ const App = () => {
   }
 
   const resetSimulation = () => {
+    setPowerOn(false)
+    setVoltage(10)
     setR1(10)
     setR2(10)
     setR3(10)
-    setVoltage(10)
-    setPowerOn(false)
     setObservations([])
-    setStatus('Adjust the sliders, click CHECK and observe the readings.')
+    setShowGraph(false)
+    setAutoConnect(false)
+    setCheckRequest(0)
+    setConnectionsVerified(false)
+    setResetRequest((current) => current + 1)
+    setStatus('Simulation reset. Make the circuit connections again.')
   }
-
   const handlePlot = () => {
+    setShowGraph(true)
     setStatus(
       observations.length
-        ? 'Observation data is ready for plotting.'
-        : 'Add at least one observation before plotting.',
+        ? 'Observation graph section opened.'
+        : 'Graph section opened. Add observations to plot readings.',
     )
   }
 
@@ -89,56 +102,105 @@ const App = () => {
     window.print()
   }
 
-  const scaledHeight = Math.ceil(BASE_HEIGHT * scale)
+  const scaledWidth = Math.ceil(BASE_WIDTH * scale)
+  const scaledHeight = Math.ceil(CONTENT_HEIGHT * scale)
+  const handleCheckConnections = useCallback((result) => {
+  if (result.isCorrect) {
+    setConnectionsVerified(true)
 
+    setStatus(
+      'Right connections! Please choose resistance values and switch on the power supply.',
+    )
+
+    return
+  }
+
+  setConnectionsVerified(false)
+
+  if (result.totalConnections === 0) {
+    setStatus('Please make the connections first.')
+    return
+  }
+
+  setStatus(
+    `Invalid connections. Correct matched points: ${result.matchedCount}; total wires: ${result.totalConnections}.`,
+  )
+}, [])
+
+const handleCheck = () => {
+  setCheckRequest((current) => current + 1)
+}
+const handleAutoConnect = () => {
+  setAutoConnect(true)
+  setConnectionsVerified(false)
+
+  setStatus(
+    'Default connections added using jsPlumb. Click CHECK to validate and lock the circuit.',
+  )
+}
   return (
-    <div id="app-wrapper" style={{ height: `${scaledHeight}px` }}>
+    <div id="app-wrapper">
       <div
-        id="app-scale"
+        id="app-viewport"
         style={{
-          transform: `scale(${scale})`,
+          height: `${scaledHeight}px`,
+          width: `${scaledWidth}px`,
         }}
       >
-        <main className="simulation-shell">
-          <HeaderBoard />
-          <InstructionsTab />
+        <div
+          id="app-scale"
+          style={{
+            transform: `scale(${scale})`,
+          }}
+        >
+          <main className="simulation-shell">
+            <HeaderBoard />
+            <InstructionsTab />
 
-          <section className="workspace-grid">
-            <aside className="left-panel">
+            <section className="workspace-grid">
+              <aside className="left-panel">
               <ActionButtons
                 onAdd={() => recordObservation('add')}
-                onCheck={() => recordObservation('check')}
+                onCheck={handleCheck}
                 onPlot={handlePlot}
                 onPrint={handlePrint}
                 onReset={resetSimulation}
+                onAutoConnect={handleAutoConnect}
               />
 
-              <ControlPanel
-                observations={observations}
-                r1={r1}
-                r2={r2}
-                r3={r3}
-                setR1={setR1}
-                setR2={setR2}
-                setR3={setR3}
-              />
-            </aside>
+                <ControlPanel
+                  observations={observations}
+                  r1={r1}
+                  r2={r2}
+                  r3={r3}
+                  setR1={setR1}
+                  setR2={setR2}
+                  setR3={setR3}
+                />
+              </aside>
 
-            <section className="right-panel">
-              <EquipmentPanel
-                powerOn={powerOn}
-                readings={readings}
-                setPowerOn={setPowerOn}
-                setVoltage={setVoltage}
-                voltage={voltage}
-              />
-
-              <CircuitDiagram r1={r1} r2={r2} r3={r3} />
+              <section className="right-panel">
+                <ConnectionLab
+                  autoConnect={autoConnect}
+                  checkRequest={checkRequest}
+                  onCheckConnections={handleCheckConnections}
+                  powerOn={powerOn}
+                  r1={r1}
+                  r2={r2}
+                  r3={r3}
+                  readings={readings}
+                  resetRequest={resetRequest}
+                  setPowerOn={setPowerOn}
+                  setVoltage={setVoltage}
+                  voltage={voltage}
+                />
+              </section>
             </section>
-          </section>
 
-          <StatusBar status={status} />
-        </main>
+          </main>
+
+          <GraphPanel className="graph-panel--separate" plotted={showGraph} />
+        </div>
       </div>
     </div>
   )
