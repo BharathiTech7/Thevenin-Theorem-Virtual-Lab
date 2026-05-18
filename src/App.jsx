@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import './App.css'
+import './ConnectionEndpoints.css'
 import ConnectionLab from './components/ConnectionLab.jsx'
 import ActionButtons from './components/ActionButtons.jsx'
 import ControlPanel from './components/ControlPanel.jsx'
@@ -8,7 +9,7 @@ import HeaderBoard from './components/HeaderBoard.jsx'
 import InstructionsTab from './components/InstructionsTab.jsx'
  
 import { calculateReadings } from './utils/circuitMath.js'
-
+ 
 const BASE_WIDTH = 1440
 const BASE_HEIGHT = 960
 const GRAPH_SECTION_GAP = 28

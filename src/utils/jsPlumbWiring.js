@@ -128,33 +128,107 @@ const terminalPaintStyles = {
   },
 }
 
-export const wirePaintStyles = {
+const terminalHoverPaintStyles = {
   positive: {
-    outlineStroke: '#0a2c72',
-    outlineWidth: 1.2,
-    stroke: '#1f6fe6',
-    strokeWidth: 4.8,
+    fill: '#2a7cff',
+    outlineStroke: '#ffffff',
+    outlineWidth: 2.4,
+    stroke: '#082767',
+    strokeWidth: 1.6,
   },
   negative: {
-    outlineStroke: '#7a1812',
-    outlineWidth: 1.2,
-    stroke: '#df342c',
-    strokeWidth: 4.8,
+    fill: '#ff4a3d',
+    outlineStroke: '#ffffff',
+    outlineWidth: 2.4,
+    stroke: '#81130f',
+    strokeWidth: 1.6,
+  },
+}
+
+const getTerminalNumber = (terminalId) => terminalId.replace('-endpoint', '')
+
+const getCssValue = (styles, propertyName, fallback) => {
+  const value = styles.getPropertyValue(propertyName).trim()
+
+  return value || fallback
+}
+
+const getCssNumber = (styles, propertyName, fallback) => {
+  const value = Number.parseFloat(styles.getPropertyValue(propertyName))
+
+  return Number.isFinite(value) ? value : fallback
+}
+
+const getEndpointPaintStyle = (element, type, state = 'default') => {
+  const styles = window.getComputedStyle(element)
+  const prefix = state === 'hover' ? '--jtk-endpoint-hover' : '--jtk-endpoint'
+  const defaults = state === 'hover'
+    ? terminalHoverPaintStyles[type]
+    : terminalPaintStyles[type]
+
+  return {
+    fill: getCssValue(styles, `${prefix}-fill`, defaults.fill),
+    outlineStroke: getCssValue(
+      styles,
+      `${prefix}-outline-stroke`,
+      defaults.outlineStroke,
+    ),
+    outlineWidth: getCssNumber(
+      styles,
+      `${prefix}-outline-width`,
+      defaults.outlineWidth,
+    ),
+    stroke: getCssValue(styles, `${prefix}-stroke`, defaults.stroke),
+    strokeWidth: getCssNumber(
+      styles,
+      `${prefix}-stroke-width`,
+      defaults.strokeWidth,
+    ),
+  }
+}
+
+const getEndpointRadius = (element) => (
+  getCssNumber(window.getComputedStyle(element), '--jtk-endpoint-radius', 5)
+)
+
+const getEndpointCssClass = (terminalId, type) => {
+  const terminalNumber = getTerminalNumber(terminalId)
+
+  return [
+    'jtk-endpoint--terminal',
+    `jtk-endpoint--terminal-${terminalNumber}`,
+    `jtk-endpoint--${terminalId}`,
+    `jtk-endpoint--${type}`,
+  ].join(' ')
+}
+
+export const wirePaintStyles = {
+  positive: {
+    outlineStroke: '#07306e',
+    outlineWidth: 1.15,
+    stroke: '#1f73e6',
+    strokeWidth: 4.6,
+  },
+  negative: {
+    outlineStroke: '#771914',
+    outlineWidth: 1.15,
+    stroke: '#dd342d',
+    strokeWidth: 4.6,
   },
 }
 
 export const wireHoverPaintStyles = {
   positive: {
-    outlineStroke: '#08265f',
-    outlineWidth: 1.5,
-    stroke: '#3384ff',
-    strokeWidth: 5.4,
+    outlineStroke: '#052357',
+    outlineWidth: 1.35,
+    stroke: '#3a8aff',
+    strokeWidth: 5,
   },
   negative: {
-    outlineStroke: '#64120d',
-    outlineWidth: 1.5,
-    stroke: '#f04a40',
-    strokeWidth: 5.4,
+    outlineStroke: '#5d110d',
+    outlineWidth: 1.35,
+    stroke: '#f04a42',
+    strokeWidth: 5,
   },
 }
 
@@ -185,7 +259,8 @@ export const addTerminalEndpoint = (instance, terminalId, type) => {
 
   instance.addEndpoint(element, {
     uuid: terminalId,
-    endpoint: 'Dot',
+    endpoint: ['Dot', { radius: getEndpointRadius(element) }],
+    cssClass: getEndpointCssClass(terminalId, type),
     anchor: ['Center'],
     isSource: true,
     isTarget: true,
@@ -194,16 +269,8 @@ export const addTerminalEndpoint = (instance, terminalId, type) => {
     connectorStyle: wirePaintStyles[type],
     connectorHoverStyle: wireHoverPaintStyles[type],
     maxConnections: 1,
-    paintStyle: {
-      ...terminalPaintStyles[type],
-    },
-    hoverPaintStyle: {
-      fill: type === 'negative' ? '#ff4a3d' : '#2a7cff',
-      outlineStroke: '#ffffff',
-      outlineWidth: 2.4,
-      stroke: type === 'negative' ? '#81130f' : '#082767',
-      strokeWidth: 1.6,
-    },
+    paintStyle: getEndpointPaintStyle(element, type),
+    hoverPaintStyle: getEndpointPaintStyle(element, type, 'hover'),
   })
 }
 

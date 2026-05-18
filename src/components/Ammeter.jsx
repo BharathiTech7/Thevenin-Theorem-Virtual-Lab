@@ -37,26 +37,30 @@ const Ammeter = ({ label, value = 0 }) => {
 
       <span
         id={`${terminals.positive}-endpoint`}
-        className="connection-terminal connection-terminal--meter connection-terminal--meter-plus"
+        className={`connection-terminal connection-terminal--meter connection-terminal--meter-plus connection-terminal--endpoint-${terminals.positive}`}
         data-polarity="plus"
         aria-label={`${label} positive terminal ${terminals.positive}`}
+        title={`${label} positive (${terminals.positive}-endpoint)`}
       />
       <span
-        className="terminal-number-label terminal-number-label--meter-plus"
+        className={`terminal-number-label terminal-number-label--meter-plus terminal-number-label--endpoint-${terminals.positive}`}
         data-terminal-id={`${terminals.positive}-endpoint`}
+        title={`${label} positive (${terminals.positive}-endpoint)`}
       >
         {terminals.positive}
       </span>
 
       <span
         id={`${terminals.negative}-endpoint`}
-        className="connection-terminal connection-terminal--meter connection-terminal--meter-minus"
+        className={`connection-terminal connection-terminal--meter connection-terminal--meter-minus connection-terminal--endpoint-${terminals.negative}`}
         data-polarity="minus"
         aria-label={`${label} negative terminal ${terminals.negative}`}
+        title={`${label} negative (${terminals.negative}-endpoint)`}
       />
       <span
-        className="terminal-number-label terminal-number-label--meter-minus"
+        className={`terminal-number-label terminal-number-label--meter-minus terminal-number-label--endpoint-${terminals.negative}`}
         data-terminal-id={`${terminals.negative}-endpoint`}
+        title={`${label} negative (${terminals.negative}-endpoint)`}
       >
         {terminals.negative}
       </span>

@@ -15,26 +15,30 @@ const PowerSupply = ({ powerOn, setPowerOn, setVoltage, voltage }) => {
       <div className="power-supply__display">{displayedVoltage.toFixed(1)} V</div>
       <span
         id="1-endpoint"
-        className="connection-terminal connection-terminal--power connection-terminal--power-plus"
+        className="connection-terminal connection-terminal--power connection-terminal--power-plus connection-terminal--endpoint-1"
         data-polarity="plus"
         aria-label="Power supply positive terminal 1"
+        title="Power positive (1-endpoint)"
       />
       <span
-        className="terminal-number-label terminal-number-label--power-plus"
+        className="terminal-number-label terminal-number-label--power-plus terminal-number-label--endpoint-1"
         data-terminal-id="1-endpoint"
+        title="Power positive (1-endpoint)"
       >
         1
       </span>
 
       <span
         id="2-endpoint"
-        className="connection-terminal connection-terminal--power connection-terminal--power-minus"
+        className="connection-terminal connection-terminal--power connection-terminal--power-minus connection-terminal--endpoint-2"
         data-polarity="minus"
         aria-label="Power supply negative terminal 2"
+        title="Power negative (2-endpoint)"
       />
       <span
-        className="terminal-number-label terminal-number-label--power-minus"
+        className="terminal-number-label terminal-number-label--power-minus terminal-number-label--endpoint-2"
         data-terminal-id="2-endpoint"
+        title="Power negative (2-endpoint)"
       >
         2
       </span>
