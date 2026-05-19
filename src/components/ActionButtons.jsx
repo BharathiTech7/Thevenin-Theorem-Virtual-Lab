@@ -55,6 +55,7 @@ const buttons = [
 ]
 
 const ActionButtons = ({
+  disabledButtons = {},
   onAdd,
   onCheck,
   onPlot,
@@ -76,17 +77,23 @@ const ActionButtons = ({
   return (
     <SectionCard className="h-[176px]" icon="buttons" title="ACTION BUTTONS">
       <div className="action-buttons__grid">
-        {buttons.map(({ label, tone, Icon, handlerName }) => (
-          <button
-            key={label}
-            type="button"
-            className={`action-button ${tone}`}
-            onClick={handlers[handlerName]}
-          >
-            <Icon />
-            <span>{label}</span>
-          </button>
-        ))}
+        {buttons.map(({ label, tone, Icon, handlerName }) => {
+          const handler = handlers[handlerName]
+          const isDisabled = !handler || disabledButtons[handlerName]
+
+          return (
+            <button
+              key={label}
+              type="button"
+              className={`action-button ${tone}`}
+              disabled={isDisabled}
+              onClick={handler}
+            >
+              <Icon />
+              <span>{label}</span>
+            </button>
+          )
+        })}
       </div>
     </SectionCard>
   )

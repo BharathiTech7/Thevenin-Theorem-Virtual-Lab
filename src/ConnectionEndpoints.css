@@ -1,5 +1,5 @@
 .connection-lab .jtk-connector {
-  z-index: 52 !important;
+  z-index: 48 !important;
 }
 
 .connection-lab .jtk-overlay {
@@ -7,7 +7,11 @@
 }
 
 .connection-lab .jtk-endpoint {
-  z-index: 18 !important;
+  z-index: 46 !important;
+}
+
+.connection-lab .connection-terminal {
+  z-index: 70 !important;
 }
 
 .connection-lab .jtk-connector {
@@ -217,26 +221,27 @@
   --endpoint-accent: #64748b;
   --endpoint-accent-rgb: 100, 116, 139;
   position: absolute;
-  z-index: 60;
+  z-index: 120 !important;
   display: grid;
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   place-items: center;
   padding: 0;
-  border: 1px solid rgba(var(--endpoint-neutral-rgb), 0.24);
+  border: 2px solid rgba(var(--endpoint-neutral-rgb), 0.34);
   border-radius: 999px;
-  color: #334155;
+  color: #172033;
   background:
-    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.95) 0 18%, transparent 19%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(226, 236, 246, 0.96));
-  font-size: 11px;
+    radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 1) 0 18%, transparent 19%),
+    linear-gradient(145deg, #ffffff, #edf5ff);
+  font-size: 11.5px;
   font-weight: 900;
   letter-spacing: 0;
   line-height: 1;
   user-select: none;
   cursor: pointer;
   box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.18),
+    0 0 0 3px rgba(255, 255, 255, 0.94),
+    0 3px 8px rgba(15, 23, 42, 0.26),
     inset 1px 1px 1px rgba(255, 255, 255, 0.94),
     inset -1px -1px 2px rgba(15, 23, 42, 0.06);
   transform: translateX(-50%);
@@ -250,7 +255,7 @@
 
 .terminal-number-label::before {
   position: absolute;
-  inset: 3px;
+  inset: 4px;
   content: "";
   pointer-events: none;
   border: 1px solid rgba(var(--endpoint-neutral-rgb), 0.18);
@@ -314,10 +319,10 @@
   background:
     linear-gradient(145deg, #ffffff, #eef4fa);
   box-shadow:
-    -2px -2px 5px rgba(255, 255, 255, 0.78),
-    3px 5px 10px rgba(15, 23, 42, 0.18),
+    0 0 0 3px rgba(255, 255, 255, 0.94),
+    0 4px 12px rgba(15, 23, 42, 0.24),
     inset 0 1px 1px rgba(255, 255, 255, 0.94),
-    0 0 0 3px rgba(var(--endpoint-accent-rgb), 0.12),
+    0 0 0 6px rgba(var(--endpoint-accent-rgb), 0.12),
     0 0 12px rgba(var(--endpoint-accent-rgb), 0.18);
 }
 
@@ -328,8 +333,8 @@
 */
 .connection-lab .jtk-endpoint--terminal-1,
 .connection-terminal--endpoint-1 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -17px;
+  --jtk-endpoint-offset-x: 1px;
+  --jtk-endpoint-offset-y: -14px;
 }
 
 .connection-terminal--endpoint-1 {
@@ -339,8 +344,8 @@
 
 .connection-lab .jtk-endpoint--terminal-2,
 .connection-terminal--endpoint-2 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -17px;
+  --jtk-endpoint-offset-x: 1px;
+  --jtk-endpoint-offset-y: -14px;
 }
 
 .connection-terminal--endpoint-2 {
@@ -350,74 +355,74 @@
 
 .connection-lab .jtk-endpoint--terminal-3,
 .connection-terminal--endpoint-3 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -1px;
+  --jtk-endpoint-offset-x: -8px;
+  --jtk-endpoint-offset-y: -11px;
 }
 
 .connection-terminal--endpoint-3 {
   --terminal-base-top: 168px;
-  --terminal-base-left: 56px;
+  --terminal-base-left: 66px;
 }
 
 .connection-lab .jtk-endpoint--terminal-4,
 .connection-terminal--endpoint-4 {
-  --jtk-endpoint-offset-x: -22px;
-  --jtk-endpoint-offset-y: -2px;
+  --jtk-endpoint-offset-x: -30px;
+  --jtk-endpoint-offset-y: -11.5px;
 }
 
 .connection-terminal--endpoint-4 {
   --terminal-base-top: 168px;
-  --terminal-base-left: 120px;
+  --terminal-base-left: 142px;
 }
 
 .connection-lab .jtk-endpoint--terminal-5,
 .connection-terminal--endpoint-5 {
   --jtk-endpoint-offset-x: -3px;
-  --jtk-endpoint-offset-y: -1px;
+  --jtk-endpoint-offset-y: -5px;
 }
 
 .connection-terminal--endpoint-5 {
   --terminal-base-top: 166px;
-  --terminal-base-left: 55px;
+  --terminal-base-left: 65px;
 }
 
 .connection-lab .jtk-endpoint--terminal-6,
 .connection-terminal--endpoint-6 {
-  --jtk-endpoint-offset-x: -17px;
-  --jtk-endpoint-offset-y: -3px;
+  --jtk-endpoint-offset-x: -20px;
+  --jtk-endpoint-offset-y: -6px;
 }
 
 .connection-terminal--endpoint-6 {
   --terminal-base-top: 167px;
-  --terminal-base-left: 120px;
+  --terminal-base-left: 142px;
 }
 
 .connection-lab .jtk-endpoint--terminal-7,
 .connection-terminal--endpoint-7 {
   --jtk-endpoint-offset-x: -1px;
-  --jtk-endpoint-offset-y: -1px;
+  --jtk-endpoint-offset-y: -6px;
 }
 
 .connection-terminal--endpoint-7 {
   --terminal-base-top: 169px;
-  --terminal-base-left: 53px;
+  --terminal-base-left: 63px;
 }
 
 .connection-lab .jtk-endpoint--terminal-8,
 .connection-terminal--endpoint-8 {
-  --jtk-endpoint-offset-x: -18px;
-  --jtk-endpoint-offset-y: 3px;
+  --jtk-endpoint-offset-x: -21px;
+  --jtk-endpoint-offset-y: -5px;
 }
 
 .connection-terminal--endpoint-8 {
   --terminal-base-top: 167px;
-  --terminal-base-left: 120px;
+  --terminal-base-left: 142px;
 }
 
 .connection-lab .jtk-endpoint--terminal-9,
 .connection-terminal--endpoint-9 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -17px;
+  --jtk-endpoint-offset-x: -11px;
+  --jtk-endpoint-offset-y: -19px;
 }
 
 .connection-terminal--endpoint-9 {
@@ -427,8 +432,8 @@
 
 .connection-lab .jtk-endpoint--terminal-10,
 .connection-terminal--endpoint-10 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -17px;
+  --jtk-endpoint-offset-x: -11px;
+  --jtk-endpoint-offset-y: -19px;
 }
 
 .connection-terminal--endpoint-10 {
@@ -438,8 +443,8 @@
 
 .connection-lab .jtk-endpoint--terminal-11,
 .connection-terminal--endpoint-11 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -17px;
+  --jtk-endpoint-offset-x: -11px;
+  --jtk-endpoint-offset-y: -19px;
 }
 
 .connection-terminal--endpoint-11 {
@@ -449,8 +454,8 @@
 
 .connection-lab .jtk-endpoint--terminal-12,
 .connection-terminal--endpoint-12 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -17px;
+  --jtk-endpoint-offset-x: -11px;
+  --jtk-endpoint-offset-y: -19px;
 }
 
 .connection-terminal--endpoint-12 {
@@ -460,8 +465,8 @@
 
 .connection-lab .jtk-endpoint--terminal-13,
 .connection-terminal--endpoint-13 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -17px;
+  --jtk-endpoint-offset-x: -11px;
+  --jtk-endpoint-offset-y: -19px;
 }
 
 .connection-terminal--endpoint-13 {
@@ -471,8 +476,8 @@
 
 .connection-lab .jtk-endpoint--terminal-14,
 .connection-terminal--endpoint-14 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -17px;
+  --jtk-endpoint-offset-x: -11px;
+  --jtk-endpoint-offset-y: -19px;
 }
 
 .connection-terminal--endpoint-14 {
@@ -482,8 +487,8 @@
 
 .connection-lab .jtk-endpoint--terminal-15,
 .connection-terminal--endpoint-15 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -17px;
+  --jtk-endpoint-offset-x: -11px;
+  --jtk-endpoint-offset-y: -19px;
 }
 
 .connection-terminal--endpoint-15 {
@@ -493,8 +498,8 @@
 
 .connection-lab .jtk-endpoint--terminal-16,
 .connection-terminal--endpoint-16 {
-  --jtk-endpoint-offset-x: -10px;
-  --jtk-endpoint-offset-y: -17px;
+  --jtk-endpoint-offset-x: -11px;
+  --jtk-endpoint-offset-y: -19px;
 }
 
 .connection-terminal--endpoint-16 {
@@ -521,58 +526,58 @@
 
 /* Adjust each terminal number label here. */
 .terminal-number-label--endpoint-1 {
-  top: 165px;
-  left: 54px;
+  top: 175px;
+  left: 68px;
 }
 
 .terminal-number-label--endpoint-2 {
-  top: 165px;
-  left: 95px;
+  top: 175px;
+  left: 109px;
 }
 
 .terminal-number-label--endpoint-3 {
   top: 190px;
-  left: 57px;
+  left: 68px;
 }
 
 .terminal-number-label--endpoint-4 {
   top: 190px;
-  left: 105px;
+  left: 120px;
 }
 
 .terminal-number-label--endpoint-5 {
   top: 190px;
-  left: 61px;
+  left: 72px;
 }
 
 .terminal-number-label--endpoint-6 {
   top: 190px;
-  left: 112px;
+  left: 132px;
 }
 
 .terminal-number-label--endpoint-7 {
-  top: 190px;
-  left: 61px;
+  top: 195px;
+  left: 72px;
 }
 
 .terminal-number-label--endpoint-8 {
-  top: 190px;
-  left: 112px;
+  top: 195px;
+  left: 130px;
 }
 
 .terminal-number-label--endpoint-9 {
   top: 107px;
-  left: 40px;
+  left: 35px;
 }
 
 .terminal-number-label--endpoint-10 {
   top: 155px;
-  left: 40px;
+  left: 35px;
 }
 
 .terminal-number-label--endpoint-11 {
   top: -40px;
-  left: 162px;
+  left: 165px;
 }
 
 .terminal-number-label--endpoint-12 {
@@ -582,17 +587,17 @@
 
 .terminal-number-label--endpoint-13 {
   top: 92px;
-  left: 430px;
+  left: 440px;
 }
 
 .terminal-number-label--endpoint-14 {
   top: 137px;
-  left: 430px;
+  left: 440px;
 }
 
 .terminal-number-label--endpoint-15 {
   top: -40px;
-  left: 615px;
+  left: 618px;
 }
 
 .terminal-number-label--endpoint-16 {

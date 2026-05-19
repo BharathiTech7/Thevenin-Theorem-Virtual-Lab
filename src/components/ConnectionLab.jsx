@@ -6,7 +6,9 @@ import EquipmentPanel from './EquipmentPanel.jsx'
 import {
   addAllEndpoints,
   autoConnectDefaultCircuit,
+  DEFAULT_AMMETER_CURRENT_KEYS,
   deleteConnectionsForTerminal,
+  getAmmeterCurrentKeys,
   lockJsPlumbCircuit,
   resolveJsPlumb,
   validateOldExperimentConnections,
@@ -15,7 +17,7 @@ import {
 } from '../utils/jsPlumbWiring.js'
 
 const ConnectionLab = ({
-  autoConnect,
+  autoConnectRequest,
   checkRequest,
   onCheckConnections,
   powerOn,
@@ -24,7 +26,7 @@ const ConnectionLab = ({
   r3,
   readings,
   resetRequest,
-  setPowerOn,
+  onTogglePower,
   setVoltage,
   voltage,
 }) => {
@@ -33,6 +35,7 @@ const ConnectionLab = ({
   const onCheckConnectionsRef = useRef(onCheckConnections)
 
   const [isLocked, setIsLocked] = useState(false)
+  const [ammeterCurrentKeys, setAmmeterCurrentKeys] = useState(DEFAULT_AMMETER_CURRENT_KEYS)
 
   useEffect(() => {
     onCheckConnectionsRef.current = onCheckConnections
@@ -53,6 +56,7 @@ const ConnectionLab = ({
 
       containerRef.current.classList.remove('connection-lab--locked')
       setIsLocked(false)
+      setAmmeterCurrentKeys(DEFAULT_AMMETER_CURRENT_KEYS)
 
       const instance = jsPlumb.getInstance({
         Container: containerRef.current,
@@ -120,7 +124,7 @@ const ConnectionLab = ({
   }, [resetRequest])
 
   useEffect(() => {
-    if (!autoConnect || !instanceRef.current || isLocked) {
+    if (autoConnectRequest === 0 || !instanceRef.current || isLocked) {
       return
     }
 
@@ -129,7 +133,7 @@ const ConnectionLab = ({
     window.setTimeout(() => {
       instanceRef.current?.repaintEverything()
     }, 80)
-  }, [autoConnect, isLocked])
+  }, [autoConnectRequest, isLocked])
 
   useEffect(() => {
     if (checkRequest === 0 || !instanceRef.current) {
@@ -139,6 +143,7 @@ const ConnectionLab = ({
     const result = validateOldExperimentConnections(instanceRef.current)
 
     if (result.isCorrect) {
+      setAmmeterCurrentKeys(getAmmeterCurrentKeys(instanceRef.current))
       lockJsPlumbCircuit(instanceRef.current, containerRef.current)
       setIsLocked(true)
     }
@@ -170,12 +175,18 @@ const ConnectionLab = ({
     instanceRef.current.repaintEverything?.()
   }
 
+  const ammeterReadings = {
+    A1: readings[ammeterCurrentKeys.A1] ?? 0,
+    A2: readings[ammeterCurrentKeys.A2] ?? 0,
+    A3: readings[ammeterCurrentKeys.A3] ?? 0,
+  }
+
   return (
     <div className="connection-lab" onClick={handleLabelClick} ref={containerRef}>
       <EquipmentPanel
+        onTogglePower={onTogglePower}
         powerOn={powerOn}
-        readings={readings}
-        setPowerOn={setPowerOn}
+        readings={ammeterReadings}
         setVoltage={setVoltage}
         voltage={voltage}
       />

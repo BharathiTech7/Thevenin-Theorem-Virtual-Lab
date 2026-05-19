@@ -65,6 +65,84 @@ export const DEFAULT_AUTO_CONNECTIONS = [
   ['8-endpoint', '16-endpoint'],
 ]
 
+export const DEFAULT_AMMETER_CURRENT_KEYS = {
+  A1: 'i1',
+  A2: 'i2',
+  A3: 'i3',
+}
+
+const AMMETER_BRANCH_CONNECTIONS = {
+  A1: [
+    {
+      currentKey: 'i1',
+      negativeTerminal: '4-endpoint',
+      positiveTerminal: '3-endpoint',
+      circuitNegativeTerminal: '12-endpoint',
+      circuitPositiveTerminal: '11-endpoint',
+    },
+    {
+      currentKey: 'i2',
+      negativeTerminal: '4-endpoint',
+      positiveTerminal: '3-endpoint',
+      circuitNegativeTerminal: '14-endpoint',
+      circuitPositiveTerminal: '13-endpoint',
+    },
+    {
+      currentKey: 'i3',
+      negativeTerminal: '4-endpoint',
+      positiveTerminal: '3-endpoint',
+      circuitNegativeTerminal: '16-endpoint',
+      circuitPositiveTerminal: '15-endpoint',
+    },
+  ],
+  A2: [
+    {
+      currentKey: 'i1',
+      negativeTerminal: '6-endpoint',
+      positiveTerminal: '5-endpoint',
+      circuitNegativeTerminal: '12-endpoint',
+      circuitPositiveTerminal: '11-endpoint',
+    },
+    {
+      currentKey: 'i2',
+      negativeTerminal: '6-endpoint',
+      positiveTerminal: '5-endpoint',
+      circuitNegativeTerminal: '14-endpoint',
+      circuitPositiveTerminal: '13-endpoint',
+    },
+    {
+      currentKey: 'i3',
+      negativeTerminal: '6-endpoint',
+      positiveTerminal: '5-endpoint',
+      circuitNegativeTerminal: '16-endpoint',
+      circuitPositiveTerminal: '15-endpoint',
+    },
+  ],
+  A3: [
+    {
+      currentKey: 'i1',
+      negativeTerminal: '8-endpoint',
+      positiveTerminal: '7-endpoint',
+      circuitNegativeTerminal: '12-endpoint',
+      circuitPositiveTerminal: '11-endpoint',
+    },
+    {
+      currentKey: 'i2',
+      negativeTerminal: '8-endpoint',
+      positiveTerminal: '7-endpoint',
+      circuitNegativeTerminal: '14-endpoint',
+      circuitPositiveTerminal: '13-endpoint',
+    },
+    {
+      currentKey: 'i3',
+      negativeTerminal: '8-endpoint',
+      positiveTerminal: '7-endpoint',
+      circuitNegativeTerminal: '16-endpoint',
+      circuitPositiveTerminal: '15-endpoint',
+    },
+  ],
+}
+
 export const resolveJsPlumb = (module) => (
   module?.jsPlumb
   || module?.default?.jsPlumb
@@ -249,6 +327,33 @@ export const getConnectionBetween = (instance, firstId, secondId) => {
 export const hasConnectionBetween = (instance, firstId, secondId) => (
   Boolean(getConnectionBetween(instance, firstId, secondId))
 )
+
+export const getAmmeterCurrentKeys = (instance) => {
+  const currentKeys = {
+    ...DEFAULT_AMMETER_CURRENT_KEYS,
+  }
+
+  Object.entries(AMMETER_BRANCH_CONNECTIONS).forEach(([meterLabel, branches]) => {
+    const matchedBranch = branches.find((branch) => (
+      hasConnectionBetween(
+        instance,
+        branch.positiveTerminal,
+        branch.circuitPositiveTerminal,
+      )
+      && hasConnectionBetween(
+        instance,
+        branch.negativeTerminal,
+        branch.circuitNegativeTerminal,
+      )
+    ))
+
+    if (matchedBranch) {
+      currentKeys[meterLabel] = matchedBranch.currentKey
+    }
+  })
+
+  return currentKeys
+}
 
 export const addTerminalEndpoint = (instance, terminalId, type) => {
   const element = document.getElementById(terminalId)

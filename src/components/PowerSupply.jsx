@@ -1,8 +1,11 @@
 import powerSupplyOff from '../assets/PowerSupply_Off.png'
 import powerSupplyOn from '../assets/PowerSupply_ON.png'
 
-const PowerSupply = ({ powerOn, setPowerOn, setVoltage, voltage }) => {
+const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage }) => {
   const displayedVoltage = powerOn ? voltage : 0
+  const handleVoltageChange = (event) => {
+    setVoltage(Number(Number(event.target.value).toFixed(1)))
+  }
 
   return (
     <article className="power-supply">
@@ -46,7 +49,7 @@ const PowerSupply = ({ powerOn, setPowerOn, setVoltage, voltage }) => {
         aria-label={powerOn ? 'Switch power supply off' : 'Switch power supply on'}
         aria-pressed={powerOn}
         className="power-supply__button"
-        onClick={() => setPowerOn((current) => !current)}
+        onClick={onTogglePower}
         type="button"
       />
 
@@ -55,15 +58,15 @@ const PowerSupply = ({ powerOn, setPowerOn, setVoltage, voltage }) => {
         <input
           aria-label="Voltage"
           className="voltage-range"
-          max="20"
+          disabled={!powerOn}
+          max="10"
           min="0"
-          onChange={(event) => setVoltage(Number(event.target.value))}
-          step="0.5"
+          onChange={handleVoltageChange}
+          step="0.1"
           type="range"
           value={voltage}
         />
-        </label>
-        
+      </label>
     </article>
   )
 }

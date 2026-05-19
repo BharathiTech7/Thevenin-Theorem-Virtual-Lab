@@ -3,11 +3,9 @@ import a2Img from '../assets/A2.png'
 import a3Img from '../assets/A3.png'
 import needleImg from '../assets/needle.png'
 
-const meterMax = {
-  A1: 5,
-  A2: 2.5,
-  A3: 2.5,
-}
+const METER_MAX_CURRENT = 10
+const DIAL_START_ANGLE = 180
+const DIAL_SWEEP_ANGLE = 180
 
 const ammeterImages = {
   A1: a1Img,
@@ -23,9 +21,9 @@ const terminalNumbers = {
 
 const Ammeter = ({ label, value = 0 }) => {
   const terminals = terminalNumbers[label]
-  const max = meterMax[label] || 5
-  const ratio = Math.min(Math.max(value / max, 0), 1)
-  const angle = 180 + ratio * 180
+  const current = Number.isFinite(value) ? value : 0
+  const ratio = Math.min(Math.max(current / METER_MAX_CURRENT, 0), 1)
+  const angle = DIAL_START_ANGLE + ratio * DIAL_SWEEP_ANGLE
 
   return (
     <article className={`ammeter ammeter--${label}`} aria-label={`${label} ammeter`}>

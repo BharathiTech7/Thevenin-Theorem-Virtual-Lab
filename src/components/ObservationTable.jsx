@@ -1,6 +1,7 @@
 import SectionCard from './SectionCard.jsx'
 
-const emptyRows = Array.from({ length: 6 })
+const OBSERVATION_ROW_COUNT = 10
+const emptyRows = Array.from({ length: OBSERVATION_ROW_COUNT })
 
 const ObservationTable = ({ observations }) => (
   <SectionCard className="h-[360px]" icon="table" title="OBSERVATION TABLE">
