@@ -93,7 +93,7 @@ const getSeriesLabelPoint = (observations, currentKey, maxCurrent, offset) => {
   }
 }
 
-const GraphPanel = ({ className = '', observations = [], plotted = false }) => {
+const GraphPanel = ({ className = '', id, observations = [], plotted = false }) => {
   const shouldPlot = plotted && observations.length >= MIN_GRAPH_READINGS
   const plottedObservations = [...observations].sort((current, next) => current.voltage - next.voltage)
   const maxCurrent = getMaxCurrent(plottedObservations)
@@ -104,7 +104,7 @@ const GraphPanel = ({ className = '', observations = [], plotted = false }) => {
   const yAxisTitleY = CHART.top + CHART.height / 2
 
   return (
-    <section className={`graph-panel ${shouldPlot ? 'graph-panel--plotted' : ''} ${className}`} aria-label="Observation graph">
+    <section className={`graph-panel ${shouldPlot ? 'graph-panel--plotted' : ''} ${className}`} id={id} aria-label="Observation graph">
       <div className="graph-panel__heading">
         <div>
           <p className="graph-panel__eyebrow">TABLE READINGS</p>

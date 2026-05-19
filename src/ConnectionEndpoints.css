@@ -333,8 +333,8 @@
 */
 .connection-lab .jtk-endpoint--terminal-1,
 .connection-terminal--endpoint-1 {
-  --jtk-endpoint-offset-x: 1px;
-  --jtk-endpoint-offset-y: -14px;
+  --jtk-endpoint-offset-x: -6px;
+  --jtk-endpoint-offset-y: -12px;
 }
 
 .connection-terminal--endpoint-1 {
@@ -344,8 +344,8 @@
 
 .connection-lab .jtk-endpoint--terminal-2,
 .connection-terminal--endpoint-2 {
-  --jtk-endpoint-offset-x: 1px;
-  --jtk-endpoint-offset-y: -14px;
+  --jtk-endpoint-offset-x: -6px;
+  --jtk-endpoint-offset-y: -12px;
 }
 
 .connection-terminal--endpoint-2 {
@@ -527,7 +527,7 @@
 /* Adjust each terminal number label here. */
 .terminal-number-label--endpoint-1 {
   top: 175px;
-  left: 68px;
+  left: 60px;
 }
 
 .terminal-number-label--endpoint-2 {

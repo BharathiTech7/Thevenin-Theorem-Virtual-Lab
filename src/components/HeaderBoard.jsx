@@ -1,5 +1,5 @@
 const HeaderBoard = () => (
-  <header className="header-board">
+  <header className="header-board" id="experiment-title-board">
     <span className="header-board__ornament" />
     <h1>TO VERIFY KIRCHHOFF'S CURRENT LAW</h1>
     <span className="header-board__ornament header-board__ornament--right" />

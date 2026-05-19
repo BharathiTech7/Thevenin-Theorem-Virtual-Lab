@@ -217,7 +217,7 @@ const App = () => {
             transform: `scale(${scale})`,
           }}
         >
-          <main className="simulation-shell">
+          <main className="simulation-shell" id="walkthrough-demo-experiment">
             <HeaderBoard />
             <InstructionsTab />
             <StatusBar status={status} />
@@ -274,6 +274,7 @@ const App = () => {
 
           <GraphPanel
             className="graph-panel--separate"
+            id="graph-panel"
             observations={observations}
             plotted={showGraph}
           />

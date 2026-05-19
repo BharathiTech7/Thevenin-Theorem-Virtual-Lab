@@ -4,7 +4,7 @@ const OBSERVATION_ROW_COUNT = 10
 const emptyRows = Array.from({ length: OBSERVATION_ROW_COUNT })
 
 const ObservationTable = ({ observations }) => (
-  <SectionCard className="h-[360px]" icon="table" title="OBSERVATION TABLE">
+  <SectionCard className="h-[360px]" icon="table" id="observation-table-panel" title="OBSERVATION TABLE">
     <div className="observation-table-wrap">
       <table className="observation-table">
         <thead>

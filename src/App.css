@@ -593,8 +593,8 @@
 
 .power-supply__image {
   position: absolute;
-  top: -2px;
-  left: 10px;
+  top: -1px;
+  left: 1px;
   z-index: 1;
   width: 300px;
   height: 230px;

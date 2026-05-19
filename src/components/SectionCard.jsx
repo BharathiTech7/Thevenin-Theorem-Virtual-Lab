@@ -6,11 +6,11 @@ const icons = {
   table: TableIcon,
 }
 
-const SectionCard = ({ children, className = '', icon, title }) => {
+const SectionCard = ({ children, className = '', icon, title, ...sectionProps }) => {
   const Icon = icons[icon]
 
   return (
-    <section className={`section-card ${className}`}>
+    <section className={`section-card ${className}`} {...sectionProps}>
       <div className="section-card__heading">
         <span className="section-card__line" />
         {Icon ? <Icon /> : null}

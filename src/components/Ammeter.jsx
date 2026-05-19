@@ -26,7 +26,7 @@ const Ammeter = ({ label, value = 0 }) => {
   const angle = DIAL_START_ANGLE + ratio * DIAL_SWEEP_ANGLE
 
   return (
-    <article className={`ammeter ammeter--${label}`} aria-label={`${label} ammeter`}>
+    <article className={`ammeter ammeter--${label}`} id={`ammeter-${label.toLowerCase()}`} aria-label={`${label} ammeter`}>
       <img
         src={ammeterImages[label]}
         alt={`${label} ammeter`}

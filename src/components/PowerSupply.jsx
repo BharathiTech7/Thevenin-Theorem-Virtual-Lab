@@ -8,7 +8,7 @@ const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage }) => {
   }
 
   return (
-    <article className="power-supply">
+    <article className="power-supply" id="power-supply">
       <img
         alt={powerOn ? 'Power supply switched on' : 'Power supply switched off'}
         className="power-supply__image"
@@ -46,6 +46,7 @@ const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage }) => {
         2
       </span>
       <button
+        id="power-toggle-button"
         aria-label={powerOn ? 'Switch power supply off' : 'Switch power supply on'}
         aria-pressed={powerOn}
         className="power-supply__button"
@@ -53,12 +54,13 @@ const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage }) => {
         type="button"
       />
 
-      <label className="power-supply__control">
+      <label className="power-supply__control" id="voltage-control">
         <span className="sr-only">Voltage</span>
         <input
           aria-label="Voltage"
           className="voltage-range"
           disabled={!powerOn}
+          id="voltage-slider"
           max="10"
           min="0"
           onChange={handleVoltageChange}

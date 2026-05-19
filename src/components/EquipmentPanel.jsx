@@ -3,7 +3,7 @@ import Ammeter from './Ammeter.jsx'
 import PowerSupply from './PowerSupply.jsx'
 
 const EquipmentPanel = ({ onTogglePower, powerOn, readings, setVoltage, voltage }) => (
-  <section className="equipment-panel">
+  <section className="equipment-panel" id="equipment-panel">
     <PowerSupply
       onTogglePower={onTogglePower}
       powerOn={powerOn}
