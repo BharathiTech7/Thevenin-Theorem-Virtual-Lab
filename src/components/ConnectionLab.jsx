@@ -16,6 +16,10 @@ import {
   wirePaintStyles,
 } from '../utils/jsPlumbWiring.js'
 
+const getJsPlumbZoom = (scale) => (
+  Number.isFinite(scale) && scale > 0 ? scale : 1
+)
+
 const ConnectionLab = ({
   autoConnectRequest,
   checkRequest,
@@ -26,6 +30,7 @@ const ConnectionLab = ({
   r3,
   readings,
   resetRequest,
+  scale = 1,
   onTogglePower,
   setVoltage,
   voltage,
@@ -33,6 +38,7 @@ const ConnectionLab = ({
   const containerRef = useRef(null)
   const instanceRef = useRef(null)
   const onCheckConnectionsRef = useRef(onCheckConnections)
+  const scaleRef = useRef(getJsPlumbZoom(scale))
 
   const [isLocked, setIsLocked] = useState(false)
   const [ammeterCurrentKeys, setAmmeterCurrentKeys] = useState(DEFAULT_AMMETER_CURRENT_KEYS)
@@ -73,6 +79,7 @@ const ConnectionLab = ({
       })
 
       instanceRef.current = instance
+      instance.setZoom?.(scaleRef.current)
 
       instance.registerConnectionTypes({
         positive: {
@@ -122,6 +129,23 @@ const ConnectionLab = ({
       instanceRef.current = null
     }
   }, [resetRequest])
+
+  useEffect(() => {
+    const instance = instanceRef.current
+    const zoom = getJsPlumbZoom(scale)
+
+    scaleRef.current = zoom
+
+    if (!instance?.setZoom) {
+      return
+    }
+
+    instance.setZoom(zoom, true)
+
+    window.setTimeout(() => {
+      instance.repaintEverything?.()
+    }, 0)
+  }, [scale])
 
   useEffect(() => {
     if (autoConnectRequest === 0 || !instanceRef.current || isLocked) {

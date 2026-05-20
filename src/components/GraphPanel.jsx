@@ -13,9 +13,9 @@ const CHART = {
 const X_TICKS = [0, 2, 4, 6, 8, 10]
 const Y_TICK_COUNT = 5
 const SERIES = [
-  { className: 'i1', key: 'i1', label: 'I1', labelOffset: -10, pointRadius: 2.8 },
-  { className: 'i3', key: 'i3', label: 'I3', labelOffset: 10, pointRadius: 3.4 },
-  { className: 'i2', key: 'i2', label: 'I2', labelOffset: -10, pointRadius: 2.2 },
+  { className: 'i1', key: 'i1', label: 'I1', labelOffset: -10, pointRadius: 1.9 },
+  { className: 'i3', key: 'i3', label: 'I3', labelOffset: 10, pointRadius: 2 },
+  { className: 'i2', key: 'i2', label: 'I2', labelOffset: -10, pointRadius: 1.8 },
 ]
 
 const getMaxCurrent = (observations) => {
@@ -185,9 +185,7 @@ const GraphPanel = ({ className = '', id, observations = [], plotted = false }) 
           </text>
 
           {!shouldPlot && (
-            <text className="graph-panel__message" textAnchor="middle" x={CHART.left + CHART.width / 2} y={CHART.top + CHART.height / 2}>
-              {plotted ? 'Add 6 readings to plot the graph.' : 'Plot appears after 6 readings.'}
-            </text>
+            <text className="graph-panel__message" textAnchor="middle" x={CHART.left + CHART.width / 2} y={CHART.top + CHART.height / 2} />
           )}
 
           {shouldPlot && (

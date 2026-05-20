@@ -1,10 +1,10 @@
-import { LightIcon } from './Icons.jsx'
+// import { LightIcon } from './Icons.jsx'
 
-const StatusBar = ({ status }) => (
-  <footer className="status-bar" id="status-bar">
-    <LightIcon />
-    <span>{status}</span>
-  </footer>
-)
+// const StatusBar = ({ status }) => (
+//   <footer className="status-bar" id="status-bar">
+//     <LightIcon />
+//     <span>{status}</span>
+//   </footer>
+// )
 
-export default StatusBar
+// export default StatusBar

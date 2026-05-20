@@ -924,15 +924,15 @@
 }
 
 .graph-panel__dot--i1 {
-  background: #d8483a;
+  background: #c83f35;
 }
 
 .graph-panel__dot--i2 {
-  background: #1b86bf;
+  background: #1579a8;
 }
 
 .graph-panel__dot--i3 {
-  background: #22945d;
+  background: #3f8f43;
 }
 
 .graph-panel__body {
@@ -976,7 +976,7 @@
   stroke: #563927;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 1.35;
+  stroke-width: 1.1;
   vector-effect: non-scaling-stroke;
 }
 
@@ -990,19 +990,19 @@
 }
 
 .graph-panel__grid-line {
-  stroke: rgba(117, 88, 62, 0.2);
-  stroke-width: 0.75;
+  stroke: rgba(117, 88, 62, 0.16);
+  stroke-width: 0.55;
   vector-effect: non-scaling-stroke;
 }
 
 .graph-panel__grid-line--horizontal {
-  stroke-dasharray: 4 7;
+  stroke-dasharray: 3 8;
 }
 
 .graph-panel__tick-line {
-  stroke: rgba(74, 43, 31, 0.45);
+  stroke: rgba(74, 43, 31, 0.34);
   stroke-linecap: round;
-  stroke-width: 1;
+  stroke-width: 0.8;
   vector-effect: non-scaling-stroke;
 }
 
@@ -1030,8 +1030,9 @@
   fill: none;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 1.7;
+  stroke-width: 1;
   vector-effect: non-scaling-stroke;
+  shape-rendering: geometricPrecision;
 }
 
 .graph-panel__plot {
@@ -1050,38 +1051,37 @@
 }
 
 .graph-panel__line--i1 {
-  stroke: #d34a3d;
+  stroke: #c83f35;
 }
 
 .graph-panel__line--i2 {
-  stroke: #1e83b6;
-  stroke-dasharray: 6 6;
+  stroke: #1579a8;
 }
 
 .graph-panel__line--i3 {
-  stroke: #4d9446;
+  stroke: #3f8f43;
 }
 
 .graph-panel__point {
   fill: #fffaf0;
-  stroke-width: 1.6;
+  stroke-width: 1;
   vector-effect: non-scaling-stroke;
-  filter: drop-shadow(0 1px 1px rgba(60, 32, 10, 0.12));
+  filter: none;
 }
 
 .graph-panel__point--i1 {
   fill: #fff7f4;
-  stroke: #d34a3d;
+  stroke: #c83f35;
 }
 
 .graph-panel__point--i2 {
   fill: #f1fbff;
-  stroke: #1e83b6;
+  stroke: #1579a8;
 }
 
 .graph-panel__point--i3 {
   fill: #f5fff2;
-  stroke: #4d9446;
+  stroke: #3f8f43;
 }
 
 .graph-panel__series-label {
@@ -1095,15 +1095,15 @@
 }
 
 .graph-panel__series-label--i1 {
-  fill: #d34a3d;
+  fill: #c83f35;
 }
 
 .graph-panel__series-label--i2 {
-  fill: #1e83b6;
+  fill: #1579a8;
 }
 
 .graph-panel__series-label--i3 {
-  fill: #4d9446;
+  fill: #3f8f43;
 }
 
 .status-bar {

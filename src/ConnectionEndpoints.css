@@ -1,13 +1,13 @@
 .connection-lab .jtk-connector {
-  z-index: 48 !important;
+  z-index: 104 !important;
 }
 
 .connection-lab .jtk-overlay {
-  z-index: 54 !important;
+  z-index: 108 !important;
 }
 
 .connection-lab .jtk-endpoint {
-  z-index: 46 !important;
+  z-index: 112 !important;
 }
 
 .connection-lab .connection-terminal {
@@ -70,12 +70,18 @@
 /* Generated jsPlumb dots are hidden but remain interactive. */
 .connection-lab .jtk-endpoint--terminal {
   --jtk-endpoint-ui-opacity: 0;
-  cursor: pointer;
+  cursor: grab;
   pointer-events: auto;
+  touch-action: none;
+}
+
+.connection-lab .jtk-endpoint--terminal.jtk-dragging,
+.connection-lab .jtk-endpoint--terminal:active {
+  cursor: grabbing;
 }
 
 .connection-terminal {
-  --jtk-endpoint-radius: 8;
+  --jtk-endpoint-radius: 12;
   --jtk-endpoint-fill: #eaf0f6;
   --jtk-endpoint-outline-stroke: #f8fbff;
   --jtk-endpoint-outline-width: 1.8;
