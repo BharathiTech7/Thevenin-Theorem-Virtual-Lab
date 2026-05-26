@@ -36,14 +36,20 @@ export const PrintIcon = () => (
 )
 export const AutoConnectIcon = () => (
   <svg aria-hidden="true" viewBox="0 0 32 32">
-    <path d="M10 12V6h12v6M10 22H7v-8h18v8h-3M10 18h12v8H10z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2.8" />
-    <path d="M21 16h2" stroke="currentColor" strokeLinecap="round" strokeWidth="2.8" />
+    <path d="M8 10h6M18 22h6M14 10c5.5 0 4.5 12 10 12M18 22c-5.5 0-4.5-12-10-12" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.6" />
+    <circle cx="7" cy="10" fill="none" r="3" stroke="currentColor" strokeWidth="2.4" />
+    <circle cx="25" cy="22" fill="none" r="3" stroke="currentColor" strokeWidth="2.4" />
+    <path d="M23 5.5 24 8l2.5 1L24 10l-1 2.5L22 10l-2.5-1L22 8Z" fill="currentColor" />
   </svg>
 )
 export const AiGuide = () => (
   <svg aria-hidden="true" viewBox="0 0 32 32">
-    <path d="M10 12V6h12v6M10 22H7v-8h18v8h-3M10 18h12v8H10z" fill="none" stroke="currentColor" strokeLinejoin="round" strokeWidth="2.8" />
-    <path d="M21 16h2" stroke="currentColor" strokeLinecap="round" strokeWidth="2.8" />
+    <path d="M16 6v4M11 6h10M8 17H5M27 17h-3M8 22H5M27 22h-3" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2.4" />
+    <rect fill="none" height="16" rx="4" stroke="currentColor" strokeLinejoin="round" strokeWidth="2.5" width="18" x="7" y="11" />
+    <circle cx="12.5" cy="18" fill="currentColor" r="1.7" />
+    <circle cx="19.5" cy="18" fill="currentColor" r="1.7" />
+    <path d="M13 23h6" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2.3" />
+    <path d="M25 4.5 26 7l2.5 1-2.5 1-1 2.5L24 9l-2.5-1L24 7Z" fill="currentColor" />
   </svg>
 )
 
