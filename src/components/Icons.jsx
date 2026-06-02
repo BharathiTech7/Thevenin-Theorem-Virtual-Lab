@@ -76,6 +76,12 @@ export const ButtonIcon = () => (
   </svg>
 )
 
+export const CloseIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 32 32">
+    <path d="M9 9l14 14M23 9 9 23" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="3" />
+  </svg>
+)
+
 export const LightIcon = () => (
   <svg aria-hidden="true" viewBox="0 0 32 32">
     <path d="M11 23h10M13 27h6M22 14a6 6 0 1 0-12 0c0 2.7 1.8 4.1 3 5.7.4.6.5 1.1.5 1.8h5c0-.7.1-1.2.5-1.8 1.2-1.6 3-3 3-5.7Z" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" />

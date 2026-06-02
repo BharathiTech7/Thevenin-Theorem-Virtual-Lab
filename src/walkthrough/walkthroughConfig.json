@@ -125,18 +125,6 @@
       },
       "audio": "#",
       "placement": "top"
-    },
-    {
-      "id": 11,
-      "target": "#status-bar",
-      "title": {
-        "en": "Status Feedback"
-      },
-      "description": {
-        "en": "Lab messages appear here after each action so students can see what to do next."
-      },
-      "audio": "#",
-      "placement": "top"
     }
   ]
 }

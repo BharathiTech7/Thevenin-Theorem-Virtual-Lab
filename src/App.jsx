@@ -6,7 +6,7 @@ import ActionButtons from './components/ActionButtons.jsx'
 import ControlPanel from './components/ControlPanel.jsx'
 import GraphPanel from './components/GraphPanel.jsx'
 import HeaderBoard from './components/HeaderBoard.jsx'
-import InstructionsTab from './components/InstructionsTab.jsx'
+import WalkthroughStartButton from './walkthrough/components/WalkthroughStartButton.jsx'
 import { EXPERIMENT_ALERTS } from './alerts/experimentStepAlerts.js'
 import { useLabAlerts } from './alerts/useLabAlerts.js'
 // import StatusBar from './components/StatusBar.jsx'
@@ -300,7 +300,7 @@ const App = () => {
         >
           <main className="simulation-shell" id="walkthrough-demo-experiment">
             <HeaderBoard />
-            <InstructionsTab />
+            <WalkthroughStartButton variant="side-tab" />
             {/* <StatusBar status={status} /> */}
             <span className="sr-only" role="status" aria-live="polite">{status}</span>
 

@@ -1,15 +1,25 @@
+import { useState } from 'react'
 import SectionCard from './SectionCard.jsx'
 import {
-  AddIcon,
   AiGuide,
   AutoConnectIcon,
+  ButtonIcon,
   CheckIcon,
+  CloseIcon,
   PlotIcon,
   PrintIcon,
   ResetIcon,
+  TableIcon,
 } from './Icons.jsx'
 
 const buttons = [
+  {
+    id: 'instruction-button',
+    label: 'INSTRUCTION',
+    tone: 'action-button--gold',
+    Icon: ButtonIcon,
+    opensInstructions: true,
+  },
   {
     id: 'check-button',
     label: 'CHECK',
@@ -21,7 +31,7 @@ const buttons = [
     id: 'add-reading-button',
     label: 'ADD',
     tone: 'action-button--blue',
-    Icon: AddIcon,
+    Icon: TableIcon,
     handlerName: 'onAdd',
   },
   {
@@ -71,6 +81,7 @@ const ActionButtons = ({
   onAutoConnect,
   onAiGuide,
 }) => {
+  const [instructionsOpen, setInstructionsOpen] = useState(false)
   const handlers = {
     onAdd,
     onCheck,
@@ -82,11 +93,20 @@ const ActionButtons = ({
   }
 
   return (
-    <SectionCard className="h-[176px]" icon="buttons" id="action-buttons-panel" title="ACTION BUTTONS">
+    <SectionCard className="action-buttons-card h-[176px]" icon="buttons" id="action-buttons-panel" title="ACTION BUTTONS">
       <div className="action-buttons__grid">
-        {buttons.map(({ id, label, tone, Icon, handlerName }) => {
+        {buttons.map(({ id, label, tone, Icon, handlerName, opensInstructions }) => {
           const handler = handlers[handlerName]
-          const isDisabled = !handler || disabledButtons[handlerName]
+          const isDisabled = !opensInstructions && (!handler || disabledButtons[handlerName])
+          const buttonProps = opensInstructions
+            ? {
+                'aria-controls': 'experiment-instructions-panel',
+                'aria-expanded': instructionsOpen,
+                onClick: () => setInstructionsOpen((current) => !current),
+              }
+            : {
+                onClick: handler,
+              }
 
           return (
             <button
@@ -95,7 +115,7 @@ const ActionButtons = ({
               type="button"
               className={`action-button ${tone}`}
               disabled={isDisabled}
-              onClick={handler}
+              {...buttonProps}
             >
               <Icon />
               <span>{label}</span>
@@ -103,6 +123,49 @@ const ActionButtons = ({
           )
         })}
       </div>
+
+      {instructionsOpen ? (
+        <div
+          className="action-instructions-panel"
+          id="experiment-instructions-panel"
+          role="region"
+          aria-labelledby="experiment-instructions-title"
+        >
+          <div className="action-instructions-panel__header">
+            <h3 id="experiment-instructions-title">Instructions</h3>
+            <button
+              type="button"
+              className="action-instructions-panel__close"
+              aria-label="Close instructions"
+              onClick={() => setInstructionsOpen(false)}
+            >
+              <CloseIcon />
+            </button>
+          </div>
+
+          <div className="action-instructions-panel__body">
+            <ol className="action-instructions-panel__steps">
+              <li>
+                <strong>STEP 1:</strong> Make connections by dragging nodes from apparatus to the circuit.
+                <ol className="action-instructions-panel__substeps" type="a">
+                  <li>Connect power supply to the circuit (1-9, 2-10).</li>
+                  <li>Connect ammeters (3-11, 4-12), (5-13, 6-14) and (7-15, 8-16), or connect any ammeter to any resistance in circuit.</li>
+                  <li>Click on the label to delete all the connections for the corresponding nodes.</li>
+                </ol>
+              </li>
+              <li><strong>STEP 2:</strong> Check your connections by clicking on the 'CHECK' button.</li>
+              <li><strong>STEP 3:</strong> Set the values of resistances R1, R2 and R3 by adjusting the sliders on left. These values will remain constant throughout the experiment.</li>
+              <li><strong>STEP 4:</strong> Click the 'Power' button to turn on the power supply.</li>
+              <li><strong>STEP 5:</strong> Vary the voltage value by moving the voltage slider to the right side. The readings on the ammeter will change accordingly.</li>
+              <li><strong>STEP 6:</strong> Click on the 'ADD' button to add the readings to the observation table.</li>
+              <li><strong>STEP 7:</strong> Repeat steps 6 and 7 until we reach to the 6th reading. Minimum reading to be taken to plot the graph is 6.</li>
+              <li><strong>STEP 8:</strong> Click on the 'PLOT' button to display the graph.</li>
+              <li><strong>STEP 9:</strong> Click on 'PRINT' button to take out the print of the page.</li>
+              <li><strong>STEP 10:</strong> Click on 'RESET' button to refresh the page.</li>
+            </ol>
+          </div>
+        </div>
+      ) : null}
     </SectionCard>
   )
 }
