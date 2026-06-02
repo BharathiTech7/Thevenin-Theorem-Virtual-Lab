@@ -158,10 +158,11 @@ const ActionButtons = ({
               <li><strong>STEP 4:</strong> Click the 'Power' button to turn on the power supply.</li>
               <li><strong>STEP 5:</strong> Vary the voltage value by moving the voltage slider to the right side. The readings on the ammeter will change accordingly.</li>
               <li><strong>STEP 6:</strong> Click on the 'ADD' button to add the readings to the observation table.</li>
-              <li><strong>STEP 7:</strong> Repeat steps 6 and 7 until we reach to the 6th reading. Minimum reading to be taken to plot the graph is 6.</li>
+              <li><strong>STEP 7:</strong> Repeat step 6 until 6 readings are recorded. A minimum of 6 readings is required to plot the graph.</li>
               <li><strong>STEP 8:</strong> Click on the 'PLOT' button to display the graph.</li>
-              <li><strong>STEP 9:</strong> Click on 'PRINT' button to take out the print of the page.</li>
-              <li><strong>STEP 10:</strong> Click on 'RESET' button to refresh the page.</li>
+              <li><strong>STEP 9:</strong> Click on the 'Generate Report' button below the graph to open the experiment report.</li>
+              <li><strong>STEP 10:</strong> Use the report page controls to print or download the generated report.</li>
+              <li><strong>STEP 11:</strong> Click on 'RESET' button to refresh the page.</li>
             </ol>
           </div>
         </div>

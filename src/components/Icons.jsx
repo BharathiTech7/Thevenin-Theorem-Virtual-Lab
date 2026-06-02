@@ -69,6 +69,13 @@ export const TableIcon = () => (
   </svg>
 )
 
+export const ActionButtonsIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 32 32">
+    <rect fill="none" height="18" rx="2.4" stroke="currentColor" strokeWidth="2" width="14" x="9" y="7" />
+    <path d="M12.5 12h7M12.5 16h7M12.5 20h4.5" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="1.8" />
+  </svg>
+)
+
 export const ButtonIcon = () => (
   <svg aria-hidden="true" viewBox="0 0 32 32">
     <rect fill="none" height="22" rx="3" stroke="currentColor" strokeWidth="2.4" width="18" x="7" y="5" />
