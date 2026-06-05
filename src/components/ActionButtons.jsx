@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import SectionCard from './SectionCard.jsx'
 import {
+  AddIcon,
   AiGuide,
   AutoConnectIcon,
   ButtonIcon,
@@ -21,6 +22,13 @@ const buttons = [
     opensInstructions: true,
   },
   {
+    id: 'ai-guide-button',
+    label: 'AI GUIDE',
+    tone: 'action-button--cyan',
+    Icon: AiGuide,
+    handlerName: 'onAiGuide',
+  },
+  {
     id: 'check-button',
     label: 'CHECK',
     tone: 'action-button--green',
@@ -28,10 +36,17 @@ const buttons = [
     handlerName: 'onCheck',
   },
   {
+    id: 'auto-connect-button',
+    label: 'AUTO CONNECT',
+    tone: 'action-button--teal',
+    Icon: AutoConnectIcon,
+    handlerName: 'onAutoConnect',
+  },
+  {
     id: 'add-reading-button',
     label: 'ADD',
     tone: 'action-button--blue',
-    Icon: TableIcon,
+    Icon: AddIcon,
     handlerName: 'onAdd',
   },
   {
@@ -55,20 +70,8 @@ const buttons = [
     Icon: PrintIcon,
     handlerName: 'onPrint',
   },
-  {
-    id: 'auto-connect-button',
-    label: 'AUTO CONNECT',
-    tone: 'action-button--teal',
-    Icon: AutoConnectIcon,
-    handlerName: 'onAutoConnect',
-  },
-  {
-    id: 'ai-guide-button',
-    label: 'AI GUIDE',
-    tone: 'action-button--cyan',
-    Icon: AiGuide,
-    handlerName: 'onAiGuide',
-  },
+  
+ 
 ]
 
 const ActionButtons = ({

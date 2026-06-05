@@ -1,3 +1,5 @@
+import { PdfIcon } from './Icons.jsx'
+
 const ReportControls = ({
   graphGenerated,
   minReadings,
@@ -23,7 +25,8 @@ const ReportControls = ({
       data-report-generated={reportGenerated ? 'true' : 'false'}
       onClick={onGenerateReport}
     >
-      Generate Report
+      <PdfIcon />
+      <span>Generate Report</span>
     </button>
   )
 }

@@ -107,8 +107,8 @@ const GraphPanel = ({ className = '', id, observations = [], plotted = false }) 
     <section className={`graph-panel ${shouldPlot ? 'graph-panel--plotted' : ''} ${className}`} id={id} aria-label="Observation graph">
       <div className="graph-panel__heading">
         <div>
-          <p className="graph-panel__eyebrow">TABLE READINGS</p>
-          <h2>OBSERVATION GRAPH</h2>
+          
+          <h2>GRAPH</h2>
         </div>
 
         <div className="graph-panel__legend" aria-label="Current lines">

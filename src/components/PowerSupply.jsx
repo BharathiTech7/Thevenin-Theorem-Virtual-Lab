@@ -2,7 +2,7 @@ import powerSupplyOff from '../assets/PowerSupply_Off.png'
 import powerSupplyOn from '../assets/PowerSupply_ON.png'
 
 const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage }) => {
-  const displayedVoltage = powerOn ? voltage : 0
+  const displayedVoltage = powerOn ? `${voltage.toFixed(1)} V` : ''
   const handleVoltageChange = (event) => {
     setVoltage(Number(Number(event.target.value).toFixed(1)))
   }
@@ -15,7 +15,7 @@ const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage }) => {
         src={powerOn ? powerSupplyOn : powerSupplyOff}
       />
 
-      <div className="power-supply__display">{displayedVoltage.toFixed(1)} V</div>
+      <div className="power-supply__display">{displayedVoltage}</div>
       <span
         id="1-endpoint"
         className="connection-terminal connection-terminal--power connection-terminal--power-plus connection-terminal--endpoint-1"

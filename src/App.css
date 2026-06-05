@@ -765,12 +765,44 @@
   --ammeter-image-scale: 1;
   --ammeter-image-top: 0;
   --ammeter-needle-top: 111px;
+  --ammeter-needle-left: 102px;
+  --ammeter-needle-width: 47px;
+  --ammeter-needle-height: 1px;
+  --ammeter-needle-origin-x: 0;
+  --ammeter-needle-origin-y: 50%;
+  --ammeter-needle-image-top: 3px;
+  --ammeter-needle-image-left: -8px;
+  --ammeter-needle-image-width: 70px;
   filter: none;
   transform: none;
 }
 
 .equipment-panel .ammeter + .ammeter {
   margin-left: -42px;
+}
+
+.ammeter--A1 {
+  --ammeter-needle-top: 111px;
+  --ammeter-needle-left: 102px;
+  --ammeter-needle-image-top: 3px;
+  --ammeter-needle-image-left: -8px;
+  --ammeter-needle-image-width: 70px;
+}
+
+.ammeter--A2 {
+  --ammeter-needle-top: 110px;
+  --ammeter-needle-left: 102px;
+  --ammeter-needle-image-top: 3px;
+  --ammeter-needle-image-left: -8px;
+  --ammeter-needle-image-width: 70px;
+}
+
+.ammeter--A3 {
+  --ammeter-needle-top: 114px;
+  --ammeter-needle-left: 102px;
+  --ammeter-needle-image-top: 3px;
+  --ammeter-needle-image-left: -8px;
+  --ammeter-needle-image-width: 70px;
 }
 
 .ammeter::before {
@@ -793,20 +825,21 @@
 .ammeter__needle {
   position: absolute;
   top: var(--ammeter-needle-top);
-  left: 50%;
+  left: var(--ammeter-needle-left);
   z-index: 3;
-  width: 47px;
-  height: auto;
-  transform-origin: 0 50%;
+  width: var(--ammeter-needle-width);
+  height: var(--ammeter-needle-height);
+  pointer-events: none;
+  transform-origin: var(--ammeter-needle-origin-x) var(--ammeter-needle-origin-y);
   transition: transform 280ms ease;
 }
 
 .ammeter__needle-image {
   position: absolute;
-  top: 50%;
-  left: -12px;
+  top: var(--ammeter-needle-image-top);
+  left: var(--ammeter-needle-image-left);
   display: block;
-  width: 70px;
+  width: var(--ammeter-needle-image-width);
   height: auto;
   transform: translateY(-50%);
 }
@@ -836,7 +869,8 @@
 
 
 .circuit-panel {
-  position: relative;
+  position: absolute;
+  top: 280px;
   width: 845px;
   height: 500px;
   overflow: hidden;
@@ -872,7 +906,7 @@
 
 .circuit-panel__image {
   position: absolute;
-  top: -220px;
+  top: -200px;
  
   width: 790px;
   height: 665px;
@@ -1111,14 +1145,15 @@
 
 .report-button {
   position: absolute;
-  right: 112px;
-  bottom: 27px;
+  right: 36px;
+  bottom: 17px;
   z-index: 4;
   display: inline-flex;
   min-width: 178px;
   height: 46px;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   padding: 0 24px;
   border: 2px solid rgba(81, 45, 22, 0.42);
   border-radius: 10px;
@@ -1135,6 +1170,12 @@
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
   transition: transform 160ms ease, filter 160ms ease;
   white-space: nowrap;
+}
+
+.report-button svg {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 auto;
 }
 
 .report-button:hover {
