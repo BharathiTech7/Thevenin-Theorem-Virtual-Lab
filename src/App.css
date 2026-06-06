@@ -793,7 +793,7 @@
 
 .ammeter--A1 {
   --ammeter-needle-top: 111px;
-  --ammeter-needle-left: 102px;
+  --ammeter-needle-left: 97px;
   --ammeter-needle-image-top: 3px;
   --ammeter-needle-image-left: -8px;
   --ammeter-needle-image-width: 70px;
@@ -1229,6 +1229,7 @@
 }
 
 .graph-panel__point--i1 {
+ 
   fill: #fff7f4;
   stroke: #c83f35;
 }
@@ -1245,12 +1246,40 @@
 
 .graph-panel__series-label {
   dominant-baseline: middle;
-  font-size: 10.5px;
+  font-size: 14px;
   font-weight: 900;
   paint-order: stroke;
-  stroke: #fffdf8;
+  stroke: rgba(255, 253, 248, 0.96);
   stroke-linejoin: round;
-  stroke-width: 4px;
+  stroke-width: 1.8px;
+  text-anchor: start;
+}
+
+.graph-panel__series-label-group {
+  pointer-events: none;
+}
+
+.graph-panel__series-label-leader {
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 0.85px;
+  vector-effect: non-scaling-stroke;
+}
+
+
+ 
+ 
+.graph-panel__series-label-bg {
+  fill: rgba(255, 253, 248, 0.96);
+  stroke-width: 0.9px;
+  vector-effect: non-scaling-stroke;
+}
+
+ 
+
+.graph-panel__series-label-sub {
+  baseline-shift: sub;
+  font-size: 72%;
 }
 
 .graph-panel__series-label--i1 {

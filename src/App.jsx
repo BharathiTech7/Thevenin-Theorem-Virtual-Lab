@@ -49,7 +49,7 @@ const getScale = () => {
 }
 
 const App = () => {
-  const { confirmAlert, showStepAlert } = useLabAlerts()
+  const { clearAlerts, showStepAlert } = useLabAlerts()
   const [scale, setScale] = useState(getScale)
   const [r1, setR1] = useState(0)
   const [r2, setR2] = useState(0)
@@ -222,12 +222,9 @@ const App = () => {
     showStepAlert(EXPERIMENT_ALERTS.resetSuccess)
   }, [showStepAlert, stopAiGuide])
 
-  const handleReset = async () => {
-    const confirmed = await confirmAlert(EXPERIMENT_ALERTS.resetWarning)
-
-    if (confirmed) {
-      resetSimulation()
-    }
+  const handleReset = () => {
+    clearAlerts()
+    resetSimulation()
   }
 
   const handlePlot = () => {
@@ -465,6 +462,7 @@ const App = () => {
 
               <section className="right-panel">
                 <ConnectionLab
+                  key={`connection-lab-${resetRequest}`}
                   autoConnectRequest={autoConnectRequest}
                   checkRequest={checkRequest}
                   onCheckConnections={handleCheckConnections}

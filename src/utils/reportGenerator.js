@@ -14,9 +14,9 @@ const GRAPH_VOLTAGE_MAX = 10
 const GRAPH_X_TICKS = [0, 2, 4, 6, 8, 10]
 const GRAPH_Y_TICK_COUNT = 5
 const GRAPH_SERIES = [
-  { className: 'i1', color: '#c83f35', key: 'i1', label: 'I1', labelOffset: -12 },
-  { className: 'i2', color: '#1579a8', key: 'i2', label: 'I2', labelOffset: 14 },
-  { className: 'i3', color: '#3f8f43', key: 'i3', label: 'I3', labelOffset: -2 },
+  { className: 'i1', color: '#c83f35', key: 'i1', labelIndex: '1', labelOffset: -12 },
+  { className: 'i2', color: '#1579a8', key: 'i2', labelIndex: '2', labelOffset: 14 },
+  { className: 'i3', color: '#3f8f43', key: 'i3', labelIndex: '3', labelOffset: -2 },
 ]
 
 const escapeHtml = (value) => String(value)
@@ -170,7 +170,7 @@ const createReportGraphSvg = (observations) => {
   const labelMarkup = GRAPH_SERIES.map((series) => {
     const point = getSeriesLabelPoint(plottedObservations, series.key, maxCurrent, series.labelOffset)
 
-    return `<text class="report-graph__series-label report-graph__series-label--${series.className}" x="${point.x}" y="${point.y}">${series.label}</text>`
+    return `<text class="report-graph__series-label report-graph__series-label--${series.className}" x="${point.x}" y="${point.y}">I<tspan class="report-graph__series-label-sub" dx="1">${series.labelIndex}</tspan></text>`
   }).join('')
 
   return `
@@ -202,6 +202,7 @@ const createReportGraphSvg = (observations) => {
             .report-graph__series-label--i1 { fill: #c83f35; }
             .report-graph__series-label--i2 { fill: #1579a8; }
             .report-graph__series-label--i3 { fill: #3f8f43; }
+            .report-graph__series-label-sub { baseline-shift: sub; font-size: 72%; }
           ]]>
         </style>
         <marker id="report-graph-axis-arrow" markerHeight="7" markerWidth="8" orient="auto" refX="7" refY="3.5">
@@ -676,6 +677,10 @@ tr:nth-child(even) {
 .report-graph__series-label--i3 {
   fill: #3f8f43;
 }
+.report-graph__series-label-sub {
+  baseline-shift: sub;
+  font-size: 72%;
+}
 .header-row {
   display: grid;
   grid-template-columns: 190px minmax(0, 1fr) 108px;
@@ -900,7 +905,7 @@ tr:nth-child(even) {
       <p style="text-align: justify;">To verify Kirchhoff's Current Law by measuring the total current entering a junction and the branch currents leaving the junction in a resistive DC network.</p>
 
       <h3>Theory</h3>
-      <p style="text-align: justify;">Kirchhoff's Current Law states that the algebraic sum of currents at a node is zero. For this experiment, the current through R1 is the incoming current I1, and it divides into branch currents I2 and I3. The verification condition is I1 = I2 + I3.</p>
+      <p style="text-align: justify;">Kirchhoff's Current Law states that the algebraic sum of currents at a node is zero. For this experiment, the current through R<sub>1</sub> is the incoming current I<sub>1</sub>, and it divides into branch currents I<sub>2</sub> and I<sub>3</sub>. The verification condition is I<sub>1</sub> = I<sub>2</sub> + I<sub>3</sub>.</p>
 
       <h3>Simulation Summary</h3>
       <p style="text-align: justify;">The circuit was connected and verified, the resistance values were fixed, the DC supply voltage was varied, ammeter readings were recorded, and the current versus voltage graph was plotted after collecting the required readings.</p>
@@ -908,20 +913,20 @@ tr:nth-child(even) {
       <h3>Components and Key Parameters</h3>
       <ul class="two-column-list">
         <li>DC power supply: 0-10 V</li>
-        <li>Ammeter A1 for total current I1</li>
-        <li>Ammeter A2 for branch current I2</li>
-        <li>Ammeter A3 for branch current I3</li>
-        <li>Resistor R1: ${formatNumber(r1, 0)} &Omega;</li>
-        <li>Resistor R2: ${formatNumber(r2, 0)} &Omega;</li>
-        <li>Resistor R3: ${formatNumber(r3, 0)} &Omega;</li>
+        <li>Ammeter A<sub>1</sub> for total current I<sub>1</sub></li>
+        <li>Ammeter A<sub>2</sub> for branch current I<sub>2</sub></li>
+        <li>Ammeter A<sub>3</sub> for branch current I<sub>3</sub></li>
+        <li>Resistor R<sub>1</sub>: ${formatNumber(r1, 0)} &Omega;</li>
+        <li>Resistor R<sub>2</sub>: ${formatNumber(r2, 0)} &Omega;</li>
+        <li>Resistor R<sub>3</sub>: ${formatNumber(r3, 0)} &Omega;</li>
         <li>Connecting leads</li>
       </ul>
 
       <h3>Calculation Formulae</h3>
       <ul>
-        <li>Total resistance: R = R1 + (R2 x R3) / (R2 + R3)</li>
-        <li>Total current: I1 = V / R</li>
-        <li>KCL check at the junction: I1 = I2 + I3</li>
+        <li>Total resistance: R = R<sub>1</sub> + (R<sub>2</sub> x R<sub>3</sub>) / (R<sub>2</sub> + R<sub>3</sub>)</li>
+        <li>Total current: I<sub>1</sub> = V / R</li>
+        <li>KCL check at the junction: I<sub>1</sub> = I<sub>2</sub> + I<sub>3</sub></li>
       </ul>
     </div>
   </div>
@@ -954,7 +959,7 @@ tr:nth-child(even) {
             <table class="compact-table">
               <tbody>
                 <tr><th>Readings Plotted</th><td>${observations.length}</td></tr>
-                <tr><th>Configured Resistance</th><td>R1 = ${formatNumber(r1, 0)} &Omega;, R2 = ${formatNumber(r2, 0)} &Omega;, R3 = ${formatNumber(r3, 0)} &Omega;</td></tr>
+                <tr><th>Configured Resistance</th><td>R<sub>1</sub> = ${formatNumber(r1, 0)} &Omega;, R<sub>2</sub> = ${formatNumber(r2, 0)} &Omega;, R<sub>3</sub> = ${formatNumber(r3, 0)} &Omega;</td></tr>
                 <tr><th>Calculated Total Resistance</th><td>${formatNumber(totalResistance)} &Omega;</td></tr>
                 <tr><th>Maximum KCL Error</th><td>${formatNumber(maxError, 4)} A</td></tr>
                 <tr><th>Average KCL Error</th><td>${formatNumber(averageError, 4)} A</td></tr>
@@ -977,7 +982,7 @@ tr:nth-child(even) {
 
         <div class="results-card">
           <h3>Conclusion</h3>
-          <p style="text-align: justify;">For every recorded voltage level, the total current I1 is equal to the sum of branch currents I2 and I3 within simulation precision. Hence Kirchhoff's Current Law is verified for the given resistive network.</p>
+          <p style="text-align: justify;">For every recorded voltage level, the total current I<sub>1</sub> is equal to the sum of branch currents I<sub>2</sub> and I<sub>3</sub> within simulation precision. Hence Kirchhoff's Current Law is verified for the given resistive network.</p>
         </div>
       </div>
     </div>
