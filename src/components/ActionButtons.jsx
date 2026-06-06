@@ -10,7 +10,6 @@ import {
   PlotIcon,
   PrintIcon,
   ResetIcon,
-  TableIcon,
 } from './Icons.jsx'
 
 const buttons = [
@@ -75,14 +74,15 @@ const buttons = [
 ]
 
 const ActionButtons = ({
+  activeButtons = {},
   disabledButtons = {},
   onAdd,
+  onAiGuide,
   onCheck,
   onPlot,
   onPrint,
   onReset,
   onAutoConnect,
-  onAiGuide,
 }) => {
   const [instructionsOpen, setInstructionsOpen] = useState(false)
   const handlers = {
@@ -100,6 +100,7 @@ const ActionButtons = ({
       <div className="action-buttons__grid">
         {buttons.map(({ id, label, tone, Icon, handlerName, opensInstructions }) => {
           const handler = handlers[handlerName]
+          const isActive = !opensInstructions && Boolean(activeButtons[handlerName])
           const isDisabled = !opensInstructions && (!handler || disabledButtons[handlerName])
           const buttonProps = opensInstructions
             ? {
@@ -108,7 +109,9 @@ const ActionButtons = ({
                 onClick: () => setInstructionsOpen((current) => !current),
               }
             : {
+                'aria-pressed': handlerName === 'onAiGuide' ? isActive : undefined,
                 onClick: handler,
+                title: handlerName === 'onAiGuide' && isActive ? 'Click to stop narration' : undefined,
               }
 
           return (
@@ -116,7 +119,7 @@ const ActionButtons = ({
               id={id}
               key={label}
               type="button"
-              className={`action-button ${tone}`}
+              className={`action-button ${tone} ${isActive ? 'action-button--active' : ''}`}
               disabled={isDisabled}
               {...buttonProps}
             >

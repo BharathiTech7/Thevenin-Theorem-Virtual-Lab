@@ -1,0 +1,62 @@
+{
+  "guideName": "AI Guide",
+  "defaultLocale": "en",
+  "locales": ["en"],
+  "steps": [
+    {
+      "id": 1,
+      "text": "STEP 1: Make connections by dragging nodes from apparatus to the circuit. Connect power supply to the circuit, 1 to 9 and 2 to 10. Connect ammeters, 3 to 11 and 4 to 12, 5 to 13 and 6 to 14, and 7 to 15 and 8 to 16, or connect any ammeter to any resistance in circuit. Click on the label to delete all the connections for the corresponding nodes.",
+      "audio": "#"
+    },
+    {
+      "id": 2,
+      "text": "STEP 2: Check your connections by clicking on the CHECK button.",
+      "audio": "#"
+    },
+    {
+      "id": 3,
+      "text": "STEP 3: Set the values of resistances R1, R2 and R3 by adjusting the sliders on left. These values will remain constant throughout the experiment.",
+      "audio": "#"
+    },
+    {
+      "id": 4,
+      "text": "STEP 4: Click the Power button to turn on the power supply.",
+      "audio": "#"
+    },
+    {
+      "id": 5,
+      "text": "STEP 5: Vary the voltage value by moving the voltage slider to the right side. The readings on the ammeter will change accordingly.",
+      "audio": "#"
+    },
+    {
+      "id": 6,
+      "text": "STEP 6: Click on the ADD button to add the readings to the observation table.",
+      "audio": "#"
+    },
+    {
+      "id": 7,
+      "text": "STEP 7: Repeat step 6 until 6 readings are recorded. A minimum of 6 readings is required to plot the graph.",
+      "audio": "#"
+    },
+    {
+      "id": 8,
+      "text": "STEP 8: Click on the PLOT button to display the graph.",
+      "audio": "#"
+    },
+    {
+      "id": 9,
+      "text": "STEP 9: Click on the Generate Report button below the graph to open the experiment report.",
+      "audio": "#"
+    },
+    {
+      "id": 10,
+      "text": "STEP 10: Use the report page controls to print or download the generated report.",
+      "audio": "#"
+    },
+    {
+      "id": 11,
+      "text": "STEP 11: Click on RESET button to refresh the page.",
+      "audio": "#"
+    }
+  ]
+}

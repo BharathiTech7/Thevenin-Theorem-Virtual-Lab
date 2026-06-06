@@ -10,6 +10,7 @@ import ReportControls from './components/ReportControls.jsx'
 import WalkthroughStartButton from './walkthrough/components/WalkthroughStartButton.jsx'
 import { EXPERIMENT_ALERTS } from './alerts/experimentStepAlerts.js'
 import { useLabAlerts } from './alerts/useLabAlerts.js'
+import { useAiGuideNarration } from './aiGuide/useAiGuideNarration.js'
 // import StatusBar from './components/StatusBar.jsx'
  
 import { calculateReadings } from './utils/circuitMath.js'
@@ -95,6 +96,38 @@ const App = () => {
   const readingCount = observations.length
   const canPlotGraph = readingCount >= MIN_GRAPH_READINGS
 
+  const handleAiGuideStart = useCallback(() => {
+    setStatus('AI Guide narration started.')
+  }, [])
+
+  const handleAiGuideFinish = useCallback(() => {
+    setStatus('AI Guide narration completed.')
+  }, [])
+
+  const handleAiGuideError = useCallback(() => {
+    setStatus('AI Guide narration could not start. Add audio files or use a browser with speech synthesis.')
+  }, [])
+
+  const {
+    isPlaying: aiGuidePlaying,
+    start: startAiGuide,
+    stop: stopAiGuide,
+  } = useAiGuideNarration({
+    onError: handleAiGuideError,
+    onFinish: handleAiGuideFinish,
+    onStart: handleAiGuideStart,
+  })
+
+  const handleAiGuide = useCallback(() => {
+    if (aiGuidePlaying) {
+      stopAiGuide()
+      setStatus('AI Guide narration stopped.')
+      return
+    }
+
+    startAiGuide()
+  }, [aiGuidePlaying, startAiGuide, stopAiGuide])
+
   const recordObservation = () => {
     if (!connectionsVerified) {
       setStatus('Check the circuit connections before adding readings.')
@@ -170,6 +203,7 @@ const App = () => {
   }
 
   const resetSimulation = useCallback(() => {
+    stopAiGuide()
     setPowerOn(false)
     setVoltage(0)
     setR1(0)
@@ -186,7 +220,7 @@ const App = () => {
     voltageLimitWarningShownRef.current = false
     setStatus('Simulation reset. Make the circuit connections again.')
     showStepAlert(EXPERIMENT_ALERTS.resetSuccess)
-  }, [showStepAlert])
+  }, [showStepAlert, stopAiGuide])
 
   const handleReset = async () => {
     const confirmed = await confirmAlert(EXPERIMENT_ALERTS.resetWarning)
@@ -398,6 +432,9 @@ const App = () => {
             <section className="workspace-grid">
               <aside className="left-panel">
                 <ActionButtons
+                  activeButtons={{
+                    onAiGuide: aiGuidePlaying,
+                  }}
                   disabledButtons={{
                     onAdd: false,
                     onAutoConnect: connectionsVerified || powerOn,
@@ -411,6 +448,7 @@ const App = () => {
                   onPrint={handlePrint}
                   onReset={handleReset}
                   onAutoConnect={handleAutoConnect}
+                  onAiGuide={handleAiGuide}
                 />
 
                 <ControlPanel
