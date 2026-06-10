@@ -12,7 +12,7 @@ export const AddIcon = () => (
   </svg>
 )
 
-export const PlotIcon = () => (
+export const CalculateIcon = () => (
   <svg aria-hidden="true" viewBox="0 0 32 32">
     <path d="M6 24h20M8 23V7M11 20l5-6 4 3 6-8" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.7" />
     <circle cx="16" cy="14" fill="currentColor" r="1.7" />

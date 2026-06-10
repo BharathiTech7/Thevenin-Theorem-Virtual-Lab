@@ -6,8 +6,8 @@ import {
   AutoConnectIcon,
   ButtonIcon,
   CheckIcon,
+  CalculateIcon,
   CloseIcon,
-  PlotIcon,
   PrintIcon,
   ResetIcon,
 } from './Icons.jsx'
@@ -49,12 +49,12 @@ const buttons = [
     handlerName: 'onAdd',
   },
   {
-    id: 'plot-button',
-    label: 'PLOT',
-    tone: 'action-button--orange',
-    Icon: PlotIcon,
-    handlerName: 'onPlot',
-  },
+  id: 'calculate-button',
+  label: 'CALCULATE',
+  tone: 'action-button--orange',
+  Icon: CalculateIcon,
+  handlerName: 'onCalculate',
+},
   {
     id: 'reset-button',
     label: 'RESET',
@@ -79,7 +79,7 @@ const ActionButtons = ({
   onAdd,
   onAiGuide,
   onCheck,
-  onPlot,
+  onCalculate,
   onPrint,
   onReset,
   onAutoConnect,
@@ -87,8 +87,8 @@ const ActionButtons = ({
   const [instructionsOpen, setInstructionsOpen] = useState(false)
   const handlers = {
     onAdd,
+    onCalculate,
     onCheck,
-    onPlot,
     onPrint,
     onReset,
     onAutoConnect,

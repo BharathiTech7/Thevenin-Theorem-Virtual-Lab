@@ -7,21 +7,15 @@ const ObservationTable = ({ observations }) => (
   <SectionCard className="h-[360px]" icon="table" id="observation-table-panel" title="OBSERVATION TABLE">
     <div className="observation-table-wrap">
       <table className="observation-table">
-        <thead>
-          <tr>
-            <th>S.No</th>
-            <th>Voltage (V)</th>
-            <th>
-              I<sub>1</sub> (A)
-            </th>
-            <th>
-              I<sub>2</sub> (A)
-            </th>
-            <th>
-              I<sub>3</sub> (A)
-            </th>
-          </tr>
-        </thead>
+<thead>
+  <tr>
+    <th>S.No</th>
+    <th>VTH (V)</th>
+    <th>RTH (Ω)</th>
+    <th>RL (Ω)</th>
+    <th>IL (A)</th>
+  </tr>
+</thead>
         <tbody>
           {emptyRows.map((_, index) => {
             const row = observations[index]
@@ -29,10 +23,10 @@ const ObservationTable = ({ observations }) => (
             return (
               <tr key={index}>
                 <td>{row?.id ?? ''}</td>
-                <td>{row ? row.voltage.toFixed(1) : ''}</td>
-                <td>{row ? row.i1.toFixed(3) : ''}</td>
-                <td>{row ? row.i2.toFixed(3) : ''}</td>
-                <td>{row ? row.i3.toFixed(3) : ''}</td>
+               <td>{row ? row.vth.toFixed(2) : ''}</td>
+<td>{row ? row.rth.toFixed(2) : ''}</td>
+<td>{row ? row.rl.toFixed(0) : ''}</td>
+<td>{row ? row.il.toFixed(4) : ''}</td>
               </tr>
             )
           })}

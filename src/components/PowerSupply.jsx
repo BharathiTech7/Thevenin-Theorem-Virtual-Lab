@@ -2,10 +2,11 @@ import powerSupplyOff from '../assets/PowerSupply_Off.png'
 import powerSupplyOn from '../assets/PowerSupply_ON.png'
 
 const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage }) => {
-  const displayedVoltage = powerOn ? `${voltage.toFixed(1)} V` : ''
-  const handleVoltageChange = (event) => {
-    setVoltage(Number(Number(event.target.value).toFixed(1)))
-  }
+ const displayedVoltage = powerOn ? `${voltage} V` : ''
+
+const handleVoltageChange = (event) => {
+  setVoltage(Number(event.target.value))
+}
 
   return (
     <article className="power-supply" id="power-supply">
@@ -56,18 +57,18 @@ const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage }) => {
 
       <label className="power-supply__control" id="voltage-control">
         <span className="sr-only">Voltage</span>
-        <input
-          aria-label="Voltage"
-          className="voltage-range"
-          disabled={!powerOn}
-          id="voltage-slider"
-          max="10"
-          min="0"
-          onChange={handleVoltageChange}
-          step="0.1"
-          type="range"
-          value={voltage}
-        />
+      <input
+  aria-label="Voltage"
+  className="voltage-range"
+  disabled={!powerOn}
+  id="voltage-slider"
+  max="30"
+  min="1"
+  onChange={handleVoltageChange}
+  step="1"
+  type="range"
+  value={voltage}
+/>
       </label>
     </article>
   )

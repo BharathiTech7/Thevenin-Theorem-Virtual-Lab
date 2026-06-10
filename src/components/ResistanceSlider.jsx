@@ -1,19 +1,31 @@
 import { useState } from 'react'
 
-const MIN_RESISTANCE = 0
-const MAX_RESISTANCE = 20
-const RESISTANCE_STEP = 0.1
-
-const normalizeResistance = (value) => {
-  const number = Number(value)
-  const bounded = Math.min(Math.max(Number.isFinite(number) ? number : 0, MIN_RESISTANCE), MAX_RESISTANCE)
-
-  return Number(bounded.toFixed(1))
-}
-
 const ResistanceSlider = ({ disabled = false, label, onChange, value }) => {
+  const isRL = label === 'RL'
+
+  const MIN_RESISTANCE = isRL ? 100 : 0.1
+  const MAX_RESISTANCE = isRL ? 300 : 10
+  const RESISTANCE_STEP = isRL ? 50 : 0.1
+
+  const normalizeResistance = (inputValue) => {
+    const number = Number(inputValue)
+
+    const bounded = Math.min(
+      Math.max(
+        Number.isFinite(number) ? number : MIN_RESISTANCE,
+        MIN_RESISTANCE,
+      ),
+      MAX_RESISTANCE,
+    )
+
+    return isRL
+      ? bounded
+      : Number(bounded.toFixed(1))
+  }
+
   const [draftValue, setDraftValue] = useState(value)
   const [isEditing, setIsEditing] = useState(false)
+
   const sliderValue = isEditing ? draftValue : value
 
   const commitValue = () => {
@@ -53,7 +65,9 @@ const ResistanceSlider = ({ disabled = false, label, onChange, value }) => {
         />
       </div>
 
-      <span className="resistance-slider__value">{sliderValue.toFixed(1)}</span>
+      <span className="resistance-slider__value">
+        {isRL ? sliderValue : Number(sliderValue).toFixed(1)}
+      </span>
     </div>
   )
 }

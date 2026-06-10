@@ -1,16 +1,12 @@
-import a1Img from '../assets/A1.png'
-import a2Img from '../assets/A2.png'
-import a3Img from '../assets/A3.png'
+import ammeterImg from '../assets/Ammeter.png'
 import needleImg from '../assets/needle.png'
 
-const METER_MAX_CURRENT = 10
+const METER_MAX_CURRENT = 5
 const DIAL_START_ANGLE = 180
 const DIAL_SWEEP_ANGLE = 180
 
 const ammeterImages = {
-  A1: a1Img,
-  A2: a2Img,
-  A3: a3Img,
+  A1: ammeterImg,
 }
 
 const terminalNumbers = {

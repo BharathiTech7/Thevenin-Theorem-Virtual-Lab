@@ -44,7 +44,7 @@ const terminalLabels = [
   },
 ]
 
-const CircuitDiagram = ({ className = '', r1, r2, r3 }) => (
+const CircuitDiagram = ({ className = '', r1, r2, r3, rl }) => (
   <section className={`circuit-panel ${className}`} id="circuit-panel">
     <div className="circuit-panel__stage">
       <img alt="Kirchhoff current law circuit diagram" className="circuit-panel__image" src={circuitImage} />
@@ -71,6 +71,9 @@ const CircuitDiagram = ({ className = '', r1, r2, r3 }) => (
       <span className="resistor-value left-[166px] top-[80px]">{r1} &Omega;</span>
       <span className="resistor-value left-[300px] top-[134px]">{r2} &Omega;</span>
       <span className="resistor-value left-[615px] top-[80px]">{r3} &Omega;</span>
+      <span className="resistor-value left-[760px] top-[210px]">
+  {rl} &Omega;
+</span>
     </div>
   </section>
 )

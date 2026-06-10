@@ -1,8 +1,15 @@
-
 import Ammeter from './Ammeter.jsx'
+import DigitalMultimeter from './DigitalMultimeter.jsx'
 import PowerSupply from './PowerSupply.jsx'
+import Voltmeter from './Voltmeter.jsx'
 
-const EquipmentPanel = ({ onTogglePower, powerOn, readings, setVoltage, voltage }) => (
+const EquipmentPanel = ({
+  onTogglePower,
+  powerOn,
+  readings,
+  setVoltage,
+  voltage,
+}) => (
   <section className="equipment-panel" id="equipment-panel">
     <PowerSupply
       onTogglePower={onTogglePower}
@@ -11,9 +18,11 @@ const EquipmentPanel = ({ onTogglePower, powerOn, readings, setVoltage, voltage 
       voltage={voltage}
     />
 
-    <Ammeter label="A1" value={readings.A1} />
-    <Ammeter label="A2" value={readings.A2} />
-    <Ammeter label="A3" value={readings.A3} />
+    <Voltmeter value={readings.vth} />
+
+    <Ammeter label="A1" value={readings.il} />
+
+    <DigitalMultimeter value={readings.rth} />
   </section>
 )
 

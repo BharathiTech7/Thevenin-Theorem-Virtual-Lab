@@ -5,19 +5,64 @@ import SectionCard from './SectionCard.jsx'
 const ControlPanel = ({
   locked,
   observations,
+  rl,
   r1,
   r2,
   r3,
+  setRl,
   setR1,
   setR2,
   setR3,
 }) => (
   <>
-    <SectionCard className="h-[212px]" icon="sliders" id="resistance-controls" title="RESISTANCE SLIDERS">
+    <SectionCard
+      className="h-[260px]"
+      icon="sliders"
+      id="resistance-controls"
+      title="RESISTANCE SLIDERS"
+    >
       <div className="flex flex-col gap-[18px] px-[26px] pt-[26px]">
-        <ResistanceSlider disabled={locked} label="R1" onChange={setR1} value={r1} />
-        <ResistanceSlider disabled={locked} label="R2" onChange={setR2} value={r2} />
-        <ResistanceSlider disabled={locked} label="R3" onChange={setR3} value={r3} />
+
+        <ResistanceSlider
+  disabled={locked}
+  label="RL"
+  onChange={setRl}
+  value={rl}
+  min={100}
+  max={300}
+  step={50}
+/>
+
+        <ResistanceSlider
+  disabled={locked}
+  label="R1"
+  onChange={setR1}
+  value={r1}
+  min={0.1}
+  max={10}
+  step={0.1}
+/>
+
+        <ResistanceSlider
+  disabled={locked}
+  label="R2"
+  onChange={setR2}
+  value={r2}
+  min={0.1}
+  max={10}
+  step={0.1}
+/>
+
+        <ResistanceSlider
+  disabled={locked}
+  label="R3"
+  onChange={setR3}
+  value={r3}
+  min={0.1}
+  max={10}
+  step={0.1}
+/>
+
       </div>
     </SectionCard>
 

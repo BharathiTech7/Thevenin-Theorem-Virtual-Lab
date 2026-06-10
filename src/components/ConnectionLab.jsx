@@ -28,6 +28,7 @@ const ConnectionLab = ({
   r1,
   r2,
   r3,
+  rl,
   readings,
   resetRequest,
   scale = 1,
@@ -199,23 +200,28 @@ const ConnectionLab = ({
     instanceRef.current.repaintEverything?.()
   }
 
-  const ammeterReadings = {
-    A1: readings[ammeterCurrentKeys.A1] ?? 0,
-    A2: readings[ammeterCurrentKeys.A2] ?? 0,
-    A3: readings[ammeterCurrentKeys.A3] ?? 0,
-  }
+const meterReadings = {
+  vth: readings.vth ?? 0,
+  il: readings.il ?? 0,
+  rth: readings.rth ?? 0,
+}
 
   return (
     <div className="connection-lab" onClick={handleLabelClick} ref={containerRef}>
-      <EquipmentPanel
-        onTogglePower={onTogglePower}
-        powerOn={powerOn}
-        readings={ammeterReadings}
-        setVoltage={setVoltage}
-        voltage={voltage}
-      />
+    <EquipmentPanel
+  onTogglePower={onTogglePower}
+  powerOn={powerOn}
+  readings={meterReadings}
+  setVoltage={setVoltage}
+  voltage={voltage}
+/>
 
-      <CircuitDiagram r1={r1} r2={r2} r3={r3} />
+      <CircuitDiagram
+  r1={r1}
+  r2={r2}
+  r3={r3}
+  rl={rl}
+/>
     </div>
   )
 }
