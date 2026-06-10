@@ -54,6 +54,7 @@ const App = () => {
   const [r1, setR1] = useState(0)
   const [r2, setR2] = useState(0)
   const [r3, setR3] = useState(0)
+  const [rl, setRl] = useState(100)
   const [voltage, setVoltage] = useState(0)
   const [powerOn, setPowerOn] = useState(false)
   const [observations, setObservations] = useState([])
@@ -78,8 +79,14 @@ const App = () => {
   }, [])
 
   const readings = useMemo(
-    () => calculateReadings({ voltage: powerOn ? voltage : 0, r1, r2, r3 }),
-    [powerOn, r1, r2, r3, voltage],
+    () => calculateReadings({
+  voltage: powerOn ? voltage : 0,
+  r1,
+  r2,
+  r3,
+  rl,
+}),
+    [powerOn, r1, r2, r3, rl, voltage],
   )
 
   const normalizedVoltage = Number(voltage.toFixed(1))
