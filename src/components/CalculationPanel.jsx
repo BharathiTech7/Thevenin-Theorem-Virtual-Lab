@@ -16,7 +16,21 @@ const CalculationPanel = ({
   const observedIL = calculatedValues?.observedIL ?? ''
  
   const handleVerify = () => {
+     if (!calculationDone) {
+    return
+  }
+  if (userCalculatedIL.trim() === '') {
+    setVerificationResult('⚠️ Please enter the calculated IL value')
+    return
+  }
+
   const entered = Number(userCalculatedIL)
+
+  if (Number.isNaN(entered)) {
+    setVerificationResult('⚠️ Enter a valid number')
+    return
+  }
+
   const actual = Number(observedIL)
 
   const isCorrect =
@@ -85,9 +99,10 @@ onChange={(e) => setUserCalculatedIL(e.target.value)}
           />
         </div>
 
-       <button
+      <button
   type="button"
   onClick={handleVerify}
+  disabled={!calculationDone}
 >
   VERIFY
 </button>

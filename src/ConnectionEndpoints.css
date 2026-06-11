@@ -471,22 +471,22 @@
 }
 .connection-terminal--endpoint-11 {
   --terminal-base-top: 18px;
-  --terminal-base-left: 705px;
+  --terminal-base-left: 560px;
 }
 
 .connection-terminal--endpoint-12 {
   --terminal-base-top: 18px;
-  --terminal-base-left: 735px;
+  --terminal-base-left: 590px;
 }
 
 .connection-terminal--endpoint-13 {
   --terminal-base-top: 300px;
-  --terminal-base-left: 705px;
+  --terminal-base-left: 560px;
 }
 
 .connection-terminal--endpoint-14 {
   --terminal-base-top: 300px;
-  --terminal-base-left: 735px;
+  --terminal-base-left: 590px;
 }
 /* Keep the invisible jsPlumb hit targets in the same modern polarity palette. */
 .connection-terminal[data-polarity="plus"] {
@@ -557,22 +557,22 @@
 }
 .terminal-number-label--endpoint-11 {
   top: 35px;
-  left: 705px;
+  left: 560px;
 }
 
 .terminal-number-label--endpoint-12 {
   top: 35px;
-  left: 735px;
+  left: 590px;
 }
 
 .terminal-number-label--endpoint-13 {
   top: 315px;
-  left: 705px;
+  left: 560px;
 }
 
 .terminal-number-label--endpoint-14 {
   top: 315px;
-  left: 735px;
+  left: 590px;
 }
 
 .terminal-label {

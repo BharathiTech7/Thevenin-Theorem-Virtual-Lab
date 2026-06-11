@@ -14,110 +14,8 @@ export const CIRCUIT_NEGATIVE_TERMINALS = [
   '14-endpoint',
 ]
 
-export const VALID_CONNECTION_SEQUENCE = [
-  '1-endpoint', '9-endpoint',
-  '2-endpoint', '10-endpoint',
-
-  '3-endpoint', '11-endpoint',
-  '4-endpoint', '12-endpoint',
-
-  '5-endpoint', '13-endpoint',
-  '6-endpoint', '14-endpoint',
 
 
-
-  // These extra combinations allow A1, A2, A3 to be connected
-  // to different valid branches, same as your old JavaScript file.
-
-  '3-endpoint', '13-endpoint',
-  '4-endpoint', '14-endpoint',
-
-  
-
-  '5-endpoint', '11-endpoint',
-  '6-endpoint', '12-endpoint',
-
-  
-
-  '7-endpoint', '11-endpoint',
-  '8-endpoint', '12-endpoint',
-
-  '7-endpoint', '13-endpoint',
-  '8-endpoint', '14-endpoint',
-]
-
-export const DEFAULT_AUTO_CONNECTIONS = [
-  ['1-endpoint', '9-endpoint'],
-  ['2-endpoint', '10-endpoint'],
-
-  ['3-endpoint', '11-endpoint'],
-  ['4-endpoint', '12-endpoint'],
-
-  ['5-endpoint', '13-endpoint'],
-  ['6-endpoint', '14-endpoint'],
-
-
-]
-
-export const DEFAULT_AMMETER_CURRENT_KEYS = {
-  A1: 'i1',
-  A2: 'i2',
-  A3: 'i3',
-}
-
-const AMMETER_BRANCH_CONNECTIONS = {
-  A1: [
-    {
-      currentKey: 'i1',
-      negativeTerminal: '4-endpoint',
-      positiveTerminal: '3-endpoint',
-      circuitNegativeTerminal: '12-endpoint',
-      circuitPositiveTerminal: '11-endpoint',
-    },
-    {
-      currentKey: 'i2',
-      negativeTerminal: '4-endpoint',
-      positiveTerminal: '3-endpoint',
-      circuitNegativeTerminal: '14-endpoint',
-      circuitPositiveTerminal: '13-endpoint',
-    },
-   
-  ],
-  A2: [
-    {
-      currentKey: 'i1',
-      negativeTerminal: '6-endpoint',
-      positiveTerminal: '5-endpoint',
-      circuitNegativeTerminal: '12-endpoint',
-      circuitPositiveTerminal: '11-endpoint',
-    },
-    {
-      currentKey: 'i2',
-      negativeTerminal: '6-endpoint',
-      positiveTerminal: '5-endpoint',
-      circuitNegativeTerminal: '14-endpoint',
-      circuitPositiveTerminal: '13-endpoint',
-    },
-    
-  ],
-  A3: [
-    {
-      currentKey: 'i1',
-      negativeTerminal: '8-endpoint',
-      positiveTerminal: '7-endpoint',
-      circuitNegativeTerminal: '12-endpoint',
-      circuitPositiveTerminal: '11-endpoint',
-    },
-    {
-      currentKey: 'i2',
-      negativeTerminal: '8-endpoint',
-      positiveTerminal: '7-endpoint',
-      circuitNegativeTerminal: '14-endpoint',
-      circuitPositiveTerminal: '13-endpoint',
-    },
- 
-  ],
-}
 
 export const resolveJsPlumb = (module) => (
   module?.jsPlumb
@@ -304,32 +202,7 @@ export const hasConnectionBetween = (instance, firstId, secondId) => (
   Boolean(getConnectionBetween(instance, firstId, secondId))
 )
 
-export const getAmmeterCurrentKeys = (instance) => {
-  const currentKeys = {
-    ...DEFAULT_AMMETER_CURRENT_KEYS,
-  }
 
-  Object.entries(AMMETER_BRANCH_CONNECTIONS).forEach(([meterLabel, branches]) => {
-    const matchedBranch = branches.find((branch) => (
-      hasConnectionBetween(
-        instance,
-        branch.positiveTerminal,
-        branch.circuitPositiveTerminal,
-      )
-      && hasConnectionBetween(
-        instance,
-        branch.negativeTerminal,
-        branch.circuitNegativeTerminal,
-      )
-    ))
-
-    if (matchedBranch) {
-      currentKeys[meterLabel] = matchedBranch.currentKey
-    }
-  })
-
-  return currentKeys
-}
 
 export const addTerminalEndpoint = (instance, terminalId, type) => {
   const element = document.getElementById(terminalId)
@@ -392,62 +265,6 @@ export const addAllEndpoints = (
 })
 }
 
-export const autoConnectDefaultCircuit = (instance) => {
-  DEFAULT_AUTO_CONNECTIONS.forEach(([source, target]) => {
-    if (hasConnectionBetween(instance, source, target)) {
-      return
-    }
-
-    instance.connect({
-      uuids: [source, target],
-      type: isNegativeTerminal(source) ? 'negative' : 'positive',
-    })
-  })
-}
-
-export const validateOldExperimentConnections = (instance) => {
-  const matchedConnections = []
-
-  for (let i = 0; i < VALID_CONNECTION_SEQUENCE.length - 1; i += 1) {
-    const firstTerminal = VALID_CONNECTION_SEQUENCE[i]
-    const secondTerminal = VALID_CONNECTION_SEQUENCE[i + 1]
-
-    const matchedConnection = getConnectionBetween(
-      instance,
-      firstTerminal,
-      secondTerminal,
-    )
-
-    if (!matchedConnection || i % 2 !== 0) {
-      continue
-    }
-
-    matchedConnections.push(matchedConnection)
-
-    try {
-      const nextPairIsMissing = !hasConnectionBetween(
-        instance,
-        VALID_CONNECTION_SEQUENCE[i + 2],
-        VALID_CONNECTION_SEQUENCE[i + 3],
-      )
-
-      if (nextPairIsMissing && i % 4 === 0) {
-        matchedConnections.pop()
-      }
-    } catch {
-      // Same idea as old JS:
-      // if the next pair does not exist, just continue.
-    }
-  }
-
-  const totalConnections = getAllConnections(instance).length
-
-  return {
-    isCorrect: matchedConnections.length === 8 && totalConnections === 8,
-    matchedCount: matchedConnections.length,
-    totalConnections,
-  }
-}
 
 export const lockJsPlumbCircuit = (instance, containerElement) => {
   getAllConnections(instance).forEach((connection) => {

@@ -2,12 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { useLabAlerts } from '../alerts/useLabAlerts.js'
 import CircuitDiagram from './CircuitDiagram.jsx'
 import EquipmentPanel from './EquipmentPanel.jsx'
-
+import PowerSupply from './PowerSupply.jsx'
 import {
   addAllEndpoints,
-  DEFAULT_AMMETER_CURRENT_KEYS,
   deleteConnectionsForTerminal,
-  getAmmeterCurrentKeys,
   resolveJsPlumb,
  validateTheveninConnections,
   wireHoverPaintStyles,
@@ -41,7 +39,7 @@ const ConnectionLab = ({
   const scaleRef = useRef(getJsPlumbZoom(scale))
   const { showStepAlert } = useLabAlerts()
   const [isLocked, setIsLocked] = useState(false)
-  const [ammeterCurrentKeys, setAmmeterCurrentKeys] = useState(DEFAULT_AMMETER_CURRENT_KEYS)
+ 
 
   useEffect(() => {
     onCheckConnectionsRef.current = onCheckConnections
@@ -63,7 +61,7 @@ const ConnectionLab = ({
 
       containerRef.current.classList.remove('connection-lab--locked')
       setIsLocked(false)
-      setAmmeterCurrentKeys(DEFAULT_AMMETER_CURRENT_KEYS)
+      
 
       const instance = jsPlumb.getInstance({
         Container: containerRef.current,
@@ -174,9 +172,7 @@ const ConnectionLab = ({
   experimentCase
 )
 
-  if (result.isCorrect) {
-  setAmmeterCurrentKeys(getAmmeterCurrentKeys(instanceRef.current))
-}
+
 
     onCheckConnectionsRef.current?.(result)
   }, [checkRequest])
@@ -221,12 +217,25 @@ const meterReadings = {
   voltage={voltage}
 />
 
-      <CircuitDiagram
-  r1={r1}
-  r2={r2}
-  r3={r3}
-  rl={rl}
-/>
+     <div className="circuit-workspace">
+
+    <div className="circuit-power-supply">
+  <PowerSupply
+    onTogglePower={onTogglePower}
+    powerOn={powerOn}
+    setVoltage={setVoltage}
+    voltage={voltage}
+  />
+</div>
+
+    <CircuitDiagram
+      r1={r1}
+      r2={r2}
+      r3={r3}
+      rl={rl}
+    />
+
+  </div>
     </div>
   )
 }

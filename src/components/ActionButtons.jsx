@@ -77,12 +77,13 @@ const ActionButtons = ({
 }) => {
   const [instructionsOpen, setInstructionsOpen] = useState(false)
   const handlers = {
-    onAdd,
-    onCalculate,
-    onCheck,
-    onPrint,
-    onAiGuide,
-  }
+  onAdd,
+  onCalculate,
+  onCheck,
+  onPrint,
+  onReset,
+  onAiGuide,
+}
 
   return (
     <SectionCard className="action-buttons-card h-[176px]" icon="buttons" id="action-buttons-panel" title="ACTION BUTTONS">

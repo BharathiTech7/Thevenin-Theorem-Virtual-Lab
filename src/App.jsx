@@ -175,7 +175,7 @@ const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
     }
 
     if (readingCount >= MAX_OBSERVATIONS) {
-      setStatus('Ten readings are already recorded. Plot the graph or reset for a new run.')
+      setStatus('Observation table is full. Reset the experiment for a new run.')
       showStepAlert(EXPERIMENT_ALERTS.minimumReadingsRequired, {
         description: 'The observation table already contains the maximum 10 readings.',
         title: 'Observation Table Is Full',
@@ -246,13 +246,13 @@ else if (experimentCase === 3) {
 setR1(0.1)
 setR2(0.1)
 setR3(0.1)
+setRl(100)
     setObservations([])
     setCalculationDone(false)
 setCalculatedValues(null)
 setVerificationResult('')
 setUserCalculatedIL('')
     setReportGenerated(false)
-    setAutoConnectRequest(0)
     setCheckRequest(0)
     setExperimentCase(1)
     setConnectionsVerified(false)
@@ -270,7 +270,12 @@ setUserCalculatedIL('')
 
 const handlePrint = () => {
   if (readingCount < MIN_OBSERVATION_READINGS) {
-    window.alert('Please add at least one observation before printing.')
+    showStepAlert({
+      title: 'Print Not Available Yet',
+      description:
+        'Complete the experiment and calculate the results before printing the report.',
+      type: 'warning',
+    })
     return
   }
 
@@ -344,8 +349,8 @@ const handleGenerateReport = () => {
     }
 
     setStatus(
-      `Invalid connections. Correct matched points: ${result.matchedCount}; total wires: ${result.totalConnections}.`,
-    )
+  'Invalid connections. Please check the wiring and try again.'
+)
     showStepAlert(EXPERIMENT_ALERTS.connectionErrorFound, {
       description: `Matched ${result.matchedCount} of 8 required wire pairs from ${result.totalConnections} total wires.`,
     })
@@ -379,12 +384,12 @@ const handleGenerateReport = () => {
   setVoltage(nextVoltage)
 }, [])
 
-  const handleCalculate = () => {
+ const handleCalculate = () => {
   setCalculatedValues({
-    vth: readings.vth,
-    rth: readings.rth,
+    vth: measuredVth,
+    rth: measuredRth,
     rl,
-    observedIL: readings.il,
+    observedIL: measuredIl,
   })
 
   setCalculationDone(true)

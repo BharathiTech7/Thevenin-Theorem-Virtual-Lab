@@ -11,12 +11,6 @@ const EquipmentPanel = ({
   voltage,
 }) => (
   <section className="equipment-panel" id="equipment-panel">
-    <PowerSupply
-      onTogglePower={onTogglePower}
-      powerOn={powerOn}
-      setVoltage={setVoltage}
-      voltage={voltage}
-    />
 
     <Voltmeter value={readings.vth} />
 
