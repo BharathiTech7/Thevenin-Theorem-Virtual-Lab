@@ -18,7 +18,7 @@ const handleVoltageChange = (event) => {
 
       <div className="power-supply__display">{displayedVoltage}</div>
       <span
-        id="1-endpoint"
+        id="7-endpoint"
         className="connection-terminal connection-terminal--power connection-terminal--power-plus connection-terminal--endpoint-1"
         data-polarity="plus"
         aria-label="Power supply positive terminal 1"
@@ -29,11 +29,11 @@ const handleVoltageChange = (event) => {
         data-terminal-id="1-endpoint"
         title="Power positive (1-endpoint)"
       >
-        1
+        7
       </span>
 
       <span
-        id="2-endpoint"
+        id="8-endpoint"
         className="connection-terminal connection-terminal--power connection-terminal--power-minus connection-terminal--endpoint-2"
         data-polarity="minus"
         aria-label="Power supply negative terminal 2"
@@ -44,7 +44,7 @@ const handleVoltageChange = (event) => {
         data-terminal-id="2-endpoint"
         title="Power negative (2-endpoint)"
       >
-        2
+        8
       </span>
       <button
         id="power-toggle-button"

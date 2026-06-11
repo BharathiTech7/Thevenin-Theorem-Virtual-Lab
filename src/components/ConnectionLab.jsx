@@ -1,17 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
-
+import { useLabAlerts } from '../alerts/useLabAlerts.js'
 import CircuitDiagram from './CircuitDiagram.jsx'
 import EquipmentPanel from './EquipmentPanel.jsx'
 
 import {
   addAllEndpoints,
-  autoConnectDefaultCircuit,
   DEFAULT_AMMETER_CURRENT_KEYS,
   deleteConnectionsForTerminal,
   getAmmeterCurrentKeys,
-  lockJsPlumbCircuit,
   resolveJsPlumb,
-  validateOldExperimentConnections,
+ validateTheveninConnections,
   wireHoverPaintStyles,
   wirePaintStyles,
 } from '../utils/jsPlumbWiring.js'
@@ -21,8 +19,8 @@ const getJsPlumbZoom = (scale) => (
 )
 
 const ConnectionLab = ({
-  autoConnectRequest,
   checkRequest,
+  experimentCase,
   onCheckConnections,
   powerOn,
   r1,
@@ -35,12 +33,13 @@ const ConnectionLab = ({
   onTogglePower,
   setVoltage,
   voltage,
+  resistancesConfigured,
 }) => {
   const containerRef = useRef(null)
   const instanceRef = useRef(null)
   const onCheckConnectionsRef = useRef(onCheckConnections)
   const scaleRef = useRef(getJsPlumbZoom(scale))
-
+  const { showStepAlert } = useLabAlerts()
   const [isLocked, setIsLocked] = useState(false)
   const [ammeterCurrentKeys, setAmmeterCurrentKeys] = useState(DEFAULT_AMMETER_CURRENT_KEYS)
 
@@ -50,10 +49,11 @@ const ConnectionLab = ({
 
   useEffect(() => {
     let cancelled = false
-
+    
     const initJsPlumb = async () => {
       const jsPlumbModule = await import('jsplumb')
       const jsPlumb = resolveJsPlumb(jsPlumbModule)
+  
 
       if (cancelled || !containerRef.current || !jsPlumb?.getInstance) {
         return
@@ -103,7 +103,21 @@ const ConnectionLab = ({
 
       instance.setSuspendDrawing(true)
 
-      addAllEndpoints(instance)
+     addAllEndpoints(
+ instance,
+  () => {
+    console.log("RESISTANCE CHECK =", resistancesConfigured)
+    return resistancesConfigured
+  },
+  () => {
+  showStepAlert({
+    title: 'Set Resistance Values First',
+    description:
+      'Please set R1, R2, R3 and RL before making connections.',
+    type: 'warning',
+  })
+}
+)
 
       instance.setSuspendDrawing(false, true)
 
@@ -129,7 +143,7 @@ const ConnectionLab = ({
       instanceRef.current?.reset()
       instanceRef.current = null
     }
-  }, [resetRequest])
+  }, [resetRequest,resistancesConfigured])
 
   useEffect(() => {
     const instance = instanceRef.current
@@ -148,30 +162,21 @@ const ConnectionLab = ({
     }, 0)
   }, [scale])
 
-  useEffect(() => {
-    if (autoConnectRequest === 0 || !instanceRef.current || isLocked) {
-      return
-    }
-
-    autoConnectDefaultCircuit(instanceRef.current)
-
-    window.setTimeout(() => {
-      instanceRef.current?.repaintEverything()
-    }, 80)
-  }, [autoConnectRequest, isLocked])
+  
 
   useEffect(() => {
     if (checkRequest === 0 || !instanceRef.current) {
       return
     }
 
-    const result = validateOldExperimentConnections(instanceRef.current)
+    const result = validateTheveninConnections(
+  instanceRef.current,
+  experimentCase
+)
 
-    if (result.isCorrect) {
-      setAmmeterCurrentKeys(getAmmeterCurrentKeys(instanceRef.current))
-      lockJsPlumbCircuit(instanceRef.current, containerRef.current)
-      setIsLocked(true)
-    }
+  if (result.isCorrect) {
+  setAmmeterCurrentKeys(getAmmeterCurrentKeys(instanceRef.current))
+}
 
     onCheckConnectionsRef.current?.(result)
   }, [checkRequest])

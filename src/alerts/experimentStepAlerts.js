@@ -34,11 +34,11 @@ export const EXPERIMENT_ALERTS = {
     type: 'info',
   },
   connectionsVerified: {
-    description: 'You can now set resistance values and power the circuit.',
+    description: 'Connections verified. Follow the current experiment step.',
     icon: '✅',
     stepNumber: 2,
     target: '#resistance-controls',
-    title: 'All Connections Verified Successfully',
+    title: 'Right Connections',
     type: 'success',
   },
   connectionErrorFound: {

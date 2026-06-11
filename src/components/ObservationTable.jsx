@@ -23,10 +23,13 @@ const ObservationTable = ({ observations }) => (
             return (
               <tr key={index}>
                 <td>{row?.id ?? ''}</td>
-               <td>{row ? row.vth.toFixed(2) : ''}</td>
-<td>{row ? row.rth.toFixed(2) : ''}</td>
-<td>{row ? row.rl.toFixed(0) : ''}</td>
-<td>{row ? row.il.toFixed(4) : ''}</td>
+               <td>{typeof row?.vth === 'number' ? row.vth.toFixed(2) : ''}</td>
+
+<td>{typeof row?.rth === 'number' ? row.rth.toFixed(2) : ''}</td>
+
+<td>{row?.rl ?? ''}</td>
+
+<td>{typeof row?.il === 'number' ? row.il.toFixed(4) : ''}</td>
               </tr>
             )
           })}

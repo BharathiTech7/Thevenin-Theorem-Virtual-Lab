@@ -22,8 +22,7 @@ const PANEL_MAX_SCALE = 0.9
 const PANEL_VIEWPORT_MARGIN = 24
 const MIN_OBSERVATION_READINGS = 1
 const MAX_OBSERVATIONS = 10
-const VOLTAGE_SAFETY_LIMIT = 8.5
-const VOLTAGE_SAFETY_RESET = 7.5
+
 
 const getObservationSignature = ({ vth, rth, il }) => (
   [
@@ -60,17 +59,23 @@ const [calculationDone, setCalculationDone] = useState(false)
 const [calculatedValues, setCalculatedValues] = useState(null)
 const [userCalculatedIL, setUserCalculatedIL] = useState('')
 const [verificationResult, setVerificationResult] = useState('')
-
+const [experimentCase, setExperimentCase] = useState(1)
+const calculationReady = experimentCase > 3
+const [measuredRth, setMeasuredRth] = useState(null)
+const [measuredVth, setMeasuredVth] = useState(null)
+const [measuredIl, setMeasuredIl] = useState(null)
   const [reportGenerated, setReportGenerated] = useState(false)
   const [status, setStatus] = useState('Make the connections, click CHECK, then set the resistance values.')
-
-  const [autoConnectRequest, setAutoConnectRequest] = useState(0)
   const [checkRequest, setCheckRequest] = useState(0)
   const [resetRequest, setResetRequest] = useState(0)
+
   const [connectionsVerified, setConnectionsVerified] = useState(false)
   const [sessionStart, setSessionStart] = useState(() => Date.now())
-  const voltageLimitWarningShownRef = useRef(false)
-
+const resistancesConfigured =
+  Number(r1) !== 0.1 &&
+  Number(r2) !== 0.1 &&
+  Number(r3) !== 0.1 &&
+  Number(rl) !== 100
   useEffect(() => {
     const handleResize = () => setScale(getScale())
 
@@ -148,7 +153,7 @@ const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
       return
     }
 
-    if (!powerOn) {
+   if (experimentCase !== 1 && !powerOn) {
       setStatus('Switch on the power supply before adding readings.')
       showStepAlert(EXPERIMENT_ALERTS.cannotStartPower, {
         description: 'Switch on the verified power supply before adding readings.',
@@ -158,7 +163,7 @@ const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
       return
     }
 
-    if (normalizedVoltage <= 0) {
+    if (experimentCase !== 1 && normalizedVoltage <= 0) {
       setStatus('Set the power supply voltage before adding a reading.')
       showStepAlert(EXPERIMENT_ALERTS.adjustVoltage, {
         dedupeKey: 'step-6-zero-voltage',
@@ -187,22 +192,51 @@ const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
       return
     }
 
- const nextObservation = {
-  id: (observations.at(-1)?.id ?? 0) + 1,
-  vth: readings.vth,
-  rth: readings.rth,
-  rl,
-  il: readings.il,
-}
-    const nextObservationCount = readingCount + 1
+ if (experimentCase === 1) {
+  setObservations([
+    {
+      id: 1,
+      rth: readings.rth,
+      vth: null,
+      il: null,
+      rl,
+    },
+  ])
 
-    setObservations([...observations, nextObservation])
+  setMeasuredRth(readings.rth)
+  setExperimentCase(2)
+}
+
+else if (experimentCase === 2) {
+  setObservations([
+    {
+      ...observations[0],
+      vth: readings.vth,
+    },
+  ])
+
+  setMeasuredVth(readings.vth)
+  setExperimentCase(3)
+}
+
+else if (experimentCase === 3) {
+  setObservations([
+    {
+      ...observations[0],
+      il: readings.il,
+    },
+  ])
+
+  setMeasuredIl(readings.il)
+  setExperimentCase(4)
+}
+  
     setReportGenerated(false)
     setStatus('Reading added to the observation table.')
 
-   if (nextObservationCount === MIN_OBSERVATION_READINGS) {
-  showStepAlert(EXPERIMENT_ALERTS.sufficientData)
-}
+//    if (nextObservationCount === MIN_OBSERVATION_READINGS) {
+//   showStepAlert(EXPERIMENT_ALERTS.sufficientData)
+// }
   }
 
   const resetSimulation = useCallback(() => {
@@ -220,10 +254,10 @@ setUserCalculatedIL('')
     setReportGenerated(false)
     setAutoConnectRequest(0)
     setCheckRequest(0)
+    setExperimentCase(1)
     setConnectionsVerified(false)
     setResetRequest((current) => current + 1)
     setSessionStart(Date.now())
-    voltageLimitWarningShownRef.current = false
     setStatus('Simulation reset. Make the circuit connections again.')
     showStepAlert(EXPERIMENT_ALERTS.resetSuccess)
   }, [showStepAlert, stopAiGuide])
@@ -273,15 +307,30 @@ const handleGenerateReport = () => {
   const scaledHeight = Math.ceil(CONTENT_HEIGHT * scale)
   const handleCheckConnections = useCallback((result) => {
     if (result.isCorrect) {
-      setConnectionsVerified(true)
+  setConnectionsVerified(true)
 
-      setStatus(
-        'Right connections! Please choose resistance values and switch on the power supply.',
-      )
-      showStepAlert(EXPERIMENT_ALERTS.connectionsVerified)
+  if (experimentCase === 1) {
+    setStatus(
+      'Right connections! Click ADD to measure RTH.'
+    )
+  }
 
-      return
-    }
+  else if (experimentCase === 2) {
+    setStatus(
+      'Right connections! Turn ON power supply and click ADD to measure VTH.'
+    )
+  }
+
+  else if (experimentCase === 3) {
+    setStatus(
+      'Right connections! Turn ON power supply and click ADD to measure IL.'
+    )
+  }
+
+  showStepAlert(EXPERIMENT_ALERTS.connectionsVerified)
+
+  return
+}
 
     setConnectionsVerified(false)
 
@@ -315,7 +364,7 @@ const handleGenerateReport = () => {
     if (powerOn) {
       setPowerOn(false)
       setVoltage(0)
-      voltageLimitWarningShownRef.current = false
+      
       setStatus('Power supply switched off.')
       return
     }
@@ -324,39 +373,11 @@ const handleGenerateReport = () => {
     setStatus('Power supply switched on. Adjust voltage and add the reading.')
     showStepAlert(EXPERIMENT_ALERTS.powerOn)
   }
-  const handleAutoConnect = () => {
-    setAutoConnectRequest((current) => current + 1)
-    setConnectionsVerified(false)
 
-    setStatus(
-      'Default connections added using jsPlumb. Click CHECK to validate and lock the circuit.',
-    )
-    showStepAlert(EXPERIMENT_ALERTS.circuitConnectionsCompleted)
-  }
 
-  const handleVoltageChange = useCallback((nextVoltage) => {
-    setVoltage(nextVoltage)
-
-    if (!powerOn || nextVoltage <= 0) {
-      if (nextVoltage < VOLTAGE_SAFETY_RESET) {
-        voltageLimitWarningShownRef.current = false
-      }
-
-      return
-    }
-
-    if (nextVoltage >= VOLTAGE_SAFETY_LIMIT && !voltageLimitWarningShownRef.current) {
-      voltageLimitWarningShownRef.current = true
-      showStepAlert(EXPERIMENT_ALERTS.voltageSafetyLimit, {
-        description: `${nextVoltage.toFixed(1)} V is close to the 10 V supply limit.`,
-      })
-      return
-    }
-
-    if (nextVoltage < VOLTAGE_SAFETY_RESET) {
-      voltageLimitWarningShownRef.current = false
-    }
-  }, [powerOn, showStepAlert])
+ const handleVoltageChange = useCallback((nextVoltage) => {
+  setVoltage(nextVoltage)
+}, [])
 
   const handleCalculate = () => {
   setCalculatedValues({
@@ -397,24 +418,23 @@ const handleGenerateReport = () => {
                   activeButtons={{
                     onAiGuide: aiGuidePlaying,
                   }}
-                 disabledButtons={{
-  onAdd: false,
-  onAutoConnect: connectionsVerified || powerOn,
-  onCheck: connectionsVerified,
+      disabledButtons={{
+  onAdd: !connectionsVerified,
+  onCheck: false,
   onPrint: false,
+  onCalculate: experimentCase !== 4,
 }}
                   onAdd={recordObservation}
                   onCheck={handleCheck}
          
                   onPrint={handlePrint}
                   onReset={handleReset}
-                  onAutoConnect={handleAutoConnect}
                   onAiGuide={handleAiGuide}
                   onCalculate={handleCalculate}
                 />
 
                 <ControlPanel
-  locked={!connectionsVerified || powerOn || observations.length > 0}
+  locked={powerOn}
   observations={observations}
   rl={rl}
   r1={r1}
@@ -429,8 +449,9 @@ const handleGenerateReport = () => {
 
               <section className="right-panel">
                 <ConnectionLab
+                experimentCase={experimentCase}
                   key={`connection-lab-${resetRequest}`}
-                  autoConnectRequest={autoConnectRequest}
+           
                   checkRequest={checkRequest}
                   onCheckConnections={handleCheckConnections}
                   powerOn={powerOn}
@@ -444,6 +465,7 @@ const handleGenerateReport = () => {
                   onTogglePower={handleTogglePower}
                   setVoltage={handleVoltageChange}
                   voltage={voltage}
+                   resistancesConfigured={resistancesConfigured}
                 />
               </section>
             </section>

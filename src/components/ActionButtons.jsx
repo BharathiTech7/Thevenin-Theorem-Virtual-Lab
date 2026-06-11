@@ -3,7 +3,6 @@ import SectionCard from './SectionCard.jsx'
 import {
   AddIcon,
   AiGuide,
-  AutoConnectIcon,
   ButtonIcon,
   CheckIcon,
   CalculateIcon,
@@ -33,13 +32,6 @@ const buttons = [
     tone: 'action-button--green',
     Icon: CheckIcon,
     handlerName: 'onCheck',
-  },
-  {
-    id: 'auto-connect-button',
-    label: 'AUTO CONNECT',
-    tone: 'action-button--teal',
-    Icon: AutoConnectIcon,
-    handlerName: 'onAutoConnect',
   },
   {
     id: 'add-reading-button',
@@ -90,8 +82,6 @@ const ActionButtons = ({
     onCalculate,
     onCheck,
     onPrint,
-    onReset,
-    onAutoConnect,
     onAiGuide,
   }
 

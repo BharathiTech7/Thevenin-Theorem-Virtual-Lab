@@ -6,14 +6,12 @@ export const CIRCUIT_POSITIVE_TERMINALS = [
   '9-endpoint',
   '11-endpoint',
   '13-endpoint',
-  '15-endpoint',
 ]
 
 export const CIRCUIT_NEGATIVE_TERMINALS = [
   '10-endpoint',
   '12-endpoint',
   '14-endpoint',
-  '16-endpoint',
 ]
 
 export const VALID_CONNECTION_SEQUENCE = [
@@ -26,8 +24,7 @@ export const VALID_CONNECTION_SEQUENCE = [
   '5-endpoint', '13-endpoint',
   '6-endpoint', '14-endpoint',
 
-  '7-endpoint', '15-endpoint',
-  '8-endpoint', '16-endpoint',
+
 
   // These extra combinations allow A1, A2, A3 to be connected
   // to different valid branches, same as your old JavaScript file.
@@ -35,14 +32,12 @@ export const VALID_CONNECTION_SEQUENCE = [
   '3-endpoint', '13-endpoint',
   '4-endpoint', '14-endpoint',
 
-  '3-endpoint', '15-endpoint',
-  '4-endpoint', '16-endpoint',
+  
 
   '5-endpoint', '11-endpoint',
   '6-endpoint', '12-endpoint',
 
-  '5-endpoint', '15-endpoint',
-  '6-endpoint', '16-endpoint',
+  
 
   '7-endpoint', '11-endpoint',
   '8-endpoint', '12-endpoint',
@@ -61,8 +56,7 @@ export const DEFAULT_AUTO_CONNECTIONS = [
   ['5-endpoint', '13-endpoint'],
   ['6-endpoint', '14-endpoint'],
 
-  ['7-endpoint', '15-endpoint'],
-  ['8-endpoint', '16-endpoint'],
+
 ]
 
 export const DEFAULT_AMMETER_CURRENT_KEYS = {
@@ -87,13 +81,7 @@ const AMMETER_BRANCH_CONNECTIONS = {
       circuitNegativeTerminal: '14-endpoint',
       circuitPositiveTerminal: '13-endpoint',
     },
-    {
-      currentKey: 'i3',
-      negativeTerminal: '4-endpoint',
-      positiveTerminal: '3-endpoint',
-      circuitNegativeTerminal: '16-endpoint',
-      circuitPositiveTerminal: '15-endpoint',
-    },
+   
   ],
   A2: [
     {
@@ -110,13 +98,7 @@ const AMMETER_BRANCH_CONNECTIONS = {
       circuitNegativeTerminal: '14-endpoint',
       circuitPositiveTerminal: '13-endpoint',
     },
-    {
-      currentKey: 'i3',
-      negativeTerminal: '6-endpoint',
-      positiveTerminal: '5-endpoint',
-      circuitNegativeTerminal: '16-endpoint',
-      circuitPositiveTerminal: '15-endpoint',
-    },
+    
   ],
   A3: [
     {
@@ -133,13 +115,7 @@ const AMMETER_BRANCH_CONNECTIONS = {
       circuitNegativeTerminal: '14-endpoint',
       circuitPositiveTerminal: '13-endpoint',
     },
-    {
-      currentKey: 'i3',
-      negativeTerminal: '8-endpoint',
-      positiveTerminal: '7-endpoint',
-      circuitNegativeTerminal: '16-endpoint',
-      circuitPositiveTerminal: '15-endpoint',
-    },
+ 
   ],
 }
 
@@ -379,7 +355,11 @@ export const addTerminalEndpoint = (instance, terminalId, type) => {
   })
 }
 
-export const addAllEndpoints = (instance) => {
+export const addAllEndpoints = (
+  instance,
+  resistancesConfigured,
+  showResistanceAlert,
+) => {
   POSITIVE_TERMINALS.forEach((terminalId) => {
     addTerminalEndpoint(instance, terminalId, 'positive')
   })
@@ -395,6 +375,21 @@ export const addAllEndpoints = (instance) => {
   CIRCUIT_NEGATIVE_TERMINALS.forEach((terminalId) => {
     addTerminalEndpoint(instance, terminalId, 'negative')
   })
+  instance.bind('beforeDrop', () => {
+
+  console.log("BEFORE DROP FIRED")
+
+  if (!resistancesConfigured()) {
+
+    console.log("BLOCKED")
+
+    showResistanceAlert()
+
+    return false
+  }
+
+  return true
+})
 }
 
 export const autoConnectDefaultCircuit = (instance) => {
@@ -464,4 +459,72 @@ export const lockJsPlumbCircuit = (instance, containerElement) => {
   })
 
   containerElement?.classList.add('connection-lab--locked')
+}
+
+export const validateTheveninConnections = (
+  instance,
+  experimentCase,
+) => {
+
+  const totalConnections = getAllConnections(instance).length
+
+  const checkPair = (a, b) =>
+    hasConnectionBetween(instance, a, b)
+
+  // CASE 1
+  if (experimentCase === 1) {
+
+    const isCorrect =
+      checkPair('9-endpoint', '10-endpoint') &&
+      checkPair('5-endpoint', '11-endpoint') &&
+      checkPair('6-endpoint', '13-endpoint') &&
+      totalConnections === 3
+
+    return {
+      isCorrect,
+      matchedCount: isCorrect ? 3 : 0,
+      totalConnections,
+    }
+  }
+
+  // CASE 2
+  if (experimentCase === 2) {
+
+    const isCorrect =
+      checkPair('7-endpoint', '9-endpoint') &&
+      checkPair('8-endpoint', '10-endpoint') &&
+      checkPair('1-endpoint', '11-endpoint') &&
+      checkPair('2-endpoint', '13-endpoint') &&
+      totalConnections === 4
+
+    return {
+      isCorrect,
+      matchedCount: isCorrect ? 4 : 0,
+      totalConnections,
+    }
+  }
+
+  // CASE 3
+  if (experimentCase === 3) {
+
+    const isCorrect =
+      checkPair('7-endpoint', '9-endpoint') &&
+      checkPair('8-endpoint', '10-endpoint') &&
+      checkPair('3-endpoint', '11-endpoint') &&
+      checkPair('4-endpoint', '12-endpoint') &&
+      checkPair('13-endpoint', '14-endpoint') &&
+      totalConnections === 5
+
+    return {
+      isCorrect,
+      matchedCount: isCorrect ? 5 : 0,
+      totalConnections,
+    }
+  }
+
+  return {
+    isCorrect: false,
+    matchedCount: 0,
+    totalConnections,
+  }
 }

@@ -32,16 +32,6 @@ const terminalLabels = [
     label: '14',
     polarity: 'minus',
   },
-  {
-    id: '15-endpoint',
-    label: '15',
-    polarity: 'plus',
-  },
-  {
-    id: '16-endpoint',
-    label: '16',
-    polarity: 'minus',
-  },
 ]
 
 const CircuitDiagram = ({ className = '', r1, r2, r3, rl }) => (

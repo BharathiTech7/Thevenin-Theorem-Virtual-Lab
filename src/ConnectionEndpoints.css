@@ -452,21 +452,10 @@
   --jtk-endpoint-offset-x: -12px;
   --jtk-endpoint-offset-y: 1px;
 }
-
-.connection-terminal--endpoint-11 {
-  --terminal-base-top: 18px;
-  --terminal-base-left: 166px;
-}
-
 .connection-lab .jtk-endpoint--terminal-12,
 .connection-terminal--endpoint-12 {
   --jtk-endpoint-offset-x: -12px;
   --jtk-endpoint-offset-y: 1px;
-}
-
-.connection-terminal--endpoint-12 {
-  --terminal-base-top: 18px;
-  --terminal-base-left: 222px;
 }
 
 .connection-lab .jtk-endpoint--terminal-13,
@@ -475,44 +464,30 @@
   --jtk-endpoint-offset-y: 1px;
 }
 
-.connection-terminal--endpoint-13 {
-  --terminal-base-top: 115px;
-  --terminal-base-left: 407px;
-}
-
 .connection-lab .jtk-endpoint--terminal-14,
 .connection-terminal--endpoint-14 {
   --jtk-endpoint-offset-x: -12px;
   --jtk-endpoint-offset-y: 1px;
 }
+.connection-terminal--endpoint-11 {
+  --terminal-base-top: 18px;
+  --terminal-base-left: 705px;
+}
+
+.connection-terminal--endpoint-12 {
+  --terminal-base-top: 18px;
+  --terminal-base-left: 735px;
+}
+
+.connection-terminal--endpoint-13 {
+  --terminal-base-top: 300px;
+  --terminal-base-left: 705px;
+}
 
 .connection-terminal--endpoint-14 {
-  --terminal-base-top: 158px;
-  --terminal-base-left: 407px;
+  --terminal-base-top: 300px;
+  --terminal-base-left: 735px;
 }
-
-.connection-lab .jtk-endpoint--terminal-15,
-.connection-terminal--endpoint-15 {
-  --jtk-endpoint-offset-x: -12px;
-  --jtk-endpoint-offset-y: 1px;
-}
-
-.connection-terminal--endpoint-15 {
-  --terminal-base-top: 18px;
-  --terminal-base-left: 620px;
-}
-
-.connection-lab .jtk-endpoint--terminal-16,
-.connection-terminal--endpoint-16 {
-  --jtk-endpoint-offset-x: -12px;
-  --jtk-endpoint-offset-y: 1px;
-}
-
-.connection-terminal--endpoint-16 {
-  --terminal-base-top: 18px;
-  --terminal-base-left: 668px;
-}
-
 /* Keep the invisible jsPlumb hit targets in the same modern polarity palette. */
 .connection-terminal[data-polarity="plus"] {
   --jtk-endpoint-fill: #1677ff;
@@ -580,35 +555,24 @@
   top: 175px;
   left: 35px;
 }
-
 .terminal-number-label--endpoint-11 {
-  top: -20px;
-  left: 165px;
+  top: 35px;
+  left: 705px;
 }
 
 .terminal-number-label--endpoint-12 {
-  top: -20px;
-  left: 220px;
+  top: 35px;
+  left: 735px;
 }
 
 .terminal-number-label--endpoint-13 {
-  top: 110px;
-  left: 440px;
+  top: 315px;
+  left: 705px;
 }
 
 .terminal-number-label--endpoint-14 {
-  top: 155px;
-  left: 440px;
-}
-
-.terminal-number-label--endpoint-15 {
-  top: -20px;
-  left: 618px;
-}
-
-.terminal-number-label--endpoint-16 {
-  top: -20px;
-  left: 665px;
+  top: 315px;
+  left: 735px;
 }
 
 .terminal-label {
