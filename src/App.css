@@ -958,13 +958,12 @@
 
 .graph-panel--separate {
   position: absolute;
-  top: 950px;
-  left: 73px;
-  width: 1332px;
-  height: 900px;
-}
-.graph-panel--separate {
-  border: 10px solid red !important;
+
+  top: 1120px;
+  left: 0px;
+
+  width: 1440px;
+  min-height: 500px;
 }
 .graph-panel::before {
   position: absolute;

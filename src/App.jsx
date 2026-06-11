@@ -448,14 +448,7 @@ const handleGenerateReport = () => {
               </section>
             </section>
 
-<CalculationPanel
-  calculationDone={calculationDone}
-  calculatedValues={calculatedValues}
-  verificationResult={verificationResult}
-  userCalculatedIL={userCalculatedIL}
-  setUserCalculatedIL={setUserCalculatedIL}
-  setVerificationResult={setVerificationResult}
-/>
+
 
 <ReportControls
   minReadings={MIN_OBSERVATION_READINGS}
@@ -465,7 +458,14 @@ const handleGenerateReport = () => {
 />
 
 </main>
-
+<CalculationPanel
+  calculationDone={calculationDone}
+  calculatedValues={calculatedValues}
+  verificationResult={verificationResult}
+  userCalculatedIL={userCalculatedIL}
+  setUserCalculatedIL={setUserCalculatedIL}
+  setVerificationResult={setVerificationResult}
+/>
         </div>
       </div>
     </div>
