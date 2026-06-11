@@ -3,60 +3,60 @@
   "defaultLocale": "en",
   "locales": ["en"],
   "steps": [
-    {
-      "id": 1,
-      "text": "STEP 1: Make connections by dragging nodes from apparatus to the circuit. Connect power supply to the circuit, 1 to 9 and 2 to 10. Connect ammeters, 3 to 11 and 4 to 12, 5 to 13 and 6 to 14, and 7 to 15 and 8 to 16, or connect any ammeter to any resistance in circuit. Click on the label to delete all the connections for the corresponding nodes.",
-      "audio": "#"
-    },
-    {
-      "id": 2,
-      "text": "STEP 2: Check your connections by clicking on the CHECK button.",
-      "audio": "#"
-    },
-    {
-      "id": 3,
-      "text": "STEP 3: Set the values of resistances R1, R2 and R3 by adjusting the sliders on left. These values will remain constant throughout the experiment.",
-      "audio": "#"
-    },
-    {
-      "id": 4,
-      "text": "STEP 4: Click the Power button to turn on the power supply.",
-      "audio": "#"
-    },
-    {
-      "id": 5,
-      "text": "STEP 5: Vary the voltage value by moving the voltage slider to the right side. The readings on the ammeter will change accordingly.",
-      "audio": "#"
-    },
-    {
-      "id": 6,
-      "text": "STEP 6: Click on the ADD button to add the readings to the observation table.",
-      "audio": "#"
-    },
-    {
-      "id": 7,
-      "text": "STEP 7: Repeat step 6 until 6 readings are recorded. A minimum of 6 readings is required to plot the graph.",
-      "audio": "#"
-    },
-    {
-      "id": 8,
-      "text": "STEP 8: Click on the PLOT button to display the graph.",
-      "audio": "#"
-    },
-    {
-      "id": 9,
-      "text": "STEP 9: Click on the Generate Report button below the graph to open the experiment report.",
-      "audio": "#"
-    },
-    {
-      "id": 10,
-      "text": "STEP 10: Use the report page controls to print or download the generated report.",
-      "audio": "#"
-    },
-    {
-      "id": 11,
-      "text": "STEP 11: Click on RESET button to refresh the page.",
-      "audio": "#"
-    }
-  ]
+  {
+    "id": 1,
+    "text": "STEP 1: Set the values of resistances R1, R2, R3 and RL using the sliders before making any circuit connections.",
+    "audio": "#"
+  },
+  {
+    "id": 2,
+    "text": "CASE 1. Measure RTH. Short circuit terminals 9 and 10. Connect the Multimeter between terminals 5 and 11, and 6 and 13. Click the CHECK button to verify the connections.",
+    "audio": "#"
+  },
+  {
+    "id": 3,
+    "text": "If the connections are correct, click the ADD button to record the RTH value in the observation table. Then remove the connections by clicking the corresponding terminal labels.",
+    "audio": "#"
+  },
+  {
+    "id": 4,
+    "text": "CASE 2. Measure VTH. Connect the Power Supply between terminals 7 and 9, and 8 and 10. Connect the Voltmeter between terminals 1 and 11, and 2 and 13. Click CHECK to verify the connections.",
+    "audio": "#"
+  },
+  {
+    "id": 5,
+    "text": "Turn ON the Power Supply and adjust the voltage using the slider. Click ADD to record the VTH value. Then remove the voltmeter connections by clicking the corresponding terminal labels.",
+    "audio": "#"
+  },
+  {
+    "id": 6,
+    "text": "CASE 3. Measure IL. Connect the Power Supply between terminals 7 and 9, and 8 and 10. Connect the Ammeter between terminals 3 and 11, 4 and 12, and short circuit terminals 13 and 14. Click CHECK to verify the connections.",
+    "audio": "#"
+  },
+  {
+    "id": 7,
+    "text": "Turn ON the Power Supply and adjust the voltage. Click ADD to record the IL value in the observation table.",
+    "audio": "#"
+  },
+  {
+    "id": 8,
+    "text": "Click the CALCULATE button to calculate the Load Current using the measured values of RTH and VTH.",
+    "audio": "#"
+  },
+  {
+    "id": 9,
+    "text": "Enter the manually calculated Load Current value in the calculation section and click VERIFY to compare it with the experimental value.",
+    "audio": "#"
+  },
+  {
+    "id": 10,
+    "text": "Click the PRINT button to print the experiment report.",
+    "audio": "#"
+  },
+  {
+    "id": 11,
+    "text": "Click the RESET button to restart the experiment and clear all observations and connections.",
+    "audio": "#"
+  }
+]
 }

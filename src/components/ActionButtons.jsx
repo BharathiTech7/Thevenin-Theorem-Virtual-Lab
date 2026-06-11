@@ -74,7 +74,6 @@ const ActionButtons = ({
   onCalculate,
   onPrint,
   onReset,
-  onAutoConnect,
 }) => {
   const [instructionsOpen, setInstructionsOpen] = useState(false)
   const handlers = {
@@ -141,25 +140,73 @@ const ActionButtons = ({
 
           <div className="action-instructions-panel__body">
             <ol className="action-instructions-panel__steps">
-              <li>
-                <strong>STEP 1:</strong> Make connections by dragging nodes from apparatus to the circuit.
-                <ol className="action-instructions-panel__substeps" type="a">
-                  <li>Connect power supply to the circuit (1-9, 2-10).</li>
-                  <li>Connect ammeters (3-11, 4-12), (5-13, 6-14) and (7-15, 8-16), or connect any ammeter to any resistance in circuit.</li>
-                  <li>Click on the label to delete all the connections for the corresponding nodes.</li>
-                </ol>
-              </li>
-              <li><strong>STEP 2:</strong> Check your connections by clicking on the 'CHECK' button.</li>
-              <li><strong>STEP 3:</strong> Set the values of resistances R1, R2 and R3 by adjusting the sliders on left. These values will remain constant throughout the experiment.</li>
-              <li><strong>STEP 4:</strong> Click the 'Power' button to turn on the power supply.</li>
-              <li><strong>STEP 5:</strong> Vary the voltage value by moving the voltage slider to the right side. The readings on the ammeter will change accordingly.</li>
-              <li><strong>STEP 6:</strong> Click on the 'ADD' button to add the readings to the observation table.</li>
-              <li><strong>STEP 7:</strong> Repeat step 6 until 6 readings are recorded. A minimum of 6 readings is required to plot the graph.</li>
-              <li><strong>STEP 8:</strong> Click on the 'PLOT' button to display the graph.</li>
-              <li><strong>STEP 9:</strong> Click on the 'Generate Report' button below the graph to open the experiment report.</li>
-              <li><strong>STEP 10:</strong> Use the report page controls to print or download the generated report.</li>
-              <li><strong>STEP 11:</strong> Click on 'RESET' button to refresh the page.</li>
-            </ol>
+
+  <li>
+    <strong>STEP 1:</strong> Set the values of resistances R1, R2, R3 and RL using the sliders.
+  </li>
+
+  <li>
+    <strong>STEP 2:</strong> Perform the following cases.
+    
+    <ol className="action-instructions-panel__substeps" type="a">
+      <li>
+  <strong>Case 1 (Measure RTH):</strong>
+  <ul>
+    <li>Short circuit terminals (9-10).</li>
+    <li>Connect Multimeter (5-11 and 6-13).</li>
+    <li>Click CHECK.</li>
+    <li>Click ADD to record RTH.</li>
+    <li>Remove connections (9-10), (5-11), (6-13) by clicking the corresponding terminal labels.</li>
+  </ul>
+</li>
+
+      <li>
+  <strong>Case 2 (Measure VTH):</strong>
+  <ul>
+    <li>Connect Power Supply (7-9 and 8-10).</li>
+    <li>Connect Voltmeter (1-11 and 2-13).</li>
+    <li>Click CHECK.</li>
+    <li>Turn ON Power Supply.</li>
+    <li>Adjust Voltage.</li>
+    <li>Click ADD to record VTH.</li>
+    <li>Remove connections (1-11 and 2-13) by clicking the corresponding terminal labels.</li>
+  </ul>
+</li>
+
+      <li>
+        <strong>Case 3 (Measure IL):</strong>
+        <ul>
+          <li>Connect Power Supply (7-9 and 8-10).</li>
+          <li>Connect Ammeter (3-11, 4-12 and 13-14).</li>
+          <li>Click CHECK.</li>
+          <li>Turn ON Power Supply.</li>
+          <li>Adjust Voltage.</li>
+          <li>Click ADD to record IL.</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+
+  <li>
+    <strong>STEP 3:</strong> Click CALCULATE to calculate load current (IL).
+  </li>
+
+  <li>
+    <strong>STEP 4:</strong> Enter the manually calculated IL value and click VERIFY.
+  </li>
+
+  <li>
+    <strong>STEP 5:</strong> Click PRINT to print the experiment report.
+  </li>
+
+  <li>
+    <strong>STEP 6:</strong> Click RESET to restart the experiment.
+  </li>
+  <li>
+  <strong>Note:</strong> Any connection can be removed by clicking its corresponding terminal number label.
+</li>
+
+</ol>
           </div>
         </div>
       ) : null}
