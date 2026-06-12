@@ -9,6 +9,7 @@ import {
   CloseIcon,
   PrintIcon,
   ResetIcon,
+   AutoConnectIcon,
 } from './Icons.jsx'
 
 const buttons = [
@@ -26,6 +27,13 @@ const buttons = [
     Icon: AiGuide,
     handlerName: 'onAiGuide',
   },
+  {
+  id: 'auto-connect-button',
+  label: 'AUTO',
+  tone: 'action-button--blue',
+ Icon: AutoConnectIcon,
+  handlerName: 'onAutoConnect',
+},
   {
     id: 'check-button',
     label: 'CHECK',
@@ -74,6 +82,7 @@ const ActionButtons = ({
   onCalculate,
   onPrint,
   onReset,
+   onAutoConnect,
 }) => {
   const [instructionsOpen, setInstructionsOpen] = useState(false)
   const handlers = {
@@ -83,6 +92,7 @@ const ActionButtons = ({
   onPrint,
   onReset,
   onAiGuide,
+  onAutoConnect,
 }
 
   return (

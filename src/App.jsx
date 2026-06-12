@@ -68,7 +68,7 @@ const [measuredIl, setMeasuredIl] = useState(null)
   const [status, setStatus] = useState('Make the connections, click CHECK, then set the resistance values.')
   const [checkRequest, setCheckRequest] = useState(0)
   const [resetRequest, setResetRequest] = useState(0)
-
+const [autoConnectRequest, setAutoConnectRequest] = useState(0)
   const [connectionsVerified, setConnectionsVerified] = useState(false)
   const [sessionStart, setSessionStart] = useState(() => Date.now())
 const resistancesConfigured =
@@ -84,7 +84,9 @@ const resistancesConfigured =
 
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-
+const handleAutoConnect = () => {
+  setAutoConnectRequest((prev) => prev + 1)
+}
   const readings = useMemo(
     () => calculateReadings({
   voltage: powerOn ? voltage : 0,
@@ -203,8 +205,13 @@ const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
     },
   ])
 
-  setMeasuredRth(readings.rth)
-  setExperimentCase(2)
+ setMeasuredRth(readings.rth)
+
+setResetRequest(prev => prev + 1)
+
+setConnectionsVerified(false)
+
+setExperimentCase(2)
 }
 
 else if (experimentCase === 2) {
@@ -215,8 +222,13 @@ else if (experimentCase === 2) {
     },
   ])
 
-  setMeasuredVth(readings.vth)
-  setExperimentCase(3)
+   setMeasuredVth(readings.vth)
+
+setResetRequest(prev => prev + 1)
+
+setConnectionsVerified(false)
+
+setExperimentCase(3)
 }
 
 else if (experimentCase === 3) {
@@ -436,6 +448,7 @@ const handleGenerateReport = () => {
                   onReset={handleReset}
                   onAiGuide={handleAiGuide}
                   onCalculate={handleCalculate}
+                  onAutoConnect={handleAutoConnect}
                 />
 
                 <ControlPanel
@@ -456,7 +469,7 @@ const handleGenerateReport = () => {
                 <ConnectionLab
                 experimentCase={experimentCase}
                   key={`connection-lab-${resetRequest}`}
-           
+                  autoConnectRequest={autoConnectRequest}
                   checkRequest={checkRequest}
                   onCheckConnections={handleCheckConnections}
                   powerOn={powerOn}

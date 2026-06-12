@@ -121,3 +121,4 @@ export const LightIcon = () => (
     <path d="M16 2v3M5.5 6.2 7.6 8.3M26.5 6.2l-2.1 2.1" stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" />
   </svg>
 )
+

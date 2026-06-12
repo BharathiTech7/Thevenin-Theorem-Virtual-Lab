@@ -8,8 +8,10 @@ import {
   deleteConnectionsForTerminal,
   resolveJsPlumb,
  validateTheveninConnections,
+ autoConnectTheveninCircuit,
   wireHoverPaintStyles,
   wirePaintStyles,
+
 } from '../utils/jsPlumbWiring.js'
 
 const getJsPlumbZoom = (scale) => (
@@ -32,6 +34,7 @@ const ConnectionLab = ({
   setVoltage,
   voltage,
   resistancesConfigured,
+  autoConnectRequest,
 }) => {
   const containerRef = useRef(null)
   const instanceRef = useRef(null)
@@ -206,6 +209,38 @@ const meterReadings = {
   il: readings.il ?? 0,
   rth: readings.rth ?? 0,
 }
+
+useEffect(() => {
+  if (
+    autoConnectRequest === 0 ||
+    !instanceRef.current
+  ) {
+    return
+  }
+
+  if (!resistancesConfigured) {
+    showStepAlert({
+      title: 'Set Resistance Values First',
+      description:
+        'Please set R1, R2, R3 and RL before auto connecting.',
+      type: 'warning',
+    })
+
+    return
+  }
+
+  autoConnectTheveninCircuit(
+    instanceRef.current,
+    experimentCase
+  )
+
+  instanceRef.current.repaintEverything?.()
+
+}, [
+  autoConnectRequest,
+  experimentCase,
+  resistancesConfigured,
+])
 
   return (
     <div className="connection-lab" onClick={handleLabelClick} ref={containerRef}>

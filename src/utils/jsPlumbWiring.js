@@ -345,3 +345,44 @@ export const validateTheveninConnections = (
     totalConnections,
   }
 }
+
+export const autoConnectTheveninCircuit = (
+  instance,
+  experimentCase,
+) => {
+
+  const connectPair = (a, b) => {
+    if (hasConnectionBetween(instance, a, b)) return
+
+    instance.connect({
+      uuids: [a, b],
+      type: isNegativeTerminal(a)
+        ? 'negative'
+        : 'positive',
+    })
+  }
+
+  // CASE 1
+  if (experimentCase === 1) {
+    connectPair('9-endpoint', '10-endpoint')
+    connectPair('5-endpoint', '11-endpoint')
+    connectPair('6-endpoint', '13-endpoint')
+  }
+
+  // CASE 2
+  if (experimentCase === 2) {
+    connectPair('7-endpoint', '9-endpoint')
+    connectPair('8-endpoint', '10-endpoint')
+    connectPair('1-endpoint', '11-endpoint')
+    connectPair('2-endpoint', '13-endpoint')
+  }
+
+  // CASE 3
+  if (experimentCase === 3) {
+    connectPair('7-endpoint', '9-endpoint')
+    connectPair('8-endpoint', '10-endpoint')
+    connectPair('3-endpoint', '11-endpoint')
+    connectPair('4-endpoint', '12-endpoint')
+    connectPair('13-endpoint', '14-endpoint')
+  }
+}
