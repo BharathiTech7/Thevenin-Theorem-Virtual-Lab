@@ -586,7 +586,7 @@
   height: 260px;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 30px;
   padding: 18px 12px;
   overflow: visible;
   isolation: auto;
@@ -768,10 +768,10 @@
 .ammeter {
   position: relative;
   z-index: auto;
-  width: 204px;
-  height: 232px;
-  flex: 0 0 204px;
-  overflow: hidden;
+  width: 190px;
+  height: 220px;
+  flex: 0 0 190px;
+  overflow: visible;
   --ammeter-image-scale: 1;
   --ammeter-image-top: 0;
   --ammeter-needle-top: 111px;
@@ -787,9 +787,9 @@
   transform: none;
 }
 
-.equipment-panel .ammeter + .ammeter {
+/* .equipment-panel .ammeter + .ammeter {
   margin-left: -42px;
-}
+} */
 
 .ammeter--A1 {
   --ammeter-needle-top: 111px;
@@ -824,8 +824,8 @@
   top: var(--ammeter-image-top);
   left: 0;
   z-index: 1;
-  width: 204px;
-  height: 224px;
+ width: 190px;
+  height: 210px;
   object-fit: fill;
   transform-origin: center top;
   transform: scale(var(--ammeter-image-scale));
