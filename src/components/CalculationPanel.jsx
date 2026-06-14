@@ -56,20 +56,29 @@ const CalculationPanel = ({
     <div className="graph-panel__body">
       <div className="p-6 flex flex-col gap-4">
 
-        <p>
-          <strong>Thevenin Equivalent Voltage (VTH):</strong>{' '}
-          {calculationDone ? Number(vth).toFixed(3) : ''}
-        </p>
+     <div className="calc-line">
+  <strong>Thevenin Equivalent Voltage (VTH):</strong>
 
-        <p>
-          <strong>Thevenin Equivalent Resistance (RTH):</strong>{' '}
-          {calculationDone ? Number(rth).toFixed(3) : ''}
-        </p>
+  <span className="fill-blank">
+    {calculationDone ? Number(vth).toFixed(3) : ''}
+  </span>
+</div>
 
-        <p>
-          <strong>Load Resistance (RL):</strong>{' '}
-          {calculationDone ? rl : ''}
-        </p>
+<div className="calc-line">
+  <strong>Thevenin Equivalent Resistance (RTH):</strong>
+
+  <span className="fill-blank">
+    {calculationDone ? Number(rth).toFixed(3) : ''}
+  </span>
+</div>
+
+<div className="calc-line">
+  <strong>Load Resistance (RL):</strong>
+
+  <span className="fill-blank">
+    {calculationDone ? Number(rl).toFixed(3) : ''}
+  </span>
+</div>
 
         <hr />
 
@@ -77,41 +86,57 @@ const CalculationPanel = ({
           <strong>Formula:</strong>
         </p>
 
-        <p>
-          IL = VTH / (RTH + RL)
-        </p>
+       <div className="formula-card">
+  IL = VTH / (RTH + RL)
+</div>
 
         <hr />
 
-        <p>
-          <strong>Observed IL:</strong>{' '}
-          {calculationDone ? Number(observedIL).toFixed(6) : ''}
-        </p>
+<div className="calc-row">
+  <span>Observed IL :</span>
 
-        <div>
-          <strong>Calculated IL:</strong>{' '}
-          <input
-            type="number"
-            step="0.000001"
-            value={userCalculatedIL}
-onChange={(e) => setUserCalculatedIL(e.target.value)}
-            disabled={!calculationDone}
-          />
-        </div>
+  <span className="fill-blank">
+    {calculationDone
+      ? Number(observedIL).toFixed(6)
+      : ''}
+  </span>
+</div>
+  <div className="calc-row">
+  <span>Calculated IL :</span>
 
-      <button
-  type="button"
-  onClick={handleVerify}
+  <input
+  type="number"
+  step="0.000001"
+  value={userCalculatedIL}
+  onChange={(e) => setUserCalculatedIL(e.target.value)}
   disabled={!calculationDone}
->
-  VERIFY
-</button>
+  className="fill-blank-input"
+  placeholder="Enter IL"
+/>
+</div>
 
-        {verificationResult && (
-          <p>
-            <strong>{verificationResult}</strong>
-          </p>
-        )}
+ <div className="verification-section">
+  <button
+    type="button"
+    onClick={handleVerify}
+    disabled={!calculationDone}
+    className="verify-btn"
+  >
+    VERIFY
+  </button>
+
+  {verificationResult && (
+    <div
+      className={`verification-message ${
+        verificationResult.includes('Verified')
+          ? 'success'
+          : 'error'
+      }`}
+    >
+      {verificationResult}
+    </div>
+  )}
+</div>
 
           </div>
     </div>
