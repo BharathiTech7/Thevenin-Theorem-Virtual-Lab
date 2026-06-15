@@ -1545,3 +1545,24 @@ input:focus-visible {
   color: #999;
   font-weight: 500;
 }
+.action-step-active {
+  background: rgba(255, 215, 0, 0.15);
+  border-left: 4px solid #facc15;
+  padding: 8px;
+  border-radius: 6px;
+  animation: pulseStep 1.5s infinite;
+}
+
+@keyframes pulseStep {
+  0% {
+    box-shadow: 0 0 0px rgba(250, 204, 21, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 15px rgba(250, 204, 21, 0.8);
+  }
+
+  100% {
+    box-shadow: 0 0 0px rgba(250, 204, 21, 0.4);
+  }
+}

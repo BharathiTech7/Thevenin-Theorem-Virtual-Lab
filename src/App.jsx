@@ -425,6 +425,23 @@ const handleGenerateReport = () => {
             <section className="workspace-grid">
               <aside className="left-panel">
                 <ActionButtons
+                 activeInstructionStep={
+    !resistancesConfigured
+      ? 'step1'
+      : experimentCase === 1
+      ? 'case1'
+      : experimentCase === 2
+      ? 'case2'
+      : experimentCase === 3
+      ? 'case3'
+      : !calculationDone
+      ? 'step3'
+      : verificationResult === ''
+      ? 'step4'
+      : !reportGenerated
+      ? 'step5'
+      : 'step6'
+  }
                   activeButtons={{
                     onAiGuide: aiGuidePlaying,
                   }}

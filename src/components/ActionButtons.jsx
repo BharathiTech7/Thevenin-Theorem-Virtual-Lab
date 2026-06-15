@@ -83,6 +83,7 @@ const ActionButtons = ({
   onPrint,
   onReset,
    onAutoConnect,
+   activeInstructionStep,
 }) => {
   const [instructionsOpen, setInstructionsOpen] = useState(false)
   const handlers = {
@@ -152,7 +153,11 @@ const ActionButtons = ({
           <div className="action-instructions-panel__body">
             <ol className="action-instructions-panel__steps">
 
-  <li>
+  <li  className={
+    activeInstructionStep === 'step1'
+      ? 'action-step-active'
+      : ''
+  }>
     <strong>STEP 1:</strong> Set the values of resistances R1, R2, R3 and RL using the sliders.
   </li>
 
@@ -160,7 +165,11 @@ const ActionButtons = ({
     <strong>STEP 2:</strong> Perform the following cases.
     
     <ol className="action-instructions-panel__substeps" type="a">
-      <li>
+      <li   className={
+    activeInstructionStep === 'case1'
+      ? 'action-step-active'
+      : ''
+  }>
   <strong>Case 1 (Measure RTH):</strong>
   <ul>
     <li>Short circuit terminals (9-10).</li>
@@ -171,7 +180,11 @@ const ActionButtons = ({
   </ul>
 </li>
 
-      <li>
+      <li  className={
+    activeInstructionStep === 'case2'
+      ? 'action-step-active'
+      : ''
+  }>
   <strong>Case 2 (Measure VTH):</strong>
   <ul>
     <li>Connect Power Supply (7-9 and 8-10).</li>
@@ -184,7 +197,11 @@ const ActionButtons = ({
   </ul>
 </li>
 
-      <li>
+      <li  className={
+    activeInstructionStep === 'case3'
+      ? 'action-step-active'
+      : ''
+  }>
         <strong>Case 3 (Measure IL):</strong>
         <ul>
           <li>Connect Power Supply (7-9 and 8-10).</li>
@@ -198,19 +215,35 @@ const ActionButtons = ({
     </ol>
   </li>
 
-  <li>
+  <li className={
+    activeInstructionStep === 'step3'
+      ? 'action-step-active'
+      : ''
+  }>
     <strong>STEP 3:</strong> Click CALCULATE to calculate load current (IL).
   </li>
 
-  <li>
+  <li  className={
+    activeInstructionStep === 'step4'
+      ? 'action-step-active'
+      : ''
+  }>
     <strong>STEP 4:</strong> Enter the manually calculated IL value and click VERIFY.
   </li>
 
-  <li>
+  <li  className={
+    activeInstructionStep === 'step5'
+      ? 'action-step-active'
+      : ''
+  }>
     <strong>STEP 5:</strong> Click PRINT to print the experiment report.
   </li>
 
-  <li>
+  <li className={
+    activeInstructionStep === 'step5'
+      ? 'action-step-active'
+      : ''
+  }>
     <strong>STEP 6:</strong> Click RESET to restart the experiment.
   </li>
   <li>
