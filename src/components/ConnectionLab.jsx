@@ -229,17 +229,27 @@ useEffect(() => {
     return
   }
 
+const result =
   autoConnectTheveninCircuit(
     instanceRef.current,
     experimentCase
   )
 
+if (!result?.success) {
+  showStepAlert({
+    title: 'Remove Existing Connections',
+    description:
+      'Please remove all current wire connections before proceeding to the next case.',
+    type: 'warning',
+  })
+
+  return
+}
+
   instanceRef.current.repaintEverything?.()
 
 }, [
   autoConnectRequest,
-  experimentCase,
-  resistancesConfigured,
 ])
 
   return (

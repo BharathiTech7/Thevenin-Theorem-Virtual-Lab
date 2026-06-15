@@ -350,7 +350,16 @@ export const autoConnectTheveninCircuit = (
   instance,
   experimentCase,
 ) => {
+  
+const totalConnections =
+  getAllConnections(instance).length
 
+if (totalConnections > 0) {
+  return {
+    success: false,
+    reason: 'REMOVE_CONNECTIONS_FIRST',
+  }
+}
   const connectPair = (a, b) => {
     if (hasConnectionBetween(instance, a, b)) return
 
@@ -385,4 +394,8 @@ export const autoConnectTheveninCircuit = (
     connectPair('4-endpoint', '12-endpoint')
     connectPair('13-endpoint', '14-endpoint')
   }
+
+  return {
+  success: true,
+}
 }

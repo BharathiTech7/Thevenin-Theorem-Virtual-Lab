@@ -206,11 +206,7 @@ const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
   ])
 
  setMeasuredRth(readings.rth)
-
-setResetRequest(prev => prev + 1)
-
 setConnectionsVerified(false)
-
 setExperimentCase(2)
 }
 
@@ -223,11 +219,7 @@ else if (experimentCase === 2) {
   ])
 
    setMeasuredVth(readings.vth)
-
-setResetRequest(prev => prev + 1)
-
 setConnectionsVerified(false)
-
 setExperimentCase(3)
 }
 
@@ -240,6 +232,7 @@ else if (experimentCase === 3) {
   ])
 
   setMeasuredIl(readings.il)
+  setConnectionsVerified(false)
   setExperimentCase(4)
 }
   

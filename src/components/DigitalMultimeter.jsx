@@ -1,8 +1,21 @@
 import multimeterImg from '../assets/multimeter.png'
-
+import knobImg from '../assets/knob.png'
 const DigitalMultimeter = ({ value = 0 }) => {
   const resistance = Number.isFinite(value) ? value : 0
+let knobAngle = 0
 
+if (resistance > 0) {
+  if (resistance <= 200)
+    knobAngle = 40
+  else if (resistance <= 2000)
+    knobAngle = 70
+  else if (resistance <= 20000)
+    knobAngle = 100
+  else if (resistance <= 200000)
+    knobAngle = 130
+  else
+    knobAngle = 160
+}
   return (
     <article
       className="ammeter ammeter--multimeter"
@@ -14,7 +27,18 @@ const DigitalMultimeter = ({ value = 0 }) => {
         alt="Digital Multimeter"
         className="ammeter__image"
       />
-
+<div
+  className="multimeter-knob"
+  style={{
+    transform: `rotate(${knobAngle}deg)`
+  }}
+>
+  <img
+    src={knobImg}
+    alt="Knob"
+    className="multimeter-knob-image"
+  />
+</div>
       <span
         id="5-endpoint"
         className="connection-terminal connection-terminal--meter connection-terminal--meter-plus connection-terminal--endpoint-5"
@@ -41,18 +65,11 @@ const DigitalMultimeter = ({ value = 0 }) => {
         6
       </span>
 
-      <div
-        style={{
-          position: 'absolute',
-          top: '58px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          fontWeight: 'bold',
-          fontSize: '14px',
-        }}
-      >
-        {resistance.toFixed(2)}
-      </div>
+   <div className="multimeter-display">
+  {resistance > 0
+    ? `${resistance.toFixed(2)} Ω`
+    : '0.00 Ω'}
+</div>
     </article>
   )
 }

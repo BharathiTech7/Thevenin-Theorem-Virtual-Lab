@@ -787,33 +787,61 @@
   transform: none;
 }
 
-/* .equipment-panel .ammeter + .ammeter {
-  margin-left: -42px;
-} */
+.multimeter-knob {
+  position: absolute;
 
-.ammeter--A1 {
-  --ammeter-needle-top: 111px;
-  --ammeter-needle-left: 97px;
-  --ammeter-needle-image-top: 3px;
-  --ammeter-needle-image-left: -8px;
-  --ammeter-needle-image-width: 70px;
+  /* Perfect alignment over the background dial center axis */
+  top: 50px;
+  left:10px;
+
+  /* Upscaled dimension to stretch the knob image to fit the background track */
+  width: 170px;
+  height: 100px;
+
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform-origin: center center;
+  transition: transform 0.4s ease;
+}
+.multimeter-knob-image {
+  width: 60%;
+  height: 100%;
+  object-fit: fill;
+} 
+.multimeter-display {
+  position: absolute;
+
+  top: 30px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 120px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: 'Courier New', monospace;
+  font-size: 20px;
+  font-weight: 700;
+
+  color: #ff2b2b;
+
+  text-shadow:
+    0 0 4px rgba(255,0,0,0.7),
+    0 0 8px rgba(255,0,0,0.4);
+
+  letter-spacing: 0;
+
+  z-index: 5;
 }
 
-.ammeter--A2 {
-  --ammeter-needle-top: 110px;
-  --ammeter-needle-left: 102px;
-  --ammeter-needle-image-top: 3px;
-  --ammeter-needle-image-left: -8px;
-  --ammeter-needle-image-width: 70px;
-}
-
-.ammeter--A3 {
-  --ammeter-needle-top: 114px;
-  --ammeter-needle-left: 102px;
-  --ammeter-needle-image-top: 3px;
-  --ammeter-needle-image-left: -8px;
-  --ammeter-needle-image-width: 70px;
-}
 
 .ammeter::before {
   display: none;
