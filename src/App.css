@@ -583,11 +583,14 @@
   position: relative;
   display: flex;
   width: 845px;
-  height: 260px;
-  align-items: center;
+  height: 320px;
+  align-items:flex-start;
   justify-content: center;
-  gap: 30px;
-  padding: 18px 12px;
+  gap: 34px;
+  padding-top: 26px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 12px;
   overflow: visible;
   isolation: auto;
   border: 2px solid rgba(255, 252, 244, 0.9);
@@ -768,35 +771,59 @@
 .ammeter {
   position: relative;
   z-index: auto;
-  width: 190px;
-  height: 220px;
-  flex: 0 0 190px;
+  width: 235px;
+  height: 275px;
+  flex: 0 0 235px;
   overflow: visible;
   --ammeter-image-scale: 1;
   --ammeter-image-top: 0;
-  --ammeter-needle-top: 111px;
-  --ammeter-needle-left: 102px;
+ --ammeter-needle-top: 155px;
+  --ammeter-needle-left: 117px;
   --ammeter-needle-width: 47px;
   --ammeter-needle-height: 1px;
   --ammeter-needle-origin-x: 0;
   --ammeter-needle-origin-y: 50%;
   --ammeter-needle-image-top: 3px;
   --ammeter-needle-image-left: -8px;
-  --ammeter-needle-image-width: 70px;
+  --ammeter-needle-image-width: 62px;
   filter: none;
   transform: none;
+}
+.ammeter__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 235px;
+  height: 295px;
+  object-fit: fill;
+  transform-origin: center top;
+  transform: scale(1);
+  filter: none;
+  
+}
+.ammeter--multimeter {
+  width: 195px;
+  height: 255px;
+  flex: 0 0 210px;
+   left: 30px;
+}
+
+.ammeter--multimeter .ammeter__image {
+  width: 195px;
+  height: 255px;
 }
 
 .multimeter-knob {
   position: absolute;
 
   /* Perfect alignment over the background dial center axis */
-  top: 50px;
-  left:10px;
+  top: 73px;
+  left:17px;
 
   /* Upscaled dimension to stretch the knob image to fit the background track */
-  width: 170px;
-  height: 100px;
+  width: 160px;
+  height: 95px;
 
   z-index: 2;
 
@@ -808,7 +835,7 @@
   transition: transform 0.4s ease;
 }
 .multimeter-knob-image {
-  width: 60%;
+  width: 67%;
   height: 100%;
   object-fit: fill;
 } 
@@ -847,18 +874,7 @@
   display: none;
 }
 
-.ammeter__image {
-  position: absolute;
-  top: var(--ammeter-image-top);
-  left: 0;
-  z-index: 1;
- width: 190px;
-  height: 210px;
-  object-fit: fill;
-  transform-origin: center top;
-  transform: scale(var(--ammeter-image-scale));
-  filter: none;
-}
+
 
 .ammeter__needle {
   position: absolute;
@@ -904,20 +920,24 @@
   text-align: center;
   transform: translateX(-50%);
 }
+.ammeter--voltmeter,
+.ammeter--A1 {
+  margin-top: -20px;
+}
 .circuit-workspace {
   position: relative;
   width: 845px;
-  height: 430px;
+  height: 475px;
   border-radius: 17px;
   background: #241812;
   overflow: hidden;
 }
 .circuit-panel {
   position: absolute;
-  left: 230px;
-  top: 20px;
-  width: 600px;
-  height: 360px;
+  left: 319px;
+  top: 2px;
+  width: 557px;
+  height: 450px;
 }
 .circuit-power-supply {
   position: absolute;
@@ -950,8 +970,8 @@
   left: 0;
 
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: 105%;
+  object-fit: fill;
 }
 
 .resistor-value {
@@ -1375,7 +1395,7 @@ input:focus-visible {
   position: relative;
   display: flex;
   width: 845px;
-  height: 747px;
+  height: 900px;
   flex-direction: column;
   gap: 18px;
 }

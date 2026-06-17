@@ -16,36 +16,41 @@ const handleVoltageChange = (event) => {
         src={powerOn ? powerSupplyOn : powerSupplyOff}
       />
 
-      <div className="power-supply__display">{displayedVoltage}</div>
-      <span
-        id="7-endpoint"
-        className="connection-terminal connection-terminal--power connection-terminal--power-plus connection-terminal--endpoint-1"
-        data-polarity="plus"
-        aria-label="Power supply positive terminal 1"
-        title="Power positive (1-endpoint)"
-      />
-      <span
-        className="terminal-number-label terminal-number-label--power-plus terminal-number-label--endpoint-1"
-        data-terminal-id="1-endpoint"
-        title="Power positive (1-endpoint)"
-      >
-        7
-      </span>
+     <div className="power-supply__display">{displayedVoltage}</div>
 
-      <span
-        id="8-endpoint"
-        className="connection-terminal connection-terminal--power connection-terminal--power-minus connection-terminal--endpoint-2"
-        data-polarity="minus"
-        aria-label="Power supply negative terminal 2"
-        title="Power negative (2-endpoint)"
-      />
-      <span
-        className="terminal-number-label terminal-number-label--power-minus terminal-number-label--endpoint-2"
-        data-terminal-id="2-endpoint"
-        title="Power negative (2-endpoint)"
-      >
-        8
-      </span>
+{/* Terminal 7 */}
+<span
+  id="7-endpoint"
+  className="connection-terminal connection-terminal--power connection-terminal--power-plus connection-terminal--endpoint-7"
+  data-polarity="plus"
+  aria-label="Power supply positive terminal 7"
+  title="Power positive (7-endpoint)"
+/>
+
+<span
+  className="terminal-number-label terminal-number-label--power-plus terminal-number-label--endpoint-7"
+  data-terminal-id="7-endpoint"
+  title="Power positive (7-endpoint)"
+>
+  7
+</span>
+
+{/* Terminal 8 */}
+<span
+  id="8-endpoint"
+  className="connection-terminal connection-terminal--power connection-terminal--power-minus connection-terminal--endpoint-8"
+  data-polarity="minus"
+  aria-label="Power supply negative terminal 8"
+  title="Power negative (8-endpoint)"
+/>
+
+<span
+  className="terminal-number-label terminal-number-label--power-minus terminal-number-label--endpoint-8"
+  data-terminal-id="8-endpoint"
+  title="Power negative (8-endpoint)"
+>
+  8
+</span>
       <button
         id="power-toggle-button"
         aria-label={powerOn ? 'Switch power supply off' : 'Switch power supply on'}
