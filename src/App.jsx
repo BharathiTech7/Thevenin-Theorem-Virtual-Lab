@@ -71,6 +71,7 @@ const [measuredIl, setMeasuredIl] = useState(null)
 const [autoConnectRequest, setAutoConnectRequest] = useState(0)
   const [connectionsVerified, setConnectionsVerified] = useState(false)
   const [sessionStart, setSessionStart] = useState(() => Date.now())
+  const [showRth, setShowRth] = useState(false)
 const resistancesConfigured =
   Number(r1) !== 0.1 &&
   Number(r2) !== 0.1 &&
@@ -104,6 +105,7 @@ console.log(readings)
   rth: readings.rth,
   il: readings.il,
 })
+const [showMultimeter, setShowMultimeter] = useState(false)
   const hasDuplicateReading = observations.some((row) => (
     row.voltage === normalizedVoltage
       || getObservationSignature(row) === currentReadingSignature
@@ -265,6 +267,8 @@ setUserCalculatedIL('')
     setSessionStart(Date.now())
     setStatus('Simulation reset. Make the circuit connections again.')
     showStepAlert(EXPERIMENT_ALERTS.resetSuccess)
+    setShowRth(false)
+    setShowMultimeter(false)
   }, [showStepAlert, stopAiGuide])
 
   const handleReset = () => {
@@ -317,6 +321,10 @@ const handleGenerateReport = () => {
   const scaledHeight = Math.ceil(CONTENT_HEIGHT * scale)
   const handleCheckConnections = useCallback((result) => {
     if (result.isCorrect) {
+      if (experimentCase === 1) {
+  setShowRth(true)
+  setShowMultimeter(true)
+}
   setConnectionsVerified(true)
 
   if (experimentCase === 1) {
@@ -493,7 +501,9 @@ const handleGenerateReport = () => {
                   onTogglePower={handleTogglePower}
                   setVoltage={handleVoltageChange}
                   voltage={voltage}
-                   resistancesConfigured={resistancesConfigured}
+                  resistancesConfigured={resistancesConfigured}
+                  showRth={showRth}
+                  showMultimeter={showMultimeter}
                 />
               </section>
             </section>

@@ -35,6 +35,9 @@ const ConnectionLab = ({
   voltage,
   resistancesConfigured,
   autoConnectRequest,
+  showRth,
+  showMultimeter
+
 }) => {
   const containerRef = useRef(null)
   const instanceRef = useRef(null)
@@ -208,6 +211,7 @@ const meterReadings = {
   vth: readings.vth ?? 0,
   il: readings.il ?? 0,
   rth: readings.rth ?? 0,
+   showRth,
 }
 
 useEffect(() => {
@@ -254,12 +258,14 @@ if (!result?.success) {
 
   return (
     <div className="connection-lab" onClick={handleLabelClick} ref={containerRef}>
-    <EquipmentPanel
+ <EquipmentPanel
   onTogglePower={onTogglePower}
   powerOn={powerOn}
   readings={meterReadings}
+  experimentCase={experimentCase}
   setVoltage={setVoltage}
   voltage={voltage}
+   showMultimeter={showMultimeter}
 />
 
      <div className="circuit-workspace">

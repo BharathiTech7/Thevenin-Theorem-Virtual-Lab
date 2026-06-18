@@ -1,6 +1,9 @@
 import multimeterImg from '../assets/multimeter.png'
 import knobImg from '../assets/knob.png'
-const DigitalMultimeter = ({ value = 0 }) => {
+const DigitalMultimeter = ({
+  value = 0,
+  showValue = false,
+}) => {
   const resistance = Number.isFinite(value) ? value : 0
 let knobAngle = 0
 
@@ -65,8 +68,8 @@ if (resistance > 0) {
         6
       </span>
 
-   <div className="multimeter-display">
-  {resistance > 0
+<div className="multimeter-display">
+  {showValue
     ? `${resistance.toFixed(2)} Ω`
     : '0.00 Ω'}
 </div>
