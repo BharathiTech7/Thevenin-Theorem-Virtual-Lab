@@ -411,7 +411,7 @@
 }
 
 .connection-terminal--endpoint-7 {
-  --terminal-base-top: 147px;
+  --terminal-base-top: 189px;
   --terminal-base-left: 47px;
 }
 
@@ -422,7 +422,7 @@
 }
 
 .connection-terminal--endpoint-8 {
-  --terminal-base-top: 147px;
+  --terminal-base-top: 189px;
   --terminal-base-left: 112px;
 }
 
@@ -538,12 +538,12 @@
 }
 
 .terminal-number-label--endpoint-7 {
-  top: 177px;
+  top: 225px;
   left: 58px;
 }
 
 .terminal-number-label--endpoint-8 {
-  top: 177px;
+  top: 225px;
   left: 103px;
 }
 

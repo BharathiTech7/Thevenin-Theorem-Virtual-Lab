@@ -639,8 +639,8 @@
   position: relative;
   z-index: auto;
   left: 15px;
-  width: 280px;
-  height: 205px;
+  width: 290px;
+  height: 270px;
   flex: 0 0 auto;
   overflow: hidden;
   border-radius: 13px;
@@ -669,14 +669,14 @@
   left: 1px;
   z-index: 1;
   width: 300px;
-  height: 230px;
+  height: 290px;
   object-fit: fill;
   filter: none;
 }
 
 .power-supply__display {
   position: absolute;
-  top: 50px;
+  top: 70px;
   left: 40px;
   z-index: 4;
   display: flex;
@@ -715,7 +715,7 @@
 .power-supply__control {
   position: absolute;
   right: 25px;
-  bottom: 30px;
+  bottom: 37px;
   z-index: 4;
   width: 116px;
   height: 26px;
@@ -934,14 +934,14 @@
 }
 .circuit-panel {
   position: absolute;
-  left: 319px;
+  left: 300px;
   top: 2px;
   width: 557px;
   height: 450px;
 }
 .circuit-power-supply {
   position: absolute;
-  left: 5px;
+  left:-15px;
   top: 110px;
   z-index: 5;
 }
