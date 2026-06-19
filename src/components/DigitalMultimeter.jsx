@@ -4,20 +4,23 @@ const DigitalMultimeter = ({
   value = 0,
   showValue = false,
 }) => {
-  const resistance = Number.isFinite(value) ? value : 0
+ const resistance =
+  showValue && Number.isFinite(value)
+    ? value
+    : 0
 let knobAngle = 0
 
 if (resistance > 0) {
-  if (resistance <= 200)
-    knobAngle = 40
+  if (resistance <= 2)
+    knobAngle = 30
+  else if (resistance <= 20)
+    knobAngle = 60
+  else if (resistance <= 200)
+    knobAngle = 90
   else if (resistance <= 2000)
-    knobAngle = 70
-  else if (resistance <= 20000)
-    knobAngle = 100
-  else if (resistance <= 200000)
-    knobAngle = 130
+    knobAngle = 120
   else
-    knobAngle = 160
+    knobAngle = 150
 }
   return (
     <article
@@ -32,15 +35,17 @@ if (resistance > 0) {
       />
 <div
   className="multimeter-knob"
-  style={{
-    transform: `rotate(${knobAngle}deg)`
-  }}
+  
 >
-  <img
-    src={knobImg}
-    alt="Knob"
-    className="multimeter-knob-image"
-  />
+ <img
+  src={knobImg}
+  alt="Knob"
+  className="multimeter-knob-image"
+  style={{
+  transform: `rotate(${knobAngle}deg)`,
+
+}}
+/>
 </div>
       <span
         id="5-endpoint"

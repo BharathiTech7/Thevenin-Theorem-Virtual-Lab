@@ -813,32 +813,32 @@
   width: 195px;
   height: 255px;
 }
-
 .multimeter-knob {
   position: absolute;
 
-  /* Perfect alignment over the background dial center axis */
-  top: 73px;
-  left:17px;
+  top: 78px;
+  left:32px;
 
-  /* Upscaled dimension to stretch the knob image to fit the background track */
-  width: 160px;
-  height: 95px;
+  width: 127px;
+  height: 107px;
 
   z-index: 2;
 
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.multimeter-knob-image {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  display: block;
 
   transform-origin: center center;
   transition: transform 0.4s ease;
 }
-.multimeter-knob-image {
-  width: 67%;
-  height: 100%;
-  object-fit: fill;
-} 
 .multimeter-display {
   position: absolute;
 
