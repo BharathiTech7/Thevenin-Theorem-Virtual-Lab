@@ -1,3 +1,10 @@
+const escapeHtml = (value) => String(value)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;')
+
 export const generateTheveninReport = ({
   observations,
   r1,
@@ -9,19 +16,41 @@ export const generateTheveninReport = ({
   observedIL,
   userCalculatedIL,
   verificationResult,
+  sessionStart,
 }) => {
-  const reportWindow = window.open('', '_blank')
+  const iitLogoSrc =
+    new URL('../assets/IIT Logo.png', import.meta.url).href
 
-  if (!reportWindow) {
-    window.alert('Unable to open report window.')
-    return
-  }
+  const virtualLabsLogoSrc =
+    new URL('../assets/image.png', import.meta.url).href
+
+  const reportDate = new Date()
+  const sessionEnd = reportDate.getTime()
+
+  const reportDateText = reportDate.toLocaleDateString(undefined, {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  })
+
+  const storedStart = localStorage.getItem('experimentStartTime')
+  const startTime = storedStart ? new Date(storedStart) : new Date(sessionStart)
+  const endTime = reportDate
+
+  const startTimeText = startTime.toLocaleTimeString()
+  const endTimeText = endTime.toLocaleTimeString()
+
+  const durationMs = Math.max(0, sessionEnd - startTime.getTime())
+  const durationTotalSeconds = Math.floor(durationMs / 1000)
+  const durationMinutes = Math.floor(durationTotalSeconds / 60)
+  const durationSeconds = String(durationTotalSeconds % 60).padStart(2, '0')
+  const durationText = `${durationMinutes} min ${durationSeconds} sec`
 
   const observationRows = observations
     .map(
-      (row) => `
+      (row, index) => `
         <tr>
-          <td>${row.id}</td>
+          <td>${index + 1}</td>
           <td>${row.vth.toFixed(2)}</td>
           <td>${row.rth.toFixed(2)}</td>
           <td>${row.rl}</td>
@@ -31,93 +60,742 @@ export const generateTheveninReport = ({
     )
     .join('')
 
-  reportWindow.document.write(`
-    <html>
-      <head>
-        <title>Thevenin Report</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            padding: 30px;
+  const css = `
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: linear-gradient(180deg, #eef4fb 0%, #f7f9fc 100%);
+  color: #1f2d3d;
+  margin: 0;
+  padding: 14px 14px 20px;
+  font-size: 13.5px;
+  line-height: 1.4;
+  overflow-wrap: break-word;
+}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+.report-page {
+  width: min(100%, 960px);
+  margin: 0 auto 16px;
+  padding: 20px 24px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #d3ddea;
+  box-shadow: 0 12px 28px rgba(23, 50, 77, 0.1);
+  break-inside: auto;
+  page-break-inside: auto;
+  overflow: visible;
+  background-clip: padding-box;
+}
+.report-page:last-of-type {
+  margin-bottom: 0;
+}
+.report-page--results {
+  break-before: page;
+  page-break-before: always;
+}
+h1,
+h2,
+h3 {
+  color: #1f2d3d;
+  margin-top: 0;
+  font-weight: 700;
+}
+h1 {
+  font-size: 24px;
+  margin: 0;
+  padding: 0;
+  line-height: 1.15;
+}
+h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #243b53;
+}
+h3 {
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #2d4b68;
+}
+p {
+  margin: 0 0 6px;
+}
+.section {
+  background: linear-gradient(180deg, #f9fbfe 0%, #f4f7fb 100%);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  border: none;
+  box-shadow: none;
+  break-inside: auto;
+  page-break-inside: auto;
+  background-clip: padding-box;
+}
+.section:last-child {
+  margin-bottom: 0;
+}
+.section > h2:first-child {
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e1e9f3;
+}
+.label {
+  font-weight: 600;
+  color: #1f2d3d;
+  display: block;
+  margin-bottom: 2px;
+}
+.report-overview-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.report-stamp {
+  margin: 0;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: none;
+  color: #50657c;
+  font-size: 12px;
+  font-weight: 600;
+}
+.report-experiment-label {
+  margin: 0 0 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #60778f;
+  font-weight: 700;
+}
+.report-experiment-title {
+  margin: 0 0 10px;
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 700;
+  color: #16324b;
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+.info-card {
+  background: #fff;
+  border: none;
+  border-radius: 9px;
+  padding: 8px 10px;
+  box-shadow: none;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 2px;
+}
+.info-card strong {
+  font-size: 15px;
+  color: #16324b;
+  font-weight: 700;
+}
+.summary-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.summary-sub-section {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.summary-sub-section h3 {
+  border-left: 3px solid #2f7bfa;
+  padding-left: 8px;
+  margin-bottom: 4px;
+  color: #16324b;
+  font-size: 14px;
+}
+.summary-sub-section p {
+  text-align: justify;
+  margin: 0;
+  color: #2d3e50;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.summary-list {
+  margin: 0;
+  padding-left: 18px;
+  color: #2d3e50;
+  font-size: 13px;
+}
+.summary-list li {
+  margin-bottom: 2px;
+}
+.table-shell {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  border: none;
+  border-radius: 12px;
+  max-width: 100%;
+  background: #ffffff;
+  box-shadow: none;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0;
+  box-shadow: none;
+  background-color: white;
+  table-layout: auto;
+}
+th,
+td {
+  border: 1px solid #d9e2ec;
+  padding: 8px 10px;
+  text-align: center;
+  font-size: 13px;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+th {
+  background: linear-gradient(135deg, #2f7bfa 0%, #1f62d0 100%);
+  border-color: #c6d7ec;
+  border-bottom-color: #b4cae5;
+  color: white;
+  font-weight: 700;
+}
+thead {
+  display: table-header-group;
+}
+tbody {
+  display: table-row-group;
+}
+tr {
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+}
+tr:nth-child(even) {
+  background-color: #f8fbff;
+}
+.results-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+.results-card {
+  background: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: none;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: visible;
+  background-clip: padding-box;
+}
+.results-card h3 {
+  margin: 0;
+  text-align: left;
+}
+.badge {
+  margin: 0;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #e8f1ff;
+  color: #1f62d0;
+  font-weight: 600;
+  font-size: 11px;
+}
+.header-row {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr) 108px;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+}
+.report-title-block {
+  text-align: center;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 3px solid #2f7bfa;
+  min-width: 0;
+}
+.report-subtitle {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #5c6f84;
+}
+.report-logo {
+  height: auto;
+  width: auto;
+  max-width: 108px;
+  max-height: 80px;
+  object-fit: contain;
+  flex-shrink: 0;
+  justify-self: center;
+}
+.report-logo--virtual-labs {
+  max-width: 190px;
+  max-height: 80px;
+  justify-self: start;
+}
+.report-logo--iit {
+  max-width: 84px;
+  max-height: 84px;
+  justify-self: end;
+}
+.param-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+.param-card {
+  background: #fff;
+  border-radius: 9px;
+  padding: 8px 12px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.param-card .param-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #60778f;
+  font-weight: 700;
+}
+.param-card .param-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #16324b;
+}
+.calc-block {
+  background: #fff;
+  border-radius: 9px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eef2f7;
+  padding-bottom: 4px;
+}
+.calc-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.calc-row .calc-label {
+  color: #50657c;
+  font-weight: 600;
+}
+.calc-row .calc-value {
+  font-weight: 700;
+  color: #16324b;
+}
+.calc-formula {
+  background: #f4f7fb;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-family: monospace;
+  font-size: 12.5px;
+  color: #2d4b68;
+  margin: 2px 0;
+}
+.conclusion-text {
+  text-align: justify;
+  line-height: 1.5;
+  color: #2d3e50;
+  margin: 0;
+}
+.report-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: min(100%, 960px);
+  margin: 16px auto 0;
+}
+.print-btn,
+.download-btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-weight: 600;
+}
+.print-btn {
+  background: linear-gradient(to right, #2f7bfa, #1f62d0);
+}
+.download-btn {
+  background: linear-gradient(to right, #28a745, #1f8d38);
+}
+.print-btn:hover,
+.download-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(31, 45, 61, 0.12);
+}
+.pdf-exporting .report-page {
+  border-color: transparent !important;
+  box-shadow: none !important;
+  margin-bottom: 0 !important;
+}
+@media (max-width: 768px) {
+  body {
+    padding: 16px 14px 24px;
+  }
+  .report-page {
+    margin-bottom: 14px;
+    padding: 16px 16px;
+  }
+  .header-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    text-align: center;
+  }
+  .report-title-block {
+    padding-bottom: 10px;
+  }
+  .report-logo,
+  .report-logo--virtual-labs,
+  .report-logo--iit {
+    max-height: 64px;
+    justify-self: center;
+  }
+  .report-actions {
+    justify-content: center;
+  }
+}
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+  .print-btn,
+  .download-btn,
+  .report-actions {
+    display: none;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+  }
+  .report-page {
+    width: 100%;
+    margin: 0;
+    padding: 14px 16px;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .header-row {
+    grid-template-columns: 150px minmax(0, 1fr) 86px;
+    gap: 14px;
+  }
+  .report-page--results {
+    break-before: page;
+    page-break-before: always;
+  }
+  .section,
+  .header-row,
+  .info-grid,
+  .summary-sub-section,
+  thead,
+  tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+  `
+
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thevenin Simulation Report</title>
+  <style>${css}</style>
+</head>
+<body id="report-root">
+  <main class="report-document" id="report-document">
+
+    <div class="report-page report-page--overview">
+
+      <div class="header-row">
+        <img
+          src="${escapeHtml(virtualLabsLogoSrc)}"
+          class="report-logo report-logo--virtual-labs"
+          alt="Virtual Labs logo"
+        >
+        <div class="report-title-block">
+          <h1>Virtual Labs Simulation Report</h1>
+          <p class="report-subtitle">Basic Electrical Science Lab</p>
+        </div>
+        <img
+          src="${escapeHtml(iitLogoSrc)}"
+          class="report-logo report-logo--iit"
+          alt="Indian Institute of Technology Roorkee logo"
+        >
+      </div>
+
+      <div class="section report-overview">
+        <div class="report-overview-top">
+          <p class="badge">Basic Electrical Science Lab</p>
+          <p class="report-stamp">Generated on ${escapeHtml(reportDateText)}</p>
+        </div>
+        <p class="report-experiment-label">Experiment Title</p>
+        <p class="report-experiment-title">Verification of Thevenin&rsquo;s Theorem</p>
+        <div class="info-grid">
+          <div class="info-card">
+            <span class="label">Start Time:</span>
+            <strong>${escapeHtml(startTimeText)}</strong>
+          </div>
+          <div class="info-card">
+            <span class="label">End Time:</span>
+            <strong>${escapeHtml(endTimeText)}</strong>
+          </div>
+          <div class="info-card">
+            <span class="label">Total Time Spent:</span>
+            <strong>${escapeHtml(durationText)}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Summary</h2>
+        <div class="summary-card">
+          <div class="summary-sub-section">
+            <h3>Aim</h3>
+            <p>To study and verify Thevenin's Theorem by replacing a linear electrical network with its equivalent voltage source and equivalent resistance and validating the load current obtained through the Thevenin equivalent circuit.</p>
+          </div>
+
+          <div class="summary-sub-section">
+            <h3>Theory</h3>
+            <p>Thevenin's Theorem states that any two-terminal linear network can be represented by an equivalent circuit consisting of a single voltage source (V<sub>TH</sub>) in series with an equivalent resistance (R<sub>TH</sub>). This simplifies complex circuit analysis and allows easy determination of load current through R<sub>L</sub>.</p>
+          </div>
+
+          <div class="summary-sub-section">
+            <h3>Learning Objectives</h3>
+            <ul class="summary-list">
+              <li>Measure Thevenin Voltage (V<sub>TH</sub>)</li>
+              <li>Measure Thevenin Resistance (R<sub>TH</sub>)</li>
+              <li>Calculate Load Current (I<sub>L</sub>)</li>
+              <li>Verify Thevenin's Theorem experimentally</li>
+              <li>Compare theoretical and observed values</li>
+            </ul>
+          </div>
+
+          <div class="summary-sub-section">
+            <h3>Formulae</h3>
+            <div class="calc-block" style="padding: 6px 10px; gap: 2px; background: transparent;">
+              <div class="calc-formula">R<sub>TH</sub> = R<sub>3</sub> + ((R<sub>1</sub> &times; R<sub>2</sub>) / (R<sub>1</sub> + R<sub>2</sub>))</div>
+              <div class="calc-formula">V<sub>TH</sub> = V<sub>S</sub> &times; (R<sub>2</sub> / (R<sub>1</sub> + R<sub>2</sub>))</div>
+              <div class="calc-formula">I<sub>L</sub> = V<sub>TH</sub> / (R<sub>TH</sub> + R<sub>L</sub>)</div>
+            </div>
+          </div>
+
+          <div class="summary-sub-section" style="margin-bottom: 0;">
+            <h3>Components and Input Ranges</h3>
+            <ul class="summary-list">
+              <li>Power Supply: 1V &ndash; 30V</li>
+              <li>R<sub>L</sub>: 100&Omega; &ndash; 300&Omega; (Step 50&Omega;)</li>
+              <li>R<sub>1</sub>: 0.1&Omega; &ndash; 10&Omega;</li>
+              <li>R<sub>2</sub>: 0.1&Omega; &ndash; 10&Omega;</li>
+              <li>R<sub>3</sub>: 0.1&Omega; &ndash; 10&Omega;</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="report-page report-page--results">
+
+      <div class="section">
+        <h2>Experiment Parameters</h2>
+        <div class="param-grid">
+          <div class="param-card">
+            <span class="param-label">R1</span>
+            <span class="param-value">${r1} &Omega;</span>
+          </div>
+          <div class="param-card">
+            <span class="param-label">R2</span>
+            <span class="param-value">${r2} &Omega;</span>
+          </div>
+          <div class="param-card">
+            <span class="param-label">R3</span>
+            <span class="param-value">${r3} &Omega;</span>
+          </div>
+          <div class="param-card">
+            <span class="param-label">RL</span>
+            <span class="param-value">${rl} &Omega;</span>
+          </div>
+          <div class="param-card">
+            <span class="param-label">VTH</span>
+            <span class="param-value">${vth.toFixed(3)} V</span>
+          </div>
+          <div class="param-card">
+            <span class="param-label">RTH</span>
+            <span class="param-value">${rth.toFixed(3)} &Omega;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Results</h2>
+
+        <div class="results-stack">
+
+          <div class="results-card">
+            <h3>Observation Table</h3>
+            <div class="table-shell">
+              <table>
+                <thead>
+                  <tr>
+                    <th>S.No.</th>
+                    <th>V<sub>TH</sub> (V)</th>
+                    <th>R<sub>TH</sub> (&Omega;)</th>
+                    <th>R<sub>L</sub> (&Omega;)</th>
+                    <th>I<sub>L</sub> (A)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${observationRows}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="results-card">
+            <h3>Calculations</h3>
+            <div class="calc-block">
+              <div class="calc-row">
+                <span class="calc-label">V<sub>TH</sub></span>
+                <span class="calc-value">${vth.toFixed(3)} V</span>
+              </div>
+              <div class="calc-row">
+                <span class="calc-label">R<sub>TH</sub></span>
+                <span class="calc-value">${rth.toFixed(3)} &Omega;</span>
+              </div>
+              <div class="calc-row">
+                <span class="calc-label">R<sub>L</sub></span>
+                <span class="calc-value">${rl} &Omega;</span>
+              </div>
+              <div class="calc-formula">
+                I<sub>L</sub> = V<sub>TH</sub> / (R<sub>TH</sub> + R<sub>L</sub>)
+              </div>
+              <div class="calc-row">
+                <span class="calc-label">Observed I<sub>L</sub></span>
+                <span class="calc-value">${observedIL.toFixed(6)} A</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="results-card">
+            <h3>Conclusion</h3>
+            <p class="conclusion-text">
+              Thevenin&rsquo;s Theorem has been verified successfully. The load current I<sub>L</sub>
+              computed from the Thevenin equivalent circuit matches the observed value, confirming
+              that any linear two-terminal network can be replaced by a single voltage source
+              V<sub>TH</sub> in series with a resistance R<sub>TH</sub>.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <div class="report-actions" data-html2canvas-ignore="true">
+    <button class="print-btn" type="button" onclick="window.print()">PRINT</button>
+    <button class="download-btn" type="button" onclick="downloadReport()">DOWNLOAD REPORT</button>
+  </div>
+
+  <script>
+    function ensureHtml2Pdf() {
+      return new Promise(function(resolve, reject) {
+        if (window.html2pdf) return resolve();
+        var script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
+
+    function downloadReport() {
+      ensureHtml2Pdf().then(function() {
+        var element = document.getElementById('report-document') || document.body;
+        var opts = {
+          margin: [0.2, 0.2, 0.2, 0.2],
+          filename: 'thevenin-simulation-report.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            scrollX: 0,
+            scrollY: 0,
+            onclone: function(clonedDoc) {
+              clonedDoc.body.classList.add('pdf-exporting');
+            }
+          },
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+          pagebreak: {
+            mode: ['css', 'legacy'],
+            before: ['.report-page--results'],
+            avoid: ['.header-row', '.report-overview', '.info-grid', '.summary-sub-section', '.results-card', 'thead', 'tr']
           }
+        };
+        return window.html2pdf().set(opts).from(element).save();
+      }).catch(function() {
+        alert('Unable to download the report automatically. Please use your browser\\'s Save as PDF option.');
+      });
+    }
+  </script>
+</body>
+</html>
+  `
 
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 12px;
-          }
+  const reportBlob = new Blob([html], { type: 'text/html' })
+  const reportUrl = URL.createObjectURL(reportBlob)
+  const reportWindow = window.open(reportUrl, '_blank')
 
-          th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-          }
+  if (!reportWindow) {
+    URL.revokeObjectURL(reportUrl)
+    window.alert('Unable to open report window.')
+    return
+  }
 
-          h1, h2 {
-            text-align: center;
-          }
-        </style>
-      </head>
+  window.setTimeout(() => {
+    URL.revokeObjectURL(reportUrl)
+  }, 60000)
 
-      <body>
-
-        <h1>Virtual Labs</h1>
-        <h2>Verification of Thevenin's Theorem</h2>
-
-        <hr>
-
-        <h3>Experiment Parameters</h3>
-
-        <p>R1 = ${r1} Ω</p>
-        <p>R2 = ${r2} Ω</p>
-        <p>R3 = ${r3} Ω</p>
-        <p>RL = ${rl} Ω</p>
-
-        <hr>
-
-        <h3>Observation Table</h3>
-
-        <table>
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>VTH (V)</th>
-              <th>RTH (Ω)</th>
-              <th>RL (Ω)</th>
-              <th>IL (A)</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            ${observationRows}
-          </tbody>
-        </table>
-
-        <hr>
-
-        <h3>Calculations</h3>
-
-        <p>VTH = ${vth.toFixed(3)} V</p>
-        <p>RTH = ${rth.toFixed(3)} Ω</p>
-        <p>RL = ${rl} Ω</p>
-
-        <p>
-          IL = VTH / (RTH + RL)
-        </p>
-
-        <p>Observed IL = ${observedIL.toFixed(6)} A</p>
-
-    
-
-        <h3>Conclusion</h3>
-
-        <p>
-          Thevenin's Theorem has been verified successfully.
-        </p>
-
-      </body>
-    </html>
-  `)
-
-  reportWindow.document.close()
+  reportWindow.focus()
 }

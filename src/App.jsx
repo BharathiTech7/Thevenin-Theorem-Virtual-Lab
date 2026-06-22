@@ -303,18 +303,19 @@ const handleGenerateReport = () => {
 
   setReportGenerated(true)
 
-  generateTheveninReport({
-    observations,
-    r1,
-    r2,
-    r3,
-    rl,
-    vth: calculatedValues?.vth ?? 0,
-    rth: calculatedValues?.rth ?? 0,
-    observedIL: calculatedValues?.observedIL ?? 0,
-    userCalculatedIL,
-    verificationResult,
-  })
+generateTheveninReport({
+  observations,
+  r1,
+  r2,
+  r3,
+  rl,
+  vth: calculatedValues?.vth ?? 0,
+  rth: calculatedValues?.rth ?? 0,
+  observedIL: calculatedValues?.observedIL ?? 0,
+  userCalculatedIL,
+  verificationResult,
+  sessionStart,
+})
 }
 
   const scaledWidth = Math.ceil(BASE_WIDTH * scale)
