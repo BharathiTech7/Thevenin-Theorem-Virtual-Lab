@@ -399,12 +399,18 @@ generateTheveninReport({
 }, [])
 
  const handleCalculate = () => {
-  setCalculatedValues({
-    vth: measuredVth,
-    rth: measuredRth,
-    rl,
-    observedIL: measuredIl,
-  })
+setCalculatedValues({
+  r1,
+  r2,
+  r3,
+  rl,
+
+  voltageSource: voltage,
+
+  vth: measuredVth,
+  rth: measuredRth,
+  observedIL: measuredIl,
+})
 
   setCalculationDone(true)
 }

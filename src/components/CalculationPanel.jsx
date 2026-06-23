@@ -1,4 +1,6 @@
-import { useLabAlerts } from '../alerts/useLabAlerts.js'
+import React from 'react';
+import { useLabAlerts } from '../alerts/useLabAlerts.js';
+
 const CalculationPanel = ({
   calculationDone,
   calculatedValues,
@@ -7,252 +9,223 @@ const CalculationPanel = ({
   setUserCalculatedIL,
   setVerificationResult,
 }) => {
+  // Extracting basic parameters from calculatedValues
+  const r1 = calculatedValues?.r1 ?? '';
+  const r2 = calculatedValues?.r2 ?? '';
+  const r3 = calculatedValues?.r3 ?? '';
+  const voltageSource = calculatedValues?.voltageSource ?? '';
+
+  // Extracting Thevenin parameters
   const vth = calculatedValues?.vth ?? '';
   const rth = calculatedValues?.rth ?? '';
   const rl = calculatedValues?.rl ?? '';
   const observedIL = calculatedValues?.observedIL ?? '';
-  const { showStepAlert } = useLabAlerts()
+
+  const { showStepAlert } = useLabAlerts();
 
   const handleVerify = () => {
-    if (!calculationDone) {
+    if (!calculationDone) return;
+
+    if (userCalculatedIL.trim() === '') {
+      showStepAlert({
+        title: 'Input Required',
+        description: 'Please enter the calculated IL value.',
+        type: 'warning',
+      });
       return;
     }
 
-  if (userCalculatedIL.trim() === '') {
-  showStepAlert({
-    title: 'Input Required',
-    description: 'Please enter the calculated IL value.',
-    type: 'warning',
-  });
-
-  return;
-}
-
-const entered = Number(userCalculatedIL);
-
-if (Number.isNaN(entered)) {
-  showStepAlert({
-    title: 'Invalid Input',
-    description: 'Please enter a valid numerical value.',
-    type: 'warning',
-  });
-
-  return;
-}
+    const entered = Number(userCalculatedIL);
+    if (Number.isNaN(entered)) {
+      showStepAlert({
+        title: 'Invalid Input',
+        description: 'Please enter a valid numerical value.',
+        type: 'warning',
+      });
+      return;
+    }
 
     const actual = Number(observedIL);
+    const isCorrect = Math.abs(entered - actual) < 0.001;
 
-const isCorrect =
-  Math.abs(entered - actual) < 0.001;
-
-if (isCorrect) {
-  showStepAlert({
-    title: 'Calculation Verified',
-    description:
-      'Your calculated load current matches the observed value.',
-    type: 'success',
-  });
-
-  setVerificationResult('✅ Verified Successfully');
-} else {
-  showStepAlert({
-    title: 'Calculation Incorrect',
-    description:
-      'The calculated load current does not match the observed value. Please verify your calculation using IL = VTH / (RTH + RL).',
-    type: 'error',
-  });
-
-  setVerificationResult('❌ Incorrect Calculation');
-}
+    if (isCorrect) {
+      showStepAlert({
+        title: 'Calculation Verified',
+        description: 'Your calculated load current matches the observed value.',
+        type: 'success',
+      });
+      setVerificationResult('✅ Verified Successfully');
+    } else {
+      showStepAlert({
+        title: 'Calculation Incorrect',
+        description: 'The calculated load current does not match the observed value. Please verify your calculation using IL = VTH / (RTH + RL).',
+        type: 'error',
+      });
+      setVerificationResult('❌ Incorrect Calculation');
+    }
   };
 
-return (
-  <section
-    id="calculation-panel"
-    className="graph-panel graph-panel--separate"
-  >
-    <div className="graph-panel__heading">
-      <div>
-        <h2>CALCULATIONS</h2>
-      </div>
-    </div>
-
-    <div className="graph-panel__body">
-
-      {/* VTH */}
-      <div className="calc-field">
-
-        <div className="calc-label">
-          Thevenin Equivalent Voltage:
+  return (
+    <section id="calculation-panel" className="graph-panel graph-panel--separate">
+      <div className="graph-panel__heading">
+        <div>
+          <h2>CALCULATIONS</h2>
         </div>
-
-        <div className="calc-input-group">
-
-          <div className="calc-prefix">
-            Vth
-          </div>
-
-          <div className="calc-display">
-            {calculationDone
-              ? Number(vth).toFixed(3)
-              : ''}
-          </div>
-
-          <div className="calc-suffix">
-            V
-          </div>
-
-        </div>
-
       </div>
 
-      {/* RTH */}
-      <div className="calc-field">
+      <div className="graph-panel__body">
+        
+        {/* TOP ROW: Resistance & Source Values */}
+        <div className="calc-top-row">
+          
+          {/* Resistance Values Card */}
+          <div className="values-card">
+            <h3>Resistance Values</h3>
+            <div className="values-inline-group">
+              <div className="inline-input-item">
+                <span className="inline-label">R₁:</span>
+                <div className="inline-display">
+                  {calculationDone && r1 !== '' ? Number(r1).toFixed(1) : ''}
+                </div>
+                <span className="inline-unit">Ω</span>
+              </div>
+              
+              <div className="inline-input-item">
+                <span className="inline-label">R₂:</span>
+                <div className="inline-display">
+                  {calculationDone && r2 !== '' ? Number(r2).toFixed(1) : ''}
+                </div>
+                <span className="inline-unit">Ω</span>
+              </div>
+              
+              <div className="inline-input-item">
+                <span className="inline-label">R₃:</span>
+                <div className="inline-display">
+                  {calculationDone && r3 !== '' ? Number(r3).toFixed(1) : ''}
+                </div>
+                <span className="inline-unit">Ω</span>
+              </div>
 
-        <div className="calc-label">
-          Thevenin Equivalent Resistance:
-        </div>
-
-        <div className="calc-input-group">
-
-          <div className="calc-prefix">
-            Rth
-          </div>
-
-          <div className="calc-display">
-            {calculationDone
-              ? Number(rth).toFixed(3)
-              : ''}
-          </div>
-
-          <div className="calc-suffix">
-            Ω
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* RL */}
-      <div className="calc-field">
-
-        <div className="calc-label">
-          Load Resistance:
-        </div>
-
-        <div className="calc-input-group">
-
-          <div className="calc-prefix">
-            RL
-          </div>
-
-          <div className="calc-display">
-            {calculationDone
-              ? Number(rl).toFixed(3)
-              : ''}
-          </div>
-
-          <div className="calc-suffix">
-            Ω
-          </div>
-
-        </div>
-
-      </div>
-
-      {/* Formula */}
-      <div className="formula-heading">
-        Formula:
-      </div>
-
-      <div className="formula-panel">
-        IL = VTH / (RTH + RL)
-      </div>
-
-      {/* Result Boxes */}
-      <div className="results-section">
-
-        <fieldset className="result-card">
-          <legend>Observed Results</legend>
-
-          <div className="result-row">
-
-            <span className="result-label">
-              Observed Load Current (IL):
-            </span>
-
-            <div className="result-display">
-              {calculationDone
-                ? Number(observedIL).toFixed(6)
-                : ''}
+              
             </div>
-
-            <div className="result-unit">
-              A
-            </div>
-
           </div>
-        </fieldset>
 
-        <fieldset className="result-card">
-          <legend>Verification</legend>
+          {/* Source Values Card */}
+          <div className="values-card">
+            <h3>Source Values</h3>
+            <div className="values-inline-group">
 
-          <div className="result-row">
-
-            <span className="result-label">
-              Calculated Load Current (IL):
-            </span>
-
-            <input
-              type="number"
-              step="0.000001"
-              value={userCalculatedIL}
-              onChange={(e) =>
-                setUserCalculatedIL(e.target.value)
-              }
-              disabled={!calculationDone}
-              className="verification-input"
-              placeholder="Enter value..."
-            />
-
-            <div className="result-unit">
-              A
+              <div className="inline-input-item">
+                <span className="inline-label long-label">Voltage Source:</span>
+                <div className="inline-display">
+                  {calculationDone && voltageSource !== '' ? Number(voltageSource).toFixed(1) : ''}
+                </div>
+                <span className="inline-unit">V</span>
+              </div>
             </div>
-
           </div>
-        </fieldset>
 
-      </div>
+        </div>
 
-      {/* Verify Button */}
-      <div className="verification-section">
+        {/* Thevenin Calculation Parameters */}
+        {/* VTH */}
+        <div className="calc-field">
+          <div className="calc-label">Thevenin Equivalent Voltage:</div>
+          <div className="calc-input-group">
+            <div className="calc-prefix">Vth</div>
+            <div className="calc-display">
+              {calculationDone ? Number(vth).toFixed(3) : ''}
+            </div>
+            <div className="calc-suffix">V</div>
+          </div>
+        </div>
 
-        <button
-          type="button"
-          onClick={handleVerify}
-          disabled={!calculationDone}
-          className="verify-btn"
-        >
-          Verify
-        </button>
+        {/* RTH */}
+        <div className="calc-field">
+          <div className="calc-label">Thevenin Equivalent Resistance:</div>
+          <div className="calc-input-group">
+            <div className="calc-prefix">Rth</div>
+            <div className="calc-display">
+              {calculationDone ? Number(rth).toFixed(3) : ''}
+            </div>
+            <div className="calc-suffix">Ω</div>
+          </div>
+        </div>
 
-        {verificationResult && (
-          <div
-            className={`verification-message ${
-              verificationResult.includes('Verified')
-                ? 'success'
-                : 'error'
-            }`}
+        {/* RL */}
+        <div className="calc-field">
+          <div className="calc-label">Load Resistance:</div>
+          <div className="calc-input-group">
+            <div className="calc-prefix">RL</div>
+            <div className="calc-display">
+              {calculationDone ? Number(rl).toFixed(3) : ''}
+            </div>
+            <div className="calc-suffix">Ω</div>
+          </div>
+        </div>
+
+        {/* Formula Display */}
+        <div className="formula-heading">Formula:</div>
+        <div className="formula-panel">
+          IL = VTH / (RTH + RL)
+        </div>
+
+        {/* Verification Result Cards */}
+        <div className="results-section">
+          <fieldset className="result-card">
+            <legend>Observed Results</legend>
+            <div className="result-row">
+              <span className="result-label">Observed Load Current (IL):</span>
+              <div className="result-display">
+                {calculationDone ? Number(observedIL).toFixed(6) : ''}
+              </div>
+              <div className="result-unit">A</div>
+            </div>
+          </fieldset>
+
+          <fieldset className="result-card">
+            <legend>Verification</legend>
+            <div className="result-row">
+              <span className="result-label">Calculated Load Current (IL):</span>
+              <input
+                type="number"
+                step="0.000001"
+                value={userCalculatedIL}
+                onChange={(e) => setUserCalculatedIL(e.target.value)}
+                disabled={!calculationDone}
+                className="verification-input"
+                placeholder="Enter value..."
+              />
+              <div className="result-unit">A</div>
+            </div>
+          </fieldset>
+        </div>
+
+        {/* Action Button Segment */}
+        <div className="verification-section">
+          <button
+            type="button"
+            onClick={handleVerify}
+            disabled={!calculationDone}
+            className="verify-btn"
           >
-            {verificationResult}
-          </div>
-        )}
+            Verify
+          </button>
+
+          {verificationResult && (
+            <div
+              className={`verification-message ${
+                verificationResult.includes('Verified') ? 'success' : 'error'
+              }`}
+            >
+              {verificationResult}
+            </div>
+          )}
+        </div>
 
       </div>
-
-    </div>
-  </section>
-)
+    </section>
+  );
 };
 
 export default CalculationPanel;
