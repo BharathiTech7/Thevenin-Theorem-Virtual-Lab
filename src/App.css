@@ -1069,10 +1069,7 @@
     
 }
 .report-button {
-  position: absolute;
-  right: 36px;
-  bottom: 17px;
-  z-index: 4;
+
   display: inline-flex;
   min-width: 178px;
   height: 46px;
@@ -1676,4 +1673,148 @@ background:
 
   text-shadow:
     0 1px 0 rgba(255,255,255,0.6);
+}
+
+.report-controls {
+  position: absolute;
+  right: 36px;
+  bottom: 17px;
+
+  z-index: 20;
+
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+
+  gap: 12px;
+}
+.formula-button {
+  display: inline-flex;
+  min-width: 132px;
+  height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 18px;
+  border: 2px solid rgba(107, 69, 24, 0.48);
+  border-radius: 10px;
+
+  color: #4f321d;
+
+  background: linear-gradient(
+    180deg,
+    #ffe7a8,
+    #efae3f
+  );
+
+  font-weight: 900;
+  cursor: pointer;
+
+  box-shadow:
+    inset 0 2px 2px rgba(255,255,255,.42),
+    inset 0 -8px 13px rgba(0,0,0,.2),
+    0 4px 7px rgba(37,22,13,.42);
+}
+
+.formula-button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.floating-formula-panel {
+  position: absolute;
+  right: 0px;
+  bottom: calc(100% + 12px);
+
+  width: 380px;
+
+  padding: 14px;
+
+  border: 2px solid rgba(89,55,30,.35);
+  border-radius: 8px;
+
+  background: #fff8ea;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.75),
+    0 14px 24px rgba(50,30,17,.28);
+
+  z-index: 50;
+}
+
+.floating-formula-panel__header {
+  margin-bottom: 10px;
+}
+
+.floating-formula-panel__header h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.floating-formula-panel__list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.floating-formula-panel__item {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 10px;
+
+  padding: 9px 10px;
+
+  border: 1px solid rgba(106,74,43,.22);
+  border-radius: 8px;
+
+  background: rgba(255,255,255,.58);
+}
+
+.floating-formula-panel__item dt {
+  display: grid;
+  place-items: center;
+
+  min-height: 30px;
+
+  border-radius: 6px;
+
+  color: white;
+  background: #075a9a;
+
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.floating-formula-panel__item dd {
+  margin: 0;
+}
+
+.floating-formula-panel__equation {
+  display: block;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.floating-formula-panel__description {
+  display: block;
+  margin-top: 4px;
+
+  font-size: 11px;
+  color: #6f523b;
+}
+
+.floating-formula-panel__note {
+  margin-top: 10px;
+
+  padding: 8px 10px;
+
+  border-radius: 7px;
+
+  background: rgba(63,143,67,.12);
+
+  color: #274f2c;
+
+  font-size: 12px;
+  font-weight: 900;
 }
