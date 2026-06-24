@@ -92,6 +92,7 @@ const ReportControls = ({
       <span>Generate Report</span>
     </button>
  <button
+ id="formula-button"
       type="button"
       className="formula-button"
       onClick={() => setFormulasOpen((current) => !current)}

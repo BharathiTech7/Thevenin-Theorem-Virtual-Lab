@@ -16,114 +16,121 @@
     "en": "This experiment is used to verify Thevenin's Theorem by determining the Thevenin equivalent voltage (VTH) and resistance (RTH) and comparing the calculated load current with the observed load current."
   },
   "placement": "bottom"
+},{
+  "id": 2,
+  "target": "#action-buttons-panel",
+  "title": {
+    "en": "Action Buttons"
+  },
+  "description": {
+    "en": "Use these controls to view instructions, use AI Guide, auto-connect the circuit, check connections, add readings, calculate results, reset the experiment and generate reports."
+  },
+  "placement": "right"
+},{
+  "id": 3,
+  "target": "#auto-connect-button",
+  "title": {
+    "en": "Auto Connect"
+  },
+  "description": {
+    "en": "Automatically creates the required Thevenin circuit connections. After auto connection, use CHECK to verify the wiring."
+  },
+  "placement": "right"
 },
-    {
-      "id": 2,
-      "target": "#action-buttons-panel",
-      "title": {
-        "en": "Lab Actions"
-      },
-      "description": {
-        "en": "Use these controls to check wiring, record readings, plot the graph, reset the setup, print results, or auto-connect the circuit."
-      },
-      "audio": "#",
-      "placement": "right"
-    },
-    {
-      "id": 3,
-      "target": "#auto-connect-button",
-      "title": {
-        "en": "Auto Connect"
-      },
-      "description": {
-        "en": "For a guided run, add the default circuit wires first, then press CHECK to validate and lock the connections."
-      },
-      "audio": "#",
-      "placement": "right"
-    },
-    {
-      "id": 4,
-      "target": "#resistance-controls",
-      "title": {
-        "en": "Resistance Controls"
-      },
-      "description": {
-        "en": "After the connections are verified, set R1, R2, and R3 with these sliders. The controls lock while the supply is on or readings exist."
-      },
-      "audio": "#",
-      "placement": "right"
-    },
-    {
-      "id": 5,
-      "target": "#power-supply",
-      "title": {
-        "en": "Power Supply"
-      },
-      "description": {
-        "en": "Switch the supply on after the circuit passes CHECK. The display shows the active voltage supplied to the experiment."
-      },
-      "audio": "#",
-      "placement": "left"
-    },
-    {
-      "id": 6,
-      "target": "#voltage-control",
-      "title": {
-        "en": "Voltage Controller"
-      },
-      "description": {
-        "en": "Use this slider to adjust the input voltage. Record a new observation after each unique voltage setting."
-      },
-      "audio": "#",
-      "placement": "left"
-    },
-    {
-      "id": 7,
-      "target": "#ammeter-a1",
-      "title": {
-        "en": "Ammeter Readings"
-      },
-      "description": {
-        "en": "A1 measures the main current. A2 and A3 show the branch currents used to confirm that I1 equals I2 plus I3."
-      },
-      "audio": "#",
-      "placement": "bottom"
-    },
-    {
-      "id": 8,
-      "target": "#circuit-panel",
-      "title": {
-        "en": "Circuit Wiring Area"
-      },
-      "description": {
-        "en": "Create or inspect terminal connections here. Before the circuit is locked, terminal labels can be used to remove a wire."
-      },
-      "audio": "#",
-      "placement": "left"
-    },
-    {
-      "id": 9,
-      "target": "#observation-table-panel",
-      "title": {
-        "en": "Observation Table"
-      },
-      "description": {
-        "en": "Each added reading appears in this table. Collect at least six readings before plotting the graph."
-      },
-      "audio": "#",
-      "placement": "right"
-    },
-    {
-      "id": 10,
-      "target": "#graph-panel",
-      "title": {
-        "en": "Observation Graph"
-      },
-      "description": {
-        "en": "Once enough readings are available, PLOT displays current-versus-voltage traces for I1, I2, and I3."
-      },
-      "audio": "#",
-      "placement": "top"
-    }
+  {
+  "id": 4,
+  "target": "#resistance-controls",
+  "title": {
+    "en": "Resistance Controls"
+  },
+  "description": {
+    "en": "Set the values of RL, R1, R2 and R3 using these sliders before taking observations."
+  },
+  "placement": "right"
+},
+  {
+  "id": 5,
+  "target": "#power-supply",
+  "title": {
+    "en": "Power Supply"
+  },
+  "description": {
+    "en": "Turn ON the power supply after successful connection verification. The display shows the applied source voltage."
+  },
+  "placement": "left"
+},
+  {
+  "id": 6,
+  "target": "#voltage-control",
+  "title": {
+    "en": "Voltage Control"
+  },
+  "description": {
+    "en": "Adjust the source voltage and record the corresponding VTH, RTH and IL values."
+  },
+  "placement": "left"
+},
+{
+  "id": 7,
+  "target": "#equipment-panel",
+  "title": {
+    "en": "Measuring Instruments"
+  },
+  "description": {
+    "en": "The voltmeter measures voltage, the ammeter measures load current and the digital multimeter is used to measure equivalent resistance during verification."
+  },
+  "placement": "bottom"
+},
+   {
+  "id": 8,
+  "target": "#circuit-panel",
+  "title": {
+    "en": "Circuit Connections"
+  },
+  "description": {
+    "en": "Connect the circuit according to Thevenin's Theorem. Terminal numbers can be used to create or remove wire connections."
+  },
+  "placement": "left"
+},{
+  "id": 9,
+  "target": "#observation-table-panel",
+  "title": {
+    "en": "Observation Table"
+  },
+  "description": {
+    "en": "All recorded values of VTH, RTH, RL and IL appear here. Multiple observations can be taken using different resistance settings."
+  },
+  "placement": "right"
+},{
+  "id": 10,
+  "target": "#calculation-panel",
+  "title": {
+    "en": "Calculation & Verification"
+  },
+  "description": {
+    "en": "Calculate the load current using IL = VTH / (RTH + RL) and compare it with the observed value to verify Thevenin's Theorem."
+  },
+  "placement": "top"
+},{
+  "id": 11,
+  "target": "#formula-button",
+  "title": {
+    "en": "Formula Reference"
+  },
+  "description": {
+    "en": "Open this panel to view all equations used in the experiment including VTH, RTH and IL calculations."
+  },
+  "placement": "top"
+},{
+  "id": 12,
+  "target": "#generate-report-button",
+  "title": {
+    "en": "Generate Report"
+  },
+  "description": {
+    "en": "Generate and download the experiment report after completing observations and verification."
+  },
+  "placement": "top"
+}
   ]
 }

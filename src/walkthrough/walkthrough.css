@@ -337,3 +337,18 @@
     transition: none;
   }
 }
+
+
+
+
+
+/* Make disabled controls look active during walkthrough */
+
+.walkthrough-active-target:disabled,
+.walkthrough-active-target button:disabled,
+.walkthrough-active-target .report-button:disabled,
+.walkthrough-active-target .action-button:disabled {
+  opacity: 1 !important;
+  filter: none !important;
+  cursor: not-allowed !important;
+}
