@@ -6,18 +6,17 @@
     "autoplay": false
   },
   "steps": [
-    {
-      "id": 1,
-      "target": "#experiment-title-board",
-      "title": {
-        "en": "Experiment Goal"
-      },
-      "description": {
-        "en": "This board states the lab objective. The walkthrough follows the same order students use to verify Kirchhoff's Current Law."
-      },
-      "audio": "#",
-      "placement": "bottom"
-    },
+{
+  "id": 1,
+  "target": "#experiment-title-board",
+  "title": {
+    "en": "Experiment Objective"
+  },
+  "description": {
+    "en": "This experiment is used to verify Thevenin's Theorem by determining the Thevenin equivalent voltage (VTH) and resistance (RTH) and comparing the calculated load current with the observed load current."
+  },
+  "placement": "bottom"
+},
     {
       "id": 2,
       "target": "#action-buttons-panel",
