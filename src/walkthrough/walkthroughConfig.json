@@ -76,7 +76,7 @@
     "en": "Calculate Button"
   },
   "description": {
-    "en": "The CALCULATE button computes the Thevenin equivalent voltage (VTH), equivalent resistance (RTH) and load current (IL) using the entered circuit values."
+    "en": "The CALCULATE button computes the Thevenin equivalent voltage (VTH), equivalent resistance (RTH), and the theoretical load current (IL). Enter the calculated IL value and click VERIFY to compare it with the observed value."
   },
   "placement": "right"
 },
@@ -167,7 +167,7 @@
     "en": "Calculation Panel"
   },
   "description": {
-    "en": "This section calculates the load current using IL = VTH / (RTH + RL) and verifies the calculated value with the observed result."
+    "en": "This panel displays VTH, RTH and RL, and allows you to verify the manually calculated load current using the formula IL = VTH / (RTH + RL)."
   },
   "placement": "top"
 },{
@@ -177,7 +177,7 @@
     "en": "Generate Report"
   },
   "description": {
-    "en": "The REPORT button generates a summarised report of the simulation. After completing the observations and verification, generate the report. The report includes the experiment details, measured readings, calculations and conclusion."
+    "en": "The REPORT button generates a summarised report of the simulation. After completing the observations and verification, generate the report. The report includes the experiment summary, measured readings, calculations, verification result and conclusion."
   },
   "placement": "top"
 }
