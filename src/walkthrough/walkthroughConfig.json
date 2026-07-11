@@ -3,7 +3,7 @@
   "defaultLocale": "en",
   "locales": ["en"],
   "audio": {
-    "autoplay": false
+    "autoplay":true
   },
   "steps": [
 {
@@ -13,8 +13,9 @@
     "en": "Aim"
   },
   "description": {
-    "en": "The aim of the experiment is to verify Thevenin's Theorem by determining the Thevenin equivalent voltage (VTH) and equivalent resistance (RTH), and calculating the load current through the load resistance."
+    "en": "The aim of the experiment is to verify Thevenin’s Theorem."
   },
+   "audio":"./walkthrough-audios/AIM.wav",
   "placement": "bottom"
 },{
   "id": 2,
@@ -25,6 +26,7 @@
   "description": {
     "en": "The Instructions provide step-by-step guidance on how to perform the simulation."
   },
+  "audio": "./walkthrough-audios/Instructions Button.wav",
   "placement": "right"
 },{
   "id": 3,
@@ -33,8 +35,9 @@
     "en": "AI Guide Button"
   },
   "description": {
-    "en": "To use this feature, click on the AI Guide button. The AI guide will assist you in performing the simulation accurately at each step."
+    "en": "To use this feature, click on the “AI Guide” button. The AI guide will assist you in performing the simulation accurately at each step."
   },
+   "audio": "./walkthrough-audios/AI Guide Button.wav",
   "placement": "right"
 },{
   "id": 4,
@@ -43,8 +46,9 @@
     "en": "Auto Connect Button"
   },
   "description": {
-    "en": "The AUTO CONNECT button automatically creates all the required circuit connections for the experiment."
+    "en": "The AUTO CONNECT button makes all the connections automatically."
   },
+   "audio": "./walkthrough-audios/Auto Connect Button.wav",
   "placement": "right"
 },
  {
@@ -54,8 +58,9 @@
     "en": "Check Button"
   },
   "description": {
-    "en": "The CHECK button verifies all the connections to ensure that they are correct.\n\nNote: If a wire is connected incorrectly, click the corresponding terminal label number to remove the connection."
+    "en": "The CHECK button verifies all the connections to ensure that they are correct."
   },
+   "audio": "./walkthrough-audios/Check Button.wav",
   "placement": "right"
 },
  {
@@ -65,8 +70,9 @@
     "en": "Add Button"
   },
   "description": {
-    "en": "The ADD button records the measured values of VTH, RTH, RL and IL in the observation table."
+    "en": "The ADD button adds the readings to the observation table."
   },
+   "audio": "./walkthrough-audios/Add Button.wav",
   "placement": "right"
 },
 {
@@ -76,8 +82,9 @@
     "en": "Calculate Button"
   },
   "description": {
-    "en": "The CALCULATE button computes the Thevenin equivalent voltage (VTH), equivalent resistance (RTH), and the theoretical load current (IL). Enter the calculated IL value and click VERIFY to compare it with the observed value."
+    "en": "The CALCULATE button auto-fills resistance values, source value and measured parameters in the Calculation Panel. For verification, you have to manually calculate the load current using the Thevenin theorem concept and verify it using the VERIFY button."
   },
+  "audio": "./walkthrough-audios/calculate button.wav",
   "placement": "right"
 },
 {
@@ -87,8 +94,9 @@
     "en": "Reset Button"
   },
   "description": {
-    "en": "The RESET button refreshes the simulation to its initial state for a fresh start."
+    "en": "The RESET button refresh the simulation to its initial state for a fresh start."
   },
+   "audio": "./walkthrough-audios/Reset Button.wav",
   "placement": "right"
 },{
   "id": 9,
@@ -99,6 +107,7 @@
   "description": {
     "en": "The PRINT button allows you to print the simulation."
   },
+   "audio": "./walkthrough-audios/Print Button.wav",
   "placement": "right"
 },{
   "id": 10,
@@ -107,78 +116,110 @@
     "en": "Resistance Sliders"
   },
   "description": {
-    "en": "Set the values of R1, R2, R3 and RL using the resistance sliders. These resistance values are used to determine the Thevenin equivalent circuit."
+    "en": "Set the values of R1, R2, R3 and RL by moving the resistance sliders. These resistance values will remain constant throughout the experiment to ensure accurate verification of the Thevenin Theorem."
   },
+   "audio": "./walkthrough-audios/Resistance Sliders.wav",
   "placement": "right"
 },{
   "id": 11,
-  "target": "#equipment-panel",
+  "target": "#voltmeter",
   "title": {
-    "en": "Measuring Instruments"
+    "en": "DC Voltmeter"
   },
   "description": {
-    "en": "The voltmeter measures the Thevenin equivalent voltage (VTH), the ammeter measures the load current (IL), and the digital multimeter measures the Thevenin equivalent resistance (RTH)."
+    "en": "This voltmeter is used to measure the Thevenin voltage (VTH) across the load terminals with the load resistance disconnected. The measured VTH will be used later to calculate the load current."
   },
+   "audio": "./walkthrough-audios/DC Voltmeter.wav",
+  "placement": "bottom"
+},
+{
+  "id": 12,
+  "target": "#ammeter-a1",
+  "title": {
+    "en": "DC Ammeter"
+  },
+  "description": {
+    "en": "This ammeter is used to measure the load current (IL​) flowing through the load resistance (RL​). The measured load current is used to verify Thevenin's Theorem by comparing it with the theoretically calculated current."
+  },
+   "audio": "./walkthrough-audios/DC Ammeter.wav",
+  "placement": "bottom"
+},
+{
+  "id": 13,
+  "target": "#multimeter",
+  "title": {
+    "en": "Digital Multimeter"
+  },
+  "description": {
+    "en": "The digital multimeter is used in resistance (Ω) mode to measure the Thevenin resistance (RTH​) across the load terminals after removing the load resistance and deactivating the independent voltage source (by replacing it with a short circuit), the equivalent resistance across the load terminals is measured."
+  },
+   "audio": "./walkthrough-audios/Digital Multimeter.wav",
   "placement": "bottom"
 },{
-  "id": 12,
+  "id": 14,
   "target": "#power-supply",
   "title": {
     "en": "Regulated DC Power Supply"
   },
   "description": {
-    "en": "This section provides the required DC voltage to the circuit. The display shows the applied source voltage, and the slider can be used to set the desired voltage."
+    "en": "This section provides the required DC voltage to the circuit. The display shows the active voltage supplied to the circuit, and the slider can be used to set the desired voltage value. "
   },
+   "audio": "./walkthrough-audios/Regulated DC Power Supply.wav",
   "placement": "left"
 },{
-  "id": 13,
+  "id": 15,
   "target": "#circuit-panel",
   "title": {
     "en": "Circuit Connections"
   },
   "description": {
-    "en": "This section displays the circuit and allows users to make the required connections by dragging and dropping wires between the connection points."
+    "en": "This section displays the circuit and allows users to make the required connections by dragging and dropping wires between the connection terminals."
   },
+   "audio": "./walkthrough-audios/Circuit Connections.wav",
   "placement": "left"
 },{
-  "id": 14,
+  "id": 16,
   "target": "#observation-table-panel",
   "title": {
     "en": "Observation Table"
   },
   "description": {
-    "en": "This table records the measured values of VTH, RTH, RL and IL. These readings are used later for calculation and verification."
+    "en": "This table records the measured Thevenin voltage (VTH), Thevenin resistance (RTH​), Load resistance (RL) and Load current (IL)."
   },
+   "audio": "./walkthrough-audios/Observation Table.wav",
   "placement": "right"
 },{
-  "id": 15,
+  "id": 17,
   "target": "#formula-button",
   "title": {
     "en": "Equations"
   },
   "description": {
-    "en": "This section displays the equations used to calculate the Thevenin equivalent voltage, equivalent resistance and load current."
+    "en": "This section displays the equations used to determine the Thevenin resistance (RTH​), Thevenin voltage (VTH) and Load current (IL)."
   },
+   "audio": "./walkthrough-audios/Equations.wav",
   "placement": "top"
 },{
-  "id": 16,
+  "id": 18,
   "target": "#calculation-panel",
   "title": {
     "en": "Calculation Panel"
   },
   "description": {
-    "en": "This panel displays VTH, RTH and RL, and allows you to verify the manually calculated load current using the formula IL = VTH / (RTH + RL)."
+    "en": "This is the Calculation Panel where the Thevenin Theorem will be verified. Enter the calculated load current and compare it with the measured load current to verify the theorem."
   },
+   "audio": "./walkthrough-audios/Calculation Panel.wav",
   "placement": "top"
 },{
-  "id": 17,
+  "id": 19,
   "target": "#generate-report-button",
   "title": {
     "en": "Generate Report"
   },
   "description": {
-    "en": "The REPORT button generates a summarised report of the simulation. After completing the observations and verification, generate the report. The report includes the experiment summary, measured readings, calculations, verification result and conclusion."
+    "en": " The Report button generates a summarised report of the simulation. After completing the observation table and theoretical calculations, generate the report. The report will include the time taken to complete the simulation, the apparatus used, recorded readings, the user-calculated result and the conclusion."
   },
+   "audio": "./walkthrough-audios/Generate Report.wav",
   "placement": "top"
 }
   ]
