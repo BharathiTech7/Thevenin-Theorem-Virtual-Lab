@@ -351,13 +351,38 @@ export const autoConnectTheveninCircuit = (
   experimentCase,
 ) => {
   
-const totalConnections =
-  getAllConnections(instance).length
+const connections = getAllConnections(instance)
 
-if (totalConnections > 0) {
-  return {
-    success: false,
-    reason: 'REMOVE_CONNECTIONS_FIRST',
+if (experimentCase !== 3) {
+  if (connections.length > 0) {
+    return {
+      success: false,
+      reason: 'REMOVE_CONNECTIONS_FIRST',
+    }
+  }
+}
+
+if (experimentCase === 3) {
+
+  const allowedConnections = connections.filter((connection) => {
+
+    const source = connection.sourceId || connection.source?.id
+    const target = connection.targetId || connection.target?.id
+
+    return (
+      (source === '7-endpoint' && target === '9-endpoint') ||
+      (source === '9-endpoint' && target === '7-endpoint') ||
+
+      (source === '8-endpoint' && target === '10-endpoint') ||
+      (source === '10-endpoint' && target === '8-endpoint')
+    )
+  })
+
+  if (allowedConnections.length !== connections.length) {
+    return {
+      success: false,
+      reason: 'REMOVE_CONNECTIONS_FIRST',
+    }
   }
 }
   const connectPair = (a, b) => {

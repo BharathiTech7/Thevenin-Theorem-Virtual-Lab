@@ -8,6 +8,7 @@ const CalculationPanel = ({
   userCalculatedIL,
   setUserCalculatedIL,
   setVerificationResult,
+  playStepById,
 }) => {
   // Extracting basic parameters from calculatedValues
   const r1 = calculatedValues?.r1 ?? '';
@@ -49,13 +50,16 @@ const CalculationPanel = ({
     const isCorrect = Math.abs(entered - actual) < 0.001;
 
     if (isCorrect) {
+      playStepById?.(34)
       showStepAlert({
         title: 'Calculation Verified',
         description: 'Your calculated load current matches the observed value.',
         type: 'success',
       });
       setVerificationResult('✅ Verified Successfully');
+
     } else {
+      playStepById?.(33)
       showStepAlert({
         title: 'Calculation Incorrect',
         description: 'The calculated load current does not match the observed value. Please verify your calculation using IL = VTH / (RTH + RL).',

@@ -1,15 +1,17 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-
 import { useFocusTrap } from '../hooks/useFocusTrap.js'
-
+import {
+  addExclusiveAudioListener,
+  dispatchExclusiveAudioStart,
+} from '../../utils/audioCoordinator.js'
 const EDGE_GAP = 16
 const TARGET_GAP = 18
 const DEFAULT_POPUP_SIZE = {
   height: 280,
   width: 360,
 }
-
+const WALKTHROUGH_AUDIO_SOURCE_ID = 'walkthrough'
 const isValidAudioSource = (audio) => Boolean(audio && audio !== '#')
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
@@ -133,7 +135,7 @@ const WalkthroughPopup = ({
       audioRef.current = null
       return () => window.clearTimeout(resetPlayingTimer)
     }
-
+dispatchExclusiveAudioStart(WALKTHROUGH_AUDIO_SOURCE_ID)
     const audio = new Audio(audioSource)
     audioRef.current = audio
 
@@ -177,7 +179,22 @@ const WalkthroughPopup = ({
       .then(() => setIsPlaying(true))
       .catch(() => setIsPlaying(false))
   }
+useEffect(() => (
+  addExclusiveAudioListener(
+    WALKTHROUGH_AUDIO_SOURCE_ID,
+    () => {
+      const audio = audioRef.current
 
+      if (!audio) {
+        return
+      }
+
+      audio.pause()
+      audio.currentTime = 0
+      setIsPlaying(false)
+    },
+  )
+), [])
   return (
     <motion.aside
       aria-describedby={descriptionId}

@@ -11,7 +11,7 @@ import { EXPERIMENT_ALERTS } from './alerts/experimentStepAlerts.js'
 import { useLabAlerts } from './alerts/useLabAlerts.js'
 import { useAiGuideNarration } from './aiGuide/useAiGuideNarration.js'
 import CalculationPanel from './components/CalculationPanel.jsx'
- 
+ import { useWalkthrough } from './walkthrough/useWalkthrough.js'
 import { calculateReadings } from './utils/circuitMath.js'
 import { generateTheveninReport } from './utils/theveninReportGenerator.js'
  
@@ -72,6 +72,12 @@ const [autoConnectRequest, setAutoConnectRequest] = useState(0)
   const [connectionsVerified, setConnectionsVerified] = useState(false)
   const [sessionStart, setSessionStart] = useState(() => Date.now())
   const [showRth, setShowRth] = useState(false)
+  const walkthroughWasOpenRef = useRef(false)
+const walkthroughCompletedRef = useRef(false)
+const resistanceIntroPlayedRef = useRef(false)
+const { isOpen: walkthroughOpen } = useWalkthrough()
+const voltageGuidePlayedRef = useRef(false)
+
 const resistancesConfigured =
   Number(r1) !== 0.1 &&
   Number(r2) !== 0.1 &&
@@ -105,6 +111,8 @@ console.log(readings)
   rth: readings.rth,
   il: readings.il,
 })
+const [case1ConnectionsRemoved, setCase1ConnectionsRemoved] = useState(false)
+const [case2ConnectionsRemoved, setCase2ConnectionsRemoved] = useState(false)
 const [showMultimeter, setShowMultimeter] = useState(false)
   const hasDuplicateReading = observations.some((row) => (
     row.voltage === normalizedVoltage
@@ -117,9 +125,9 @@ const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
     setStatus('AI Guide narration started.')
   }, [])
 
-  const handleAiGuideFinish = useCallback(() => {
-    setStatus('AI Guide narration completed.')
-  }, [])
+const handleAiGuideFinish = useCallback(() => {
+  setStatus('AI Guide finished.')
+}, [])
 
   const handleAiGuideError = useCallback(() => {
     setStatus('AI Guide narration could not start. Add audio files or use a browser with speech synthesis.')
@@ -129,12 +137,72 @@ const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
     isPlaying: aiGuidePlaying,
     start: startAiGuide,
     stop: stopAiGuide,
-  } = useAiGuideNarration({
+    playStepById,
+    playStepsById,
+    finish,
+} = useAiGuideNarration({
     onError: handleAiGuideError,
     onFinish: handleAiGuideFinish,
     onStart: handleAiGuideStart,
-  })
+})
+useEffect(() => {
+  if (walkthroughOpen) {
+    walkthroughWasOpenRef.current = true
+    return
+  }
 
+  if (
+    !aiGuidePlaying ||
+    !walkthroughWasOpenRef.current ||
+    walkthroughCompletedRef.current
+  ) {
+    return
+  }
+
+  walkthroughCompletedRef.current = true
+
+  playStepById(2)
+}, [walkthroughOpen, aiGuidePlaying, playStepById])
+useEffect(() => {
+  if (
+    !aiGuidePlaying ||
+    !resistancesConfigured ||
+    resistanceIntroPlayedRef.current
+  ) {
+    return
+  }
+
+  resistanceIntroPlayedRef.current = true
+
+  playStepsById([3,4, 5])
+}, [
+  aiGuidePlaying,
+  resistancesConfigured,
+  playStepById,
+])
+useEffect(() => {
+  if (!case1ConnectionsRemoved) {
+    return
+  }
+
+  playStepsById?.([16, 17])
+
+}, [
+  case1ConnectionsRemoved,
+  playStepsById,
+])
+
+useEffect(() => {
+  if (!case2ConnectionsRemoved) {
+    return
+  }
+
+  playStepsById([25, 26])
+
+}, [
+  case2ConnectionsRemoved,
+  playStepsById,
+])
   const handleAiGuide = useCallback(() => {
     if (aiGuidePlaying) {
       stopAiGuide()
@@ -197,6 +265,7 @@ const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
     }
 
  if (experimentCase === 1) {
+
   setObservations([
     {
       id: 1,
@@ -207,9 +276,14 @@ const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
     },
   ])
 
- setMeasuredRth(readings.rth)
-setConnectionsVerified(false)
-setExperimentCase(2)
+  setMeasuredRth(readings.rth)
+
+  playStepById(15)
+
+  setConnectionsVerified(false)
+  voltageGuidePlayedRef.current = false
+  setExperimentCase(2)
+  setCase1ConnectionsRemoved(false)
 }
 
 else if (experimentCase === 2) {
@@ -220,9 +294,13 @@ else if (experimentCase === 2) {
     },
   ])
 
+
    setMeasuredVth(readings.vth)
+   playStepById(24)
 setConnectionsVerified(false)
+voltageGuidePlayedRef.current = false
 setExperimentCase(3)
+setCase2ConnectionsRemoved(false)
 }
 
 else if (experimentCase === 3) {
@@ -234,8 +312,10 @@ else if (experimentCase === 3) {
   ])
 
   setMeasuredIl(readings.il)
+  playStepById(31)
   setConnectionsVerified(false)
   setExperimentCase(4)
+  
 }
   
     setReportGenerated(false)
@@ -248,6 +328,7 @@ else if (experimentCase === 3) {
 
   const resetSimulation = useCallback(() => {
     stopAiGuide()
+    playStepById(35)
     setPowerOn(false)
     setVoltage(1)
 setR1(0.1)
@@ -269,6 +350,10 @@ setUserCalculatedIL('')
     showStepAlert(EXPERIMENT_ALERTS.resetSuccess)
     setShowRth(false)
     setShowMultimeter(false)
+    walkthroughWasOpenRef.current = false
+walkthroughCompletedRef.current = false
+resistanceIntroPlayedRef.current = false
+voltageGuidePlayedRef.current = false
   }, [showStepAlert, stopAiGuide])
 
   const handleReset = () => {
@@ -287,7 +372,7 @@ const handlePrint = () => {
     })
     return
   }
-
+  playStepById(36)
   window.print()
 }
 
@@ -303,6 +388,7 @@ const handleGenerateReport = () => {
 
   setReportGenerated(true)
 
+  playStepById(37)
 generateTheveninReport({
   observations,
   r1,
@@ -321,59 +407,84 @@ generateTheveninReport({
   const scaledWidth = Math.ceil(BASE_WIDTH * scale)
   const scaledHeight = Math.ceil(CONTENT_HEIGHT * scale)
   const handleCheckConnections = useCallback((result) => {
-    if (result.isCorrect) {
-      if (experimentCase === 1) {
-  setShowRth(true)
-  setShowMultimeter(true)
-}
-  setConnectionsVerified(true)
 
-  if (experimentCase === 1) {
-    setStatus(
-      'Right connections! Click ADD to measure RTH.'
-    )
-  }
+  if (result.isCorrect) {
 
-  else if (experimentCase === 2) {
-    setStatus(
-      'Right connections! Turn ON power supply and click ADD to measure VTH.'
-    )
-  }
-
-  else if (experimentCase === 3) {
-    setStatus(
-      'Right connections! Turn ON power supply and click ADD to measure IL.'
-    )
-  }
-
-  showStepAlert(EXPERIMENT_ALERTS.connectionsVerified)
-
-  return
-}
-
-    setConnectionsVerified(false)
-
-    if (result.totalConnections === 0) {
-      setStatus('Please make the connections first.')
-      showStepAlert(EXPERIMENT_ALERTS.connectionErrorFound, {
-        description: 'No circuit wires were found. Drag node connections before checking.',
-        type: 'warning',
-      })
-      return
+    if (experimentCase === 1) {
+      setShowRth(true)
+      setShowMultimeter(true)
+      playStepById(14)
     }
 
-    setStatus(
-  'Invalid connections. Please check the wiring and try again.'
-)
+    else if (experimentCase === 2) {
+      playStepById(22)
+    }
+
+    else if (experimentCase === 3) {
+      playStepById(29)
+    }
+
+    setConnectionsVerified(true)
+
+    if (experimentCase === 1) {
+      setStatus('Right connections! Click ADD to measure RTH.')
+    }
+
+    else if (experimentCase === 2) {
+      setStatus(
+        'Right connections! Turn ON power supply and click ADD to measure VTH.'
+      )
+    }
+
+    else if (experimentCase === 3) {
+      setStatus(
+        'Right connections! Turn ON power supply and click ADD to measure IL.'
+      )
+    }
+
+    showStepAlert(EXPERIMENT_ALERTS.connectionsVerified)
+
+    return
+  }
+
+  setConnectionsVerified(false)
+
+  if (result.totalConnections === 0) {
+
+    playStepById(13)
+
+    setStatus('Please make the connections first.')
+
     showStepAlert(EXPERIMENT_ALERTS.connectionErrorFound, {
-      description: `Matched ${result.matchedCount} of 8 required wire pairs from ${result.totalConnections} total wires.`,
+      description:
+        'No circuit wires were found. Drag node connections before checking.',
+      type: 'warning',
     })
-  }, [showStepAlert])
+
+    return
+  }
+
+  if (result.matchedCount <= 1) {
+    playStepById(9)
+  } else {
+    playStepById(10)
+  }
+
+  setStatus(
+    'Invalid connections. Please check the wiring and try again.'
+  )
+
+  showStepAlert(EXPERIMENT_ALERTS.connectionErrorFound, {
+    description: `Matched ${result.matchedCount} of 8 required wire pairs from ${result.totalConnections} total wires.`,
+  })
+
+}, [experimentCase, playStepById, showStepAlert])
 
   const handleCheck = () => {
     setCheckRequest((current) => current + 1)
   }
   const handleTogglePower = () => {
+    
     if (!powerOn && !connectionsVerified) {
       setStatus('Check the circuit connections before switching on the power supply.')
       showStepAlert(EXPERIMENT_ALERTS.cannotStartPower)
@@ -389,14 +500,39 @@ generateTheveninReport({
     }
 
     setPowerOn(true)
+    
     setStatus('Power supply switched on. Adjust voltage and add the reading.')
     showStepAlert(EXPERIMENT_ALERTS.powerOn)
   }
 
 
  const handleVoltageChange = useCallback((nextVoltage) => {
+
   setVoltage(nextVoltage)
-}, [])
+
+  if (
+    powerOn &&
+    experimentCase === 2 &&
+    !voltageGuidePlayedRef.current
+  ) {
+    voltageGuidePlayedRef.current = true
+    playStepById(23)
+  }
+
+  if (
+    powerOn &&
+    experimentCase === 3 &&
+    !voltageGuidePlayedRef.current
+  ) {
+    voltageGuidePlayedRef.current = true
+    playStepById(30)
+  }
+
+}, [
+  powerOn,
+  experimentCase,
+  playStepById,
+])
 
  const handleCalculate = () => {
 setCalculatedValues({
@@ -413,6 +549,8 @@ setCalculatedValues({
 })
 
   setCalculationDone(true)
+  playStepById(32)
+
 }
 
   return (
@@ -511,6 +649,12 @@ setCalculatedValues({
                   resistancesConfigured={resistancesConfigured}
                   showRth={showRth}
                   showMultimeter={showMultimeter}
+                  playStepById={playStepById}
+                  playStepsById={playStepsById}
+                  case1ConnectionsRemoved={case1ConnectionsRemoved}
+                  setCase1ConnectionsRemoved={setCase1ConnectionsRemoved}
+                  case2ConnectionsRemoved={case2ConnectionsRemoved}
+                  setCase2ConnectionsRemoved={setCase2ConnectionsRemoved}
                 />
               </section>
             </section>
@@ -532,6 +676,7 @@ setCalculatedValues({
   userCalculatedIL={userCalculatedIL}
   setUserCalculatedIL={setUserCalculatedIL}
   setVerificationResult={setVerificationResult}
+  playStepById={playStepById}
 />
         </div>
       </div>

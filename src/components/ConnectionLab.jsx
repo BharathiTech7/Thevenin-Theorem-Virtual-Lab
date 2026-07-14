@@ -36,8 +36,13 @@ const ConnectionLab = ({
   resistancesConfigured,
   autoConnectRequest,
   showRth,
-  showMultimeter
-
+  showMultimeter,
+  playStepById,
+   playStepsById,
+   case1ConnectionsRemoved,
+setCase1ConnectionsRemoved,
+case2ConnectionsRemoved,
+setCase2ConnectionsRemoved,
 }) => {
   const containerRef = useRef(null)
   const instanceRef = useRef(null)
@@ -45,12 +50,14 @@ const ConnectionLab = ({
   const scaleRef = useRef(getJsPlumbZoom(scale))
   const { showStepAlert } = useLabAlerts()
   const [isLocked, setIsLocked] = useState(false)
- 
-
+  const experimentCaseRef = useRef(experimentCase)
+  const autoConnectingRef = useRef(false)
   useEffect(() => {
     onCheckConnectionsRef.current = onCheckConnections
   }, [onCheckConnections])
-
+useEffect(() => {
+  experimentCaseRef.current = experimentCase
+}, [experimentCase])
   useEffect(() => {
     let cancelled = false
     
@@ -124,7 +131,124 @@ const ConnectionLab = ({
 )
 
       instance.setSuspendDrawing(false, true)
+ let wrongConnectionPlaying = false
 
+instance.bind('connection', (info) => {
+  if (autoConnectingRef.current) {
+  return
+}
+  const source = info.sourceId
+  const target = info.targetId
+
+  console.log('CONNECTED:', source, '→', target)
+
+  const isPair = (a, b) =>
+    (source === a && target === b) ||
+    (source === b && target === a)
+
+  //
+  // CASE 1
+  //
+  if (experimentCaseRef.current === 1) {
+    if (isPair('5-endpoint', '11-endpoint')) {
+      playStepById?.(6)
+      return
+    }
+
+    if (isPair('6-endpoint', '13-endpoint')) {
+      playStepById?.(7)
+      return
+    }
+
+    if (isPair('9-endpoint', '10-endpoint')) {
+      playStepById?.(8)
+      return
+    }
+
+    if (!wrongConnectionPlaying) {
+      wrongConnectionPlaying = true
+
+      playStepById?.(9)
+
+      setTimeout(() => {
+        wrongConnectionPlaying = false
+      }, 1800)
+    }
+
+    return
+  }
+
+  //
+  // CASE 2
+  //
+  if (experimentCaseRef.current === 2) {
+    if (isPair('7-endpoint', '9-endpoint')) {
+      playStepById?.(18)
+      return
+    }
+
+    if (isPair('8-endpoint', '10-endpoint')) {
+      playStepById?.(19)
+      return
+    }
+
+    if (isPair('1-endpoint', '11-endpoint')) {
+      playStepById?.(20)
+      return
+    }
+
+    if (isPair('2-endpoint', '13-endpoint')) {
+      playStepById?.(21)
+      return
+    }
+
+    if (!wrongConnectionPlaying) {
+      wrongConnectionPlaying = true
+
+      playStepById?.(9)
+console.log("CURRENT CASE =", experimentCase)
+      setTimeout(() => {
+        wrongConnectionPlaying = false
+      }, 1800)
+    }
+
+    return
+  }
+
+
+  //
+// CASE 3
+//
+if (experimentCaseRef.current === 3) {
+
+    if (isPair('3-endpoint', '11-endpoint')) {
+        playStepById?.(27)
+        return
+    }
+
+    if (isPair('4-endpoint', '12-endpoint')) {
+        playStepById?.(28)
+        return
+    }
+
+    if (isPair('13-endpoint', '14-endpoint')) {
+        playStepById?.(21)   // Click Check
+        return
+    }
+
+    if (!wrongConnectionPlaying) {
+        wrongConnectionPlaying = true
+
+        playStepById?.(9)
+
+        setTimeout(() => {
+            wrongConnectionPlaying = false
+        }, 1800)
+    }
+
+    return
+}
+})
       window.setTimeout(() => {
         instance.repaintEverything()
       }, 100)
@@ -205,6 +329,50 @@ const ConnectionLab = ({
 
     deleteConnectionsForTerminal(instanceRef.current, terminalId)
     instanceRef.current.repaintEverything?.()
+    const remainingConnections =
+  instanceRef.current.getAllConnections()
+
+// --------------------
+// CASE 1 → CASE 2
+// --------------------
+
+if (
+  experimentCase === 2 &&
+  remainingConnections.length === 0 &&
+  !case1ConnectionsRemoved
+) {
+  setCase1ConnectionsRemoved(true)
+}
+
+// --------------------
+// CASE 2 → CASE 3
+// --------------------
+
+const has79 = remainingConnections.some(
+  (c) =>
+    (c.sourceId === '7-endpoint' &&
+      c.targetId === '9-endpoint') ||
+    (c.sourceId === '9-endpoint' &&
+      c.targetId === '7-endpoint')
+)
+
+const has810 = remainingConnections.some(
+  (c) =>
+    (c.sourceId === '8-endpoint' &&
+      c.targetId === '10-endpoint') ||
+    (c.sourceId === '10-endpoint' &&
+      c.targetId === '8-endpoint')
+)
+
+if (
+  experimentCase === 3 &&
+  remainingConnections.length === 2 &&
+  has79 &&
+  has810 &&
+  !case2ConnectionsRemoved
+) {
+  setCase2ConnectionsRemoved(true)
+}
   }
 
 const meterReadings = {
@@ -232,7 +400,7 @@ useEffect(() => {
 
     return
   }
-
+autoConnectingRef.current = true
 const result =
   autoConnectTheveninCircuit(
     instanceRef.current,
@@ -251,6 +419,20 @@ if (!result?.success) {
 }
 
   instanceRef.current.repaintEverything?.()
+  if (experimentCase === 1) {
+  playStepById?.(11)
+}
+
+if (experimentCase === 2) {
+  playStepById?.(11)
+}
+
+if (experimentCase === 3) {
+  playStepById?.(11)
+}
+  setTimeout(() => {
+  autoConnectingRef.current = false
+}, 500)
 
 }, [
   autoConnectRequest,
