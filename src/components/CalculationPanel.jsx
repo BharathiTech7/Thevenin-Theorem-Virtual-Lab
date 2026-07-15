@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLabAlerts } from '../alerts/useLabAlerts.js';
-
+import { EXPERIMENT_ALERTS } from '../alerts/experimentStepAlerts.js'
 const CalculationPanel = ({
   calculationDone,
   calculatedValues,
@@ -51,20 +51,12 @@ const CalculationPanel = ({
 
     if (isCorrect) {
       playStepById?.(34)
-      showStepAlert({
-        title: 'Calculation Verified',
-        description: 'Your calculated load current matches the observed value.',
-        type: 'success',
-      });
+     showStepAlert(EXPERIMENT_ALERTS.verificationSuccess)
       setVerificationResult('✅ Verified Successfully');
 
     } else {
       playStepById?.(33)
-      showStepAlert({
-        title: 'Calculation Incorrect',
-        description: 'The calculated load current does not match the observed value. Please verify your calculation using IL = VTH / (RTH + RL).',
-        type: 'error',
-      });
+      showStepAlert(EXPERIMENT_ALERTS.verificationFailed)
       setVerificationResult('❌ Incorrect Calculation');
     }
   };

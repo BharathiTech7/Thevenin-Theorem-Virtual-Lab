@@ -131,7 +131,17 @@ export const useAiGuideNarration = ({
       callback()
     }
 
-    const handleEnded = () => settle(resolve)
+    const handleEnded = () => {
+  window.dispatchEvent(
+    new CustomEvent('lab-alert:sound-ended', {
+      detail: {
+        id: 'lab-alert',
+      },
+    })
+  )
+
+  settle(resolve)
+}
     const handleError = () => settle(() => reject(new Error(`Unable to play AI Guide audio: ${audioSource}`)))
 
     audio.addEventListener('ended', handleEnded)

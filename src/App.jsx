@@ -279,7 +279,7 @@ useEffect(() => {
   setMeasuredRth(readings.rth)
 
   playStepById(15)
-
+  showStepAlert(EXPERIMENT_ALERTS.readingAddedCase1)
   setConnectionsVerified(false)
   voltageGuidePlayedRef.current = false
   setExperimentCase(2)
@@ -297,6 +297,7 @@ else if (experimentCase === 2) {
 
    setMeasuredVth(readings.vth)
    playStepById(24)
+   showStepAlert(EXPERIMENT_ALERTS.readingAddedCase2)
 setConnectionsVerified(false)
 voltageGuidePlayedRef.current = false
 setExperimentCase(3)
@@ -313,6 +314,7 @@ else if (experimentCase === 3) {
 
   setMeasuredIl(readings.il)
   playStepById(31)
+  showStepAlert(EXPERIMENT_ALERTS.readingAdded)
   setConnectionsVerified(false)
   setExperimentCase(4)
   
@@ -373,6 +375,7 @@ const handlePrint = () => {
     return
   }
   playStepById(36)
+  showStepAlert(EXPERIMENT_ALERTS.printLayoutGenerated)
   window.print()
 }
 
@@ -389,6 +392,7 @@ const handleGenerateReport = () => {
   setReportGenerated(true)
 
   playStepById(37)
+  showStepAlert(EXPERIMENT_ALERTS.reportGenerated)
 generateTheveninReport({
   observations,
   r1,
@@ -442,7 +446,15 @@ generateTheveninReport({
       )
     }
 
-    showStepAlert(EXPERIMENT_ALERTS.connectionsVerified)
+    if (experimentCase === 1) {
+  showStepAlert(EXPERIMENT_ALERTS.connectionsVerified)
+}
+else if (experimentCase === 2) {
+  showStepAlert(EXPERIMENT_ALERTS.connectionsVerifiedCase2)
+}
+else if (experimentCase === 3) {
+  showStepAlert(EXPERIMENT_ALERTS.connectionsVerifiedCase3)
+}
 
     return
   }
@@ -550,6 +562,7 @@ setCalculatedValues({
 
   setCalculationDone(true)
   playStepById(32)
+  showStepAlert(EXPERIMENT_ALERTS.calculationReady)
 
 }
 
