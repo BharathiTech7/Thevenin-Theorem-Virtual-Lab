@@ -3,6 +3,7 @@ import { useLabAlerts } from '../alerts/useLabAlerts.js'
 import CircuitDiagram from './CircuitDiagram.jsx'
 import EquipmentPanel from './EquipmentPanel.jsx'
 import PowerSupply from './PowerSupply.jsx'
+import { EXPERIMENT_ALERTS } from '../alerts/experimentStepAlerts.js'
 import {
   addAllEndpoints,
   deleteConnectionsForTerminal,
@@ -160,16 +161,29 @@ instance.bind('connection', (info) => {
       return
     }
 
-    if (isPair('9-endpoint', '10-endpoint')) {
-      playStepById?.(8)
-      return
-    }
+   if (isPair('9-endpoint', '10-endpoint')) {
+
+  const result = validateTheveninConnections(
+    instanceRef.current,
+    1,
+  )
+
+  if (result.totalConnections !== 3) {
+    return
+  }
+
+  if (result.isCorrect) {
+    playStepById?.(8)
+  }
+
+  return
+}
 
     if (!wrongConnectionPlaying) {
       wrongConnectionPlaying = true
 
       playStepById?.(9)
-
+      showStepAlert(EXPERIMENT_ALERTS.wrongConnection)
       setTimeout(() => {
         wrongConnectionPlaying = false
       }, 1800)
@@ -197,15 +211,29 @@ instance.bind('connection', (info) => {
       return
     }
 
-    if (isPair('2-endpoint', '13-endpoint')) {
-      playStepById?.(21)
-      return
-    }
+   if (isPair('2-endpoint', '13-endpoint')) {
+
+  const result = validateTheveninConnections(
+    instanceRef.current,
+    2,
+  )
+
+  if (result.totalConnections !== 4) {
+    return
+  }
+
+  if (result.isCorrect) {
+    playStepById?.(21)
+  }
+
+  return
+}
 
     if (!wrongConnectionPlaying) {
       wrongConnectionPlaying = true
 
       playStepById?.(9)
+      showStepAlert(EXPERIMENT_ALERTS.wrongConnection)
 console.log("CURRENT CASE =", experimentCase)
       setTimeout(() => {
         wrongConnectionPlaying = false
@@ -232,15 +260,33 @@ if (experimentCaseRef.current === 3) {
     }
 
     if (isPair('13-endpoint', '14-endpoint')) {
-        playStepById?.(21)   // Click Check
-        return
-    }
+
+  const result = validateTheveninConnections(
+    instanceRef.current,
+    3,
+  )
+
+  if (result.totalConnections !== 5) {
+    return
+  }
+
+  if (result.isCorrect) {
+    playStepById?.(29) // replace with your Case-3 completion step if different
+  }
+
+  return
+}
 
     if (!wrongConnectionPlaying) {
         wrongConnectionPlaying = true
 
         playStepById?.(9)
-
+        showStepAlert(EXPERIMENT_ALERTS.wrongConnection)
+        showStepAlert(EXPERIMENT_ALERTS.connectionErrorFound, {
+  title: 'Wrong Connection',
+  description:
+    'This wire connection is incorrect. Please follow the circuit diagram and try again.',
+})
         setTimeout(() => {
             wrongConnectionPlaying = false
         }, 1800)

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react'
-
+import { addExclusiveAudioListener, dispatchExclusiveAudioStart } from '../utils/audioCoordinator.js'
 import { LabAlertContext } from './LabAlertContext.js'
 import LabAlertCard from './LabAlertCard.jsx'
 import LabAlertSpotlight from './LabAlertSpotlight.jsx'
@@ -22,7 +22,19 @@ const DEFAULT_ICONS = {
 const TOP_RIGHT_LIMIT = 3
 const DEDUPE_WINDOW = 900
 const ALERT_TYPES = ['success', 'warning', 'error', 'info']
+const ALERT_AUDIO_SOURCE_ID = 'lab-alert'
 
+const isConfiguredAudioSource = (audioSource) => (
+  typeof audioSource === 'string' &&
+  audioSource.trim() !== '' &&
+  audioSource.trim() !== '#'
+)
+
+const dispatchLabAlertEvent = (eventName, detail) => {
+  if (typeof window === 'undefined') return
+
+  window.dispatchEvent(new CustomEvent(eventName, { detail }))
+}
 const getPlacement = () => 'center'
 
 const initialAlertState = {
@@ -88,13 +100,110 @@ const LabAlertProvider = ({ children }) => {
   const nextIdRef = useRef(0)
   const activeDedupeKeysRef = useRef(new Set())
   const recentAlertsRef = useRef(new Map())
+  const alertAudioRef = useRef(null)
   const [alertState, dispatchAlert] = useReducer(alertReducer, initialAlertState)
   const alertStateRef = useRef(alertState)
 
   useEffect(() => {
     alertStateRef.current = alertState
   }, [alertState])
+  const stopAlertAudio = useCallback((reason = 'stopped') => {
+  const currentPlayback = alertAudioRef.current
 
+  if (!currentPlayback) return
+
+  currentPlayback.audio.pause()
+  currentPlayback.audio.currentTime = 0
+  currentPlayback.finish(reason)
+}, [])
+useEffect(() => {
+
+  const handleAlertSound = (event) => {
+
+    const audioSource = event.detail?.audio
+    const alertId = event.detail?.id
+
+    if (!isConfiguredAudioSource(audioSource)) return
+
+    dispatchExclusiveAudioStart(ALERT_AUDIO_SOURCE_ID)
+
+    stopAlertAudio()
+
+    const audio = new Audio(audioSource)
+
+    const playback = {
+      audio,
+      finish: null,
+      id: alertId,
+    }
+
+    let settled = false
+
+    const finishPlayback = (reason) => {
+
+      if (settled) return
+
+      settled = true
+
+      audio.removeEventListener('ended', handleEnded)
+      audio.removeEventListener('error', handleError)
+
+      if (alertAudioRef.current === playback) {
+        alertAudioRef.current = null
+      }
+
+      dispatchLabAlertEvent('lab-alert:sound-ended', {
+        id: alertId,
+        reason,
+      })
+    }
+
+    const handleEnded = () => finishPlayback('ended')
+
+    const handleError = () => finishPlayback('error')
+
+    playback.finish = finishPlayback
+
+    alertAudioRef.current = playback
+
+    audio.addEventListener('ended', handleEnded)
+    audio.addEventListener('error', handleError)
+
+    audio.play().catch(() => finishPlayback('error'))
+  }
+
+  const handleAlertStop = (event) => {
+
+    const alertId = event.detail?.id
+    const current = alertAudioRef.current
+
+    if (!current) return
+
+    if (alertId && current.id !== alertId) return
+
+    stopAlertAudio(event.detail?.reason ?? 'dismiss')
+  }
+
+  window.addEventListener('lab-alert:sound', handleAlertSound)
+  window.addEventListener('lab-alert:sound-stop', handleAlertStop)
+
+  const removeExclusiveAudioListener =
+    addExclusiveAudioListener(ALERT_AUDIO_SOURCE_ID, () =>
+      stopAlertAudio('interrupted')
+    )
+
+  return () => {
+
+    window.removeEventListener('lab-alert:sound', handleAlertSound)
+    window.removeEventListener('lab-alert:sound-stop', handleAlertStop)
+
+    removeExclusiveAudioListener()
+
+    stopAlertAudio()
+
+  }
+
+}, [stopAlertAudio])
   const releaseDedupeKey = useCallback((alert) => {
     if (alert?.dedupeKey) {
       activeDedupeKeysRef.current.delete(alert.dedupeKey)
@@ -199,6 +308,8 @@ const LabAlertProvider = ({ children }) => {
     showAlert,
     showStepAlert,
   }), [clearAlerts, confirmAlert, showAlert, showStepAlert])
+
+
 
   return (
     <LabAlertContext.Provider value={contextValue}>

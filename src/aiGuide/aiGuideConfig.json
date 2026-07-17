@@ -145,8 +145,8 @@
     },
     {
       "id": 29,
-      "text": "Connections verified successfully. Now turn ON the power supply.",
-      "audio": "./audios/After 2nd case connections, check.wav"      
+      "text": "Connections Verified successfully. Now switch ON the power supply and set the required voltage value.",
+      "audio": "./audios/After 2nd case connections, check.wav"   
   
     },
     

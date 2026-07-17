@@ -46,7 +46,7 @@ const ALERT_AUDIO = {
   ),
 
   case3Verified: getAlertAudio(
-    'Now check again for the 3rd case.wav'
+    'After 2nd case connections, check.wav'
   ),
 
   addFinalReading: getAlertAudio(
@@ -68,6 +68,12 @@ const ALERT_AUDIO = {
   reset: getAlertAudio(
     'Reset.wav'
   ),
+reportGenerated: getAlertAudio(
+  'Generate Report button click.wav'
+),
+wrongConnection: getAlertAudio(
+  'Wrong connection.wav'
+),
 
   print: getAlertAudio(
     'Print.wav'
@@ -132,7 +138,7 @@ connectionsVerifiedCase2: {
 connectionsVerifiedCase3: {
   audio: ALERT_AUDIO.case3Verified,
   description:
-    'Connections verified successfully. Now turn ON the power supply.',
+    'Connections Verified successfully. Now switch ON the power supply and set the required voltage value.',
   icon: '✅',
   stepNumber: 2,
   target: '#check-button',
@@ -203,7 +209,7 @@ connectionsVerifiedCase3: {
  readingAdded: {
   audio: ALERT_AUDIO.addFinalReading,
   description:
-    'Final reading added successfully. Click CALCULATE to manually verify Thevenin’s Theorem.',
+      'Final reading added to the observation table. Now click on the Calculate button to manually verify the theorem.',
   icon: '✅',
   stepNumber: 6,
   target: '#observation-table-panel',
@@ -213,7 +219,7 @@ connectionsVerifiedCase3: {
 readingAddedCase1: {
   audio: ALERT_AUDIO.removeCase1,
   description:
-    'Reading added successfully. Remove the connections 9-10, 5-11 and 6-13.',
+    'Reading is added to the observation table. Now remove the connections 9 to 10, 5 to 11 and 6 to 13.',
   icon: '✅',
   stepNumber: 6,
   target: '#observation-table-panel',
@@ -224,7 +230,7 @@ readingAddedCase1: {
 readingAddedCase2: {
   audio: ALERT_AUDIO.removeVoltmeter,
   description:
-    'Reading added successfully. Turn OFF the power supply and remove voltmeter connections 1-11 and 2-13.',
+    'Readings added to the observation table. Now turn OFF the power supply and remove the voltmeter connections 1 to 11 and 2 to 13.',
   icon: '✅',
   stepNumber: 6,
   target: '#observation-table-panel',
@@ -242,7 +248,8 @@ readingAddedCase2: {
  calculationReady: {
   audio: ALERT_AUDIO.calculate,
   description:
-    'Observed values are displayed. Calculate IL manually, enter the value and click Verify.',
+         'The observed values are displayed in the Calculations Panel. Calculate the load current manually using the rules of the Thevenin Theorem, enter the calculated value in the input field and click the Verify button to verify the theorem.',
+
   icon: '🧮',
   stepNumber: 7,
   target: '#calculation-panel',
@@ -253,7 +260,7 @@ readingAddedCase2: {
 verificationSuccess: {
   audio: ALERT_AUDIO.verifyCorrect,
   description:
-    'Thevenin Theorem verified successfully. Click Generate Report.',
+         'Calculations are correct. Thevenin\'s Theorem has been verified successfully. Now click on the Generate Report button.',
   icon: '✅',
   stepNumber: 8,
   target: '#generate-report-button',
@@ -264,7 +271,7 @@ verificationSuccess: {
 verificationFailed: {
   audio: ALERT_AUDIO.verifyWrong,
   description:
-    'Incorrect calculation. Please review your calculation and try again.',
+  'Incorrect calculations. The Thevenin\'s Theorem could not be verified. Please review your calculations and try again.',
   icon: '❌',
   stepNumber: 8,
   target: '#calculation-panel',
@@ -322,11 +329,22 @@ tingSetup: {
   title: 'Experiment Reset Successfully',
   type: 'success',
 },
+wrongConnection: {
+  audio: ALERT_AUDIO.wrongConnection,
+  title: 'Wrong Connection',
+  description: 'This connection is wrong.',
+  icon: '❌',
+  stepNumber: 2,
+  target: '#circuit-panel',
+  type: 'error',
+},
 reportGenerated: {
-  audio: ALERT_AUDIO.reportGenerated,
   title: 'Report Generated',
-  description: 'Your report has been generated successfully. Click OK to view your report.',
+  description:
+    'Your report has been generated successfully. Click OK to view your report.',
   icon: '✅',
   type: 'success',
+  requiresConfirmation: true,
+  confirmLabel: 'OK',
 },
 }

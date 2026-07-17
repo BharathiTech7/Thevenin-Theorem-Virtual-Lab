@@ -378,34 +378,42 @@ const handlePrint = () => {
   showStepAlert(EXPERIMENT_ALERTS.printLayoutGenerated)
   window.print()
 }
-
 const handleGenerateReport = () => {
   if (!calculationDone) {
-  window.alert('Please click CALCULATE before generating report.')
-  return
-}
+    window.alert('Please click CALCULATE before generating report.')
+    return
+  }
+
   if (readingCount < MIN_OBSERVATION_READINGS) {
     window.alert('Please add at least one observation.')
     return
   }
 
-  setReportGenerated(true)
+  // Start audio immediately
+  playStepById?.(37)
 
-  playStepById(37)
-  showStepAlert(EXPERIMENT_ALERTS.reportGenerated)
-generateTheveninReport({
-  observations,
-  r1,
-  r2,
-  r3,
-  rl,
-  vth: calculatedValues?.vth ?? 0,
-  rth: calculatedValues?.rth ?? 0,
-  observedIL: calculatedValues?.observedIL ?? 0,
-  userCalculatedIL,
-  verificationResult,
-  sessionStart,
-})
+  // Show alert
+  showStepAlert({
+    ...EXPERIMENT_ALERTS.reportGenerated,
+
+    onConfirm: () => {
+      setReportGenerated(true)
+
+      generateTheveninReport({
+        observations,
+        r1,
+        r2,
+        r3,
+        rl,
+        vth: calculatedValues?.vth ?? 0,
+        rth: calculatedValues?.rth ?? 0,
+        observedIL: calculatedValues?.observedIL ?? 0,
+        userCalculatedIL,
+        verificationResult,
+        sessionStart,
+      })
+    },
+  })
 }
 
   const scaledWidth = Math.ceil(BASE_WIDTH * scale)
