@@ -124,12 +124,7 @@ useEffect(() => {
     return resistancesConfigured
   },
   () => {
-  showStepAlert({
-    title: 'Set Resistance Values First',
-    description:
-      'Please set R1, R2, R3 and RL before making connections.',
-    type: 'warning',
-  })
+  showStepAlert(EXPERIMENT_ALERTS.resistanceRequired)
 }
 )
 
@@ -386,7 +381,7 @@ if (experimentCaseRef.current === 3) {
 
 if (
   experimentCase === 2 &&
-  remainingConnections.length <3 &&
+  remainingConnections.length ===0 &&
   !case1ConnectionsRemoved
 ) {
   setCase1ConnectionsRemoved(true)
@@ -446,13 +441,7 @@ useEffect(() => {
   }
 
   if (!resistancesConfigured) {
-    showStepAlert({
-      title: 'Set Resistance Values First',
-      description:
-        'Please set R1, R2, R3 and RL before auto connecting.',
-      type: 'warning',
-    })
-
+    showStepAlert(EXPERIMENT_ALERTS.resistanceRequiredForAutoConnect)
     return
   }
 autoConnectingRef.current = true

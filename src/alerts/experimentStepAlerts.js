@@ -1,13 +1,8 @@
 export const ALERT_AUDIO_PLACEHOLDER = '#'
 
-const alertAudioModules = import.meta.glob('../audios/*', {
-  eager: true,
-  import: 'default',
-  query: '?url',
-})
-
 const getAlertAudio = (fileName) =>
-  alertAudioModules[`../audios/${fileName}`] ?? ALERT_AUDIO_PLACEHOLDER
+  `/audios/${fileName}`
+
 const ALERT_AUDIO = {
   resistanceRequired: getAlertAudio(
     'Before resistance set, check & auto connect button click.wav'
@@ -350,5 +345,23 @@ reportGenerated: {
   type: 'success',
   requiresConfirmation: true,
   confirmLabel: 'OK',
+},
+resistanceRequired: {
+  audio: ALERT_AUDIO.resistanceRequired,
+  title: 'Set Resistance Values First',
+  description:
+    'Please set R1, R2, R3 and RL using the resistance sliders.',
+  icon: '⚠️',
+  type: 'warning',
+  target: '#resistance-controls',
+},
+resistanceRequiredForAutoConnect: {
+  audio: ALERT_AUDIO.resistanceRequired,
+  title: 'Set Resistance Values First',
+  description:
+    'Please set R1, R2, R3 and RL using resistance Sliders.',
+  icon: '⚠️',
+  type: 'warning',
+  target: '#resistance-controls',
 },
 }
