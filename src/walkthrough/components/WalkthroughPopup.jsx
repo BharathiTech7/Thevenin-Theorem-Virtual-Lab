@@ -99,6 +99,7 @@ const WalkthroughPopup = ({
   onClose,
   onNext,
   onPrevious,
+  onSkip,
   targetRect,
   totalSteps,
 }) => {
@@ -137,6 +138,7 @@ const WalkthroughPopup = ({
     }
 dispatchExclusiveAudioStart(WALKTHROUGH_AUDIO_SOURCE_ID)
     const audio = new Audio(audioSource)
+    console.log("Walkthrough audio source:", audioSource)
     audioRef.current = audio
 
     const handleEnded = () => setIsPlaying(false)
@@ -267,13 +269,13 @@ useEffect(() => (
         >
           Previous
         </button>
-        <button
-          className="walkthrough-popup__button walkthrough-popup__button--secondary"
-          onClick={onClose}
-          type="button"
-        >
-          Exit
-        </button>
+       <button
+  className="walkthrough-popup__button walkthrough-popup__button--secondary"
+  onClick={onSkip}
+  type="button"
+>
+  Skip
+</button>
         <button
           className="walkthrough-popup__button walkthrough-popup__button--primary"
           data-autofocus

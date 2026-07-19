@@ -25,7 +25,7 @@ const getLocalizedValue = (value, locale, fallbackLocale) => {
 
 const resolveWalkthroughAudio = (audio) => {
   if (!audio || audio === '#') {
-    return audio ?? '#'
+    return '#'
   }
 
   if (typeof audio !== 'string') {
@@ -34,7 +34,7 @@ const resolveWalkthroughAudio = (audio) => {
 
   const normalizedAudio = audio.replaceAll('\\', '/')
 
-  return walkthroughAudioModules[normalizedAudio] ?? audio
+  return walkthroughAudioModules[normalizedAudio] ?? '#'
 }
 
 export const loadWalkthroughConfig = (config, locale = FALLBACK_LOCALE) => {
@@ -62,3 +62,5 @@ export const loadWalkthroughConfig = (config, locale = FALLBACK_LOCALE) => {
       })),
   }
 }
+
+console.log(Object.keys(walkthroughAudioModules))

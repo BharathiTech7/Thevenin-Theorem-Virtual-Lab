@@ -495,7 +495,7 @@ else if (experimentCase === 3) {
   )
 
   showStepAlert(EXPERIMENT_ALERTS.connectionErrorFound, {
-    description: `Matched ${result.matchedCount} of 8 required wire pairs from ${result.totalConnections} total wires.`,
+    description: 'Some Connections are wrong.',
   })
 
 }, [experimentCase, playStepById, showStepAlert])
@@ -504,26 +504,35 @@ else if (experimentCase === 3) {
     setCheckRequest((current) => current + 1)
   }
   const handleTogglePower = () => {
-    
-    if (!powerOn && !connectionsVerified) {
-      setStatus('Check the circuit connections before switching on the power supply.')
-      showStepAlert(EXPERIMENT_ALERTS.cannotStartPower)
-      return
-    }
-
-    if (powerOn) {
-      setPowerOn(false)
-      setVoltage(0)
-      
-      setStatus('Power supply switched off.')
-      return
-    }
-
-    setPowerOn(true)
-    
-    setStatus('Power supply switched on. Adjust voltage and add the reading.')
-    showStepAlert(EXPERIMENT_ALERTS.powerOn)
+  // Case 1 - Power supply should never be used
+  if (experimentCase === 1) {
+    showStepAlert(EXPERIMENT_ALERTS.cannotStartPower)
+    setStatus(
+      'Power supply is not required during Case 1.'
+    )
+    return
   }
+
+  // Case 2 & Case 3
+  if (!powerOn && !connectionsVerified) {
+    showStepAlert(EXPERIMENT_ALERTS.cannotStartPower)
+    setStatus(
+      'Complete all required connections before switching ON the power supply.'
+    )
+    return
+  }
+
+  if (powerOn) {
+    setPowerOn(false)
+    setVoltage(0)
+    setStatus('Power supply switched off.')
+    return
+  }
+
+  setPowerOn(true)
+  setStatus('Power supply switched on. Adjust voltage and add the reading.')
+  showStepAlert(EXPERIMENT_ALERTS.powerOn)
+}
 
 
  const handleVoltageChange = useCallback((nextVoltage) => {
@@ -676,6 +685,8 @@ setCalculatedValues({
                   setCase1ConnectionsRemoved={setCase1ConnectionsRemoved}
                   case2ConnectionsRemoved={case2ConnectionsRemoved}
                   setCase2ConnectionsRemoved={setCase2ConnectionsRemoved}
+                  setShowRth={setShowRth}
+                  setShowMultimeter={setShowMultimeter}
                 />
               </section>
             </section>

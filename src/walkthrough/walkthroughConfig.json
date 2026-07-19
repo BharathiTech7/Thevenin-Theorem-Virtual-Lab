@@ -35,9 +35,9 @@
     "en": "AI Guide Button"
   },
   "description": {
-    "en": "To use this feature, click on the “AI Guide” button. The AI guide will assist you in performing the simulation accurately at each step."
+    "en": "The AI guide will assist you in performing the simulation accurately at each step."
   },
-   "audio": "./walkthrough-audios/AI Guide Button.wav",
+   "audio": "./walkthrough-audios/Ai Guide btn.wav",
   "placement": "right"
 },{
   "id": 4,

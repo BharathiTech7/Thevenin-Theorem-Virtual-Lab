@@ -78,6 +78,9 @@ wrongConnection: getAlertAudio(
   print: getAlertAudio(
     'Print.wav'
   ),
+  wrongCon:getAlertAudio(
+    'Multiple wrong connections.wav'
+  )
 }
 export const EXPERIMENT_ALERTS = {
   connectionMode: {
@@ -146,6 +149,7 @@ connectionsVerifiedCase3: {
   type: 'success',
 },
   connectionErrorFound: {
+    audio: ALERT_AUDIO.wrongCon,
     icon: '⚠️',
     stepNumber: 2,
     target: '#circuit-panel',

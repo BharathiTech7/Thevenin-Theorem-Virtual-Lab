@@ -5,20 +5,21 @@ import Spotlight from './Spotlight.jsx'
 import WalkthroughPopup from './WalkthroughPopup.jsx'
 
 const WalkthroughOverlay = () => {
-  const {
-    activeStep,
-    autoPlayAudioForStep,
-    canGoNext,
-    canGoPrevious,
-    close,
-    currentStep,
-    isOpen,
-    isPositioningTarget,
-    next,
-    previous,
-    targetRect,
-    totalSteps,
-  } = useWalkthrough()
+const {
+  activeStep,
+  autoPlayAudioForStep,
+  canGoNext,
+  canGoPrevious,
+  close,
+  currentStep,
+  goToStep,
+  isOpen,
+  isPositioningTarget,
+  next,
+  previous,
+  targetRect,
+  totalSteps,
+} = useWalkthrough()
 
   return (
     <AnimatePresence>
@@ -36,18 +37,19 @@ const WalkthroughOverlay = () => {
           <AnimatePresence mode="wait">
             {!isPositioningTarget && targetRect ? (
               <WalkthroughPopup
-                activeStep={activeStep}
-                autoPlayAudio={autoPlayAudioForStep}
-                canGoNext={canGoNext}
-                canGoPrevious={canGoPrevious}
-                currentStep={currentStep}
-                key={activeStep.id}
-                onClose={close}
-                onNext={next}
-                onPrevious={previous}
-                targetRect={targetRect}
-                totalSteps={totalSteps}
-              />
+    activeStep={activeStep}
+    autoPlayAudio={autoPlayAudioForStep}
+    canGoNext={canGoNext}
+    canGoPrevious={canGoPrevious}
+    currentStep={currentStep}
+    key={activeStep.id}
+    onClose={close}
+    onNext={next}
+    onPrevious={previous}
+    onSkip={() => goToStep(totalSteps - 1)}
+    targetRect={targetRect}
+    totalSteps={totalSteps}
+/>
             ) : null}
           </AnimatePresence>
           <span className="sr-only">

@@ -1,6 +1,6 @@
 import voltmeterImg from '../assets/Voltmeter.png'
 import needleImg from '../assets/needle.png'
-
+import { useEffect, useState } from 'react'
 const METER_MAX_VOLTAGE = 30
 const DIAL_START_ANGLE = 180
 const DIAL_SWEEP_ANGLE = 180
@@ -9,14 +9,23 @@ const terminals = {
   positive: 1,
   negative: 2,
 }
-
-const Voltmeter = ({ value = 0 }) => {
+const Voltmeter = ({ value = 0, powerOn }) => {
   const voltage = Number.isFinite(value) ? value : 0
 
-  const ratio = Math.min(
-    Math.max(voltage / METER_MAX_VOLTAGE, 0),
-    1,
-  )
+
+  const [displayVoltage, setDisplayVoltage] = useState(0)
+
+useEffect(() => {
+  if (!powerOn) {
+    setDisplayVoltage(0)
+  } else if (voltage > 0) {
+    setDisplayVoltage(voltage)
+  }
+}, [powerOn, voltage])
+ const ratio = Math.min(
+  Math.max(displayVoltage / METER_MAX_VOLTAGE, 0),
+  1,
+)
 
   const angle = DIAL_START_ANGLE + ratio * DIAL_SWEEP_ANGLE
 

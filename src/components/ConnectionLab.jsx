@@ -44,6 +44,8 @@ const ConnectionLab = ({
 setCase1ConnectionsRemoved,
 case2ConnectionsRemoved,
 setCase2ConnectionsRemoved,
+setShowRth,
+  setShowMultimeter,
 }) => {
   const containerRef = useRef(null)
   const instanceRef = useRef(null)
@@ -384,10 +386,12 @@ if (experimentCaseRef.current === 3) {
 
 if (
   experimentCase === 2 &&
-  remainingConnections.length === 0 &&
+  remainingConnections.length <3 &&
   !case1ConnectionsRemoved
 ) {
   setCase1ConnectionsRemoved(true)
+  setShowMultimeter(false)
+  setShowRth(false)
 }
 
 // --------------------
@@ -410,9 +414,14 @@ const has810 = remainingConnections.some(
       c.targetId === '8-endpoint')
 )
 
+const result = validateTheveninConnections(
+  instanceRef.current,
+  2
+)
+
 if (
   experimentCase === 3 &&
-  remainingConnections.length === 2 &&
+  result.totalConnections === 2 &&
   has79 &&
   has810 &&
   !case2ConnectionsRemoved
@@ -454,6 +463,8 @@ const result =
   )
 
 if (!result?.success) {
+  autoConnectingRef.current = false
+
   showStepAlert({
     title: 'Remove Existing Connections',
     description:
@@ -494,6 +505,7 @@ if (experimentCase === 3) {
   setVoltage={setVoltage}
   voltage={voltage}
    showMultimeter={showMultimeter}
+   
 />
 
      <div className="circuit-workspace">

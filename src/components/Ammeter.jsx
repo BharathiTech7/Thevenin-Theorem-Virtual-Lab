@@ -1,6 +1,6 @@
 import ammeterImg from '../assets/Ammeter.png'
 import needleImg from '../assets/needle.png'
-
+import { useEffect, useState } from 'react'
 const METER_MAX_CURRENT = 5
 const DIAL_START_ANGLE = 180
 const DIAL_SWEEP_ANGLE = 180
@@ -15,10 +15,23 @@ const terminalNumbers = {
   A3: { positive: 7, negative: 8 },
 }
 
-const Ammeter = ({ label, value = 0 }) => {
+
+const Ammeter = ({ label, value = 0, powerOn }) => {
   const terminals = terminalNumbers[label]
   const current = Number.isFinite(value) ? value : 0
-  const ratio = Math.min(Math.max(current / METER_MAX_CURRENT, 0), 1)
+  const [displayCurrent, setDisplayCurrent] = useState(0)
+
+useEffect(() => {
+  if (!powerOn) {
+    setDisplayCurrent(0)
+  } else if (current > 0) {
+    setDisplayCurrent(current)
+  }
+}, [powerOn, current])
+ const ratio = Math.min(
+  Math.max(displayCurrent / METER_MAX_CURRENT, 0),
+  1,
+)
   const angle = DIAL_START_ANGLE + ratio * DIAL_SWEEP_ANGLE
 
   return (

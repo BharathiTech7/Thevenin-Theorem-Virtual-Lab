@@ -16,6 +16,7 @@ const EquipmentPanel = ({
   <section className="equipment-panel" id="equipment-panel">
 
 <Voltmeter
+  powerOn={powerOn}
   value={
     experimentCase === 2
       ? readings.vth
@@ -25,6 +26,7 @@ const EquipmentPanel = ({
 
 <Ammeter
   label="A1"
+  powerOn={powerOn}
   value={
     experimentCase === 3
       ? readings.il
