@@ -54,6 +54,7 @@ const [r3, setR3] = useState(0.1)
   const [rl, setRl] = useState(100)
 const [voltage, setVoltage] = useState(1)
   const [powerOn, setPowerOn] = useState(false)
+  const [voltageLocked, setVoltageLocked] = useState(false)
   const [observations, setObservations] = useState([])
 const [calculationDone, setCalculationDone] = useState(false)
 const [calculatedValues, setCalculatedValues] = useState(null)
@@ -77,7 +78,8 @@ const walkthroughCompletedRef = useRef(false)
 const resistanceIntroPlayedRef = useRef(false)
 const { isOpen: walkthroughOpen } = useWalkthrough()
 const voltageGuidePlayedRef = useRef(false)
-
+const [guideEndpointHighlightActive, setGuideEndpointHighlightActive] =
+  useState(false)
 const resistancesConfigured =
   Number(r1) !== 0.1 &&
   Number(r2) !== 0.1 &&
@@ -298,6 +300,7 @@ else if (experimentCase === 2) {
    setMeasuredVth(readings.vth)
    playStepById(24)
    showStepAlert(EXPERIMENT_ALERTS.readingAddedCase2)
+   setVoltageLocked(true)
 setConnectionsVerified(false)
 voltageGuidePlayedRef.current = false
 setExperimentCase(3)
@@ -333,6 +336,7 @@ else if (experimentCase === 3) {
     playStepById(35)
     setPowerOn(false)
     setVoltage(1)
+    setVoltageLocked(false)
 setR1(0.1)
 setR2(0.1)
 setR3(0.1)
@@ -522,12 +526,17 @@ else if (experimentCase === 3) {
     return
   }
 
-  if (powerOn) {
+if (powerOn) {
+
+    if (voltageLocked) {
+        return
+    }
+
     setPowerOn(false)
     setVoltage(0)
     setStatus('Power supply switched off.')
     return
-  }
+}
 
   setPowerOn(true)
   setStatus('Power supply switched on. Adjust voltage and add the reading.')
@@ -535,7 +544,11 @@ else if (experimentCase === 3) {
 }
 
 
- const handleVoltageChange = useCallback((nextVoltage) => {
+const handleVoltageChange = useCallback((nextVoltage) => {
+
+  if (voltageLocked) {
+    return
+  }
 
   setVoltage(nextVoltage)
 
@@ -561,6 +574,7 @@ else if (experimentCase === 3) {
   powerOn,
   experimentCase,
   playStepById,
+  voltageLocked,
 ])
 
  const handleCalculate = () => {
@@ -676,6 +690,7 @@ setCalculatedValues({
                   onTogglePower={handleTogglePower}
                   setVoltage={handleVoltageChange}
                   voltage={voltage}
+                  voltageLocked={voltageLocked}
                   resistancesConfigured={resistancesConfigured}
                   showRth={showRth}
                   showMultimeter={showMultimeter}
@@ -687,6 +702,7 @@ setCalculatedValues({
                   setCase2ConnectionsRemoved={setCase2ConnectionsRemoved}
                   setShowRth={setShowRth}
                   setShowMultimeter={setShowMultimeter}
+                  
                 />
               </section>
             </section>

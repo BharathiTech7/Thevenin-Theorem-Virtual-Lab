@@ -1,10 +1,11 @@
 import powerSupplyOff from '../assets/PowerSupply_Off.png'
 import powerSupplyOn from '../assets/PowerSupply_ON.png'
 
-const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage }) => {
+const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage,voltageLocked, }) => {
  const displayedVoltage = powerOn ? `${voltage} V` : ''
 
 const handleVoltageChange = (event) => {
+  
   setVoltage(Number(event.target.value))
 }
 
@@ -65,7 +66,7 @@ const handleVoltageChange = (event) => {
       <input
   aria-label="Voltage"
   className="voltage-range"
-  disabled={!powerOn}
+  disabled={!powerOn || voltageLocked}
   id="voltage-slider"
   max="30"
   min="1"

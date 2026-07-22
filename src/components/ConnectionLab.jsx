@@ -33,6 +33,7 @@ const ConnectionLab = ({
   scale = 1,
   onTogglePower,
   setVoltage,
+  voltageLocked,
   voltage,
   resistancesConfigured,
   autoConnectRequest,
@@ -46,6 +47,7 @@ case2ConnectionsRemoved,
 setCase2ConnectionsRemoved,
 setShowRth,
   setShowMultimeter,
+  guideEndpointHighlightActive = false,
 }) => {
   const containerRef = useRef(null)
   const instanceRef = useRef(null)
@@ -505,6 +507,7 @@ if (experimentCase === 3) {
     powerOn={powerOn}
     setVoltage={setVoltage}
     voltage={voltage}
+    voltageLocked={voltageLocked}
   />
 </div>
 
