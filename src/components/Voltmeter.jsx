@@ -4,12 +4,22 @@ import { useEffect, useState } from 'react'
 const METER_MAX_VOLTAGE = 30
 const DIAL_START_ANGLE = 180
 const DIAL_SWEEP_ANGLE = 180
+import {
+  getTerminalConnectedClass,
+  getTerminalHighlightClass,
+  getTerminalNumberHighlightClass,
+} from '../utils/terminalHighlight.js'
 
 const terminals = {
   positive: 1,
   negative: 2,
 }
-const Voltmeter = ({ value = 0, powerOn }) => {
+const Voltmeter = ({
+  connectedTerminalIds = [],
+  highlightedTerminalIds = [],
+  value = 0,
+  powerOn,
+}) => {
   const voltage = Number.isFinite(value) ? value : 0
 
 
@@ -43,12 +53,12 @@ useEffect(() => {
 
       <span
         id="1-endpoint"
-        className="connection-terminal connection-terminal--meter connection-terminal--meter-plus connection-terminal--endpoint-1"
+className={`connection-terminal connection-terminal--meter connection-terminal--meter-plus connection-terminal--endpoint-1${getTerminalConnectedClass(connectedTerminalIds, '1-endpoint')}${getTerminalHighlightClass(highlightedTerminalIds, '1-endpoint')}`}
         data-polarity="plus"
       />
 
       <span
-        className="terminal-number-label terminal-number-label--meter-plus terminal-number-label--endpoint-1"
+className={`terminal-number-label terminal-number-label--meter-plus terminal-number-label--endpoint-1${getTerminalNumberHighlightClass(highlightedTerminalIds, '1-endpoint')}`}
         data-terminal-id="1-endpoint"
       >
         1
@@ -56,12 +66,12 @@ useEffect(() => {
 
       <span
         id="2-endpoint"
-        className="connection-terminal connection-terminal--meter connection-terminal--meter-minus connection-terminal--endpoint-2"
+className={`connection-terminal connection-terminal--meter connection-terminal--meter-minus connection-terminal--endpoint-2${getTerminalConnectedClass(connectedTerminalIds, '2-endpoint')}${getTerminalHighlightClass(highlightedTerminalIds, '2-endpoint')}`}
         data-polarity="minus"
       />
 
       <span
-        className="terminal-number-label terminal-number-label--meter-minus terminal-number-label--endpoint-2"
+className={`terminal-number-label terminal-number-label--meter-minus terminal-number-label--endpoint-2${getTerminalNumberHighlightClass(highlightedTerminalIds, '2-endpoint')}`}
         data-terminal-id="2-endpoint"
       >
         2

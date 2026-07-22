@@ -1,7 +1,20 @@
 import powerSupplyOff from '../assets/PowerSupply_Off.png'
 import powerSupplyOn from '../assets/PowerSupply_ON.png'
-
-const PowerSupply = ({ onTogglePower, powerOn, setVoltage, voltage,voltageLocked, }) => {
+import {
+  getTerminalConnectedClass,
+  getTerminalHighlightClass,
+  getTerminalNumberHighlightClass,
+} from '../utils/terminalHighlight.js'
+const PowerSupply = ({
+  connectedTerminalIds = [],
+  highlightedTerminalIds = [],
+  onTogglePower,
+  powerOn,
+  setVoltage,
+  voltage,
+  voltageLocked,
+   powerDisabled,
+}) => {
  const displayedVoltage = powerOn ? `${voltage} V` : ''
 
 const handleVoltageChange = (event) => {
@@ -22,14 +35,14 @@ const handleVoltageChange = (event) => {
 {/* Terminal 7 */}
 <span
   id="7-endpoint"
-  className="connection-terminal connection-terminal--power connection-terminal--power-plus connection-terminal--endpoint-7"
+className={`connection-terminal connection-terminal--power connection-terminal--power-plus connection-terminal--endpoint-7${getTerminalConnectedClass(connectedTerminalIds, '7-endpoint')}${getTerminalHighlightClass(highlightedTerminalIds, '7-endpoint')}`}
   data-polarity="plus"
   aria-label="Power supply positive terminal 7"
   title="Power positive (7-endpoint)"
 />
 
 <span
-  className="terminal-number-label terminal-number-label--power-plus terminal-number-label--endpoint-7"
+className={`terminal-number-label terminal-number-label--power-plus terminal-number-label--endpoint-7${getTerminalNumberHighlightClass(highlightedTerminalIds, '7-endpoint')}`}
   data-terminal-id="7-endpoint"
   title="Power positive (7-endpoint)"
 >
@@ -39,27 +52,30 @@ const handleVoltageChange = (event) => {
 {/* Terminal 8 */}
 <span
   id="8-endpoint"
-  className="connection-terminal connection-terminal--power connection-terminal--power-minus connection-terminal--endpoint-8"
+className={`connection-terminal connection-terminal--power connection-terminal--power-minus connection-terminal--endpoint-8${getTerminalConnectedClass(connectedTerminalIds, '8-endpoint')}${getTerminalHighlightClass(highlightedTerminalIds, '8-endpoint')}`}
   data-polarity="minus"
   aria-label="Power supply negative terminal 8"
   title="Power negative (8-endpoint)"
 />
 
 <span
-  className="terminal-number-label terminal-number-label--power-minus terminal-number-label--endpoint-8"
+className={`terminal-number-label terminal-number-label--power-minus terminal-number-label--endpoint-8${getTerminalNumberHighlightClass(highlightedTerminalIds, '8-endpoint')}`}
   data-terminal-id="8-endpoint"
   title="Power negative (8-endpoint)"
 >
   8
 </span>
-      <button
-        id="power-toggle-button"
-        aria-label={powerOn ? 'Switch power supply off' : 'Switch power supply on'}
-        aria-pressed={powerOn}
-        className="power-supply__button"
-        onClick={onTogglePower}
-        type="button"
-      />
+     <button
+  id="power-toggle-button"
+  aria-label={powerOn ? 'Switch power supply off' : 'Switch power supply on'}
+  aria-pressed={powerOn}
+  className={`power-supply__button ${
+    powerDisabled ? 'power-supply__button--disabled' : ''
+  }`}
+  disabled={powerDisabled}
+  onClick={onTogglePower}
+  type="button"
+/>
 
       <label className="power-supply__control" id="voltage-control">
         <span className="sr-only">Voltage</span>

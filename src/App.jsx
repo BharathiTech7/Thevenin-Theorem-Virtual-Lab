@@ -135,13 +135,14 @@ const handleAiGuideFinish = useCallback(() => {
     setStatus('AI Guide narration could not start. Add audio files or use a browser with speech synthesis.')
   }, [])
 
-  const {
-    isPlaying: aiGuidePlaying,
-    start: startAiGuide,
-    stop: stopAiGuide,
-    playStepById,
-    playStepsById,
-    finish,
+const {
+  isPlaying: aiGuidePlaying,
+  activeStepId,
+  start: startAiGuide,
+  stop: stopAiGuide,
+  playStepById,
+  playStepsById,
+  finish,
 } = useAiGuideNarration({
     onError: handleAiGuideError,
     onFinish: handleAiGuideFinish,
@@ -596,7 +597,25 @@ setCalculatedValues({
   showStepAlert(EXPERIMENT_ALERTS.calculationReady)
 
 }
+const guideHighlights = {
+  5: ['5-endpoint', '11-endpoint'],
+  6: ['6-endpoint', '13-endpoint'],
+  7: ['9-endpoint', '10-endpoint'],
 
+  17: ['7-endpoint', '9-endpoint'],
+  18: ['8-endpoint', '10-endpoint'],
+  19: ['1-endpoint', '11-endpoint'],
+  20: ['2-endpoint', '13-endpoint'],
+
+  26: ['3-endpoint', '11-endpoint'],
+  27: ['4-endpoint', '12-endpoint'],
+  28: ['13-endpoint', '14-endpoint'],
+}
+
+const highlightedTerminalIds =
+  guideHighlights[Number(activeStepId)] ?? []
+console.log("ACTIVE STEP =", activeStepId)
+console.log("HIGHLIGHT IDS =", highlightedTerminalIds)
   return (
     <div id="app-wrapper">
       <div
@@ -702,7 +721,7 @@ setCalculatedValues({
                   setCase2ConnectionsRemoved={setCase2ConnectionsRemoved}
                   setShowRth={setShowRth}
                   setShowMultimeter={setShowMultimeter}
-                  
+                  highlightedTerminalIds={highlightedTerminalIds}
                 />
               </section>
             </section>

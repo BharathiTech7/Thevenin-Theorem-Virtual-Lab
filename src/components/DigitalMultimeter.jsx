@@ -1,6 +1,13 @@
 import multimeterImg from '../assets/multimeter.png'
 import knobImg from '../assets/knob.png'
+import {
+  getTerminalConnectedClass,
+  getTerminalHighlightClass,
+  getTerminalNumberHighlightClass,
+} from '../utils/terminalHighlight.js'
 const DigitalMultimeter = ({
+  connectedTerminalIds = [],
+  highlightedTerminalIds = [],
   value = 0,
   showValue = false,
 }) => {
@@ -49,12 +56,12 @@ if (resistance > 0) {
 </div>
       <span
         id="5-endpoint"
-        className="connection-terminal connection-terminal--meter connection-terminal--meter-plus connection-terminal--endpoint-5"
+className={`connection-terminal connection-terminal--meter connection-terminal--meter-plus connection-terminal--endpoint-5${getTerminalConnectedClass(connectedTerminalIds, '5-endpoint')}${getTerminalHighlightClass(highlightedTerminalIds, '5-endpoint')}`}
         data-polarity="plus"
       />
 
       <span
-        className="terminal-number-label terminal-number-label--meter-plus terminal-number-label--endpoint-5"
+className={`terminal-number-label terminal-number-label--meter-plus terminal-number-label--endpoint-5${getTerminalNumberHighlightClass(highlightedTerminalIds, '5-endpoint')}`}
         data-terminal-id="5-endpoint"
       >
         5
@@ -62,12 +69,12 @@ if (resistance > 0) {
 
       <span
         id="6-endpoint"
-        className="connection-terminal connection-terminal--meter connection-terminal--meter-minus connection-terminal--endpoint-6"
+className={`connection-terminal connection-terminal--meter connection-terminal--meter-minus connection-terminal--endpoint-6${getTerminalConnectedClass(connectedTerminalIds, '6-endpoint')}${getTerminalHighlightClass(highlightedTerminalIds, '6-endpoint')}`}
         data-polarity="minus"
       />
 
       <span
-        className="terminal-number-label terminal-number-label--meter-minus terminal-number-label--endpoint-6"
+className={`terminal-number-label terminal-number-label--meter-minus terminal-number-label--endpoint-6${getTerminalNumberHighlightClass(highlightedTerminalIds, '6-endpoint')}`}
         data-terminal-id="6-endpoint"
       >
         6

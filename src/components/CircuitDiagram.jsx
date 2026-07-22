@@ -1,5 +1,9 @@
 import { Fragment } from 'react'
-
+import {
+  getTerminalConnectedClass,
+  getTerminalHighlightClass,
+  getTerminalNumberHighlightClass,
+} from '../utils/terminalHighlight.js'
 import circuitImage from '../assets/circuit.png'
 const terminalLabels = [
   {
@@ -34,7 +38,15 @@ const terminalLabels = [
   },
 ]
 
-const CircuitDiagram = ({ className = '', r1, r2, r3, rl }) => (
+const CircuitDiagram = ({
+  className = '',
+  connectedTerminalIds = [],
+  highlightedTerminalIds = [],
+  r1,
+  r2,
+  r3,
+  rl,
+}) => (
   <section className={`circuit-panel ${className}`} id="circuit-panel">
     <div className="circuit-panel__stage">
       <img alt="Kirchhoff current law circuit diagram" className="circuit-panel__image" src={circuitImage} />
@@ -43,13 +55,13 @@ const CircuitDiagram = ({ className = '', r1, r2, r3, rl }) => (
         <Fragment key={id}>
           <span
             id={id}
-            className={`connection-terminal connection-terminal--circuit connection-terminal--endpoint-${label}`}
+className={`connection-terminal connection-terminal--circuit connection-terminal--endpoint-${label}${getTerminalConnectedClass(connectedTerminalIds, id)}${getTerminalHighlightClass(highlightedTerminalIds, id)}`}
             data-polarity={polarity}
             aria-label={`Circuit terminal ${label}`}
             title={`Circuit terminal ${label} (${id})`}
           />
           <span
-            className={`terminal-number-label terminal-number-label--circuit terminal-number-label--endpoint-${label}`}
+className={`terminal-number-label terminal-number-label--circuit terminal-number-label--endpoint-${label}${getTerminalNumberHighlightClass(highlightedTerminalIds, id)}`}
             data-terminal-id={id}
             title={`Circuit terminal ${label} (${id})`}
           >

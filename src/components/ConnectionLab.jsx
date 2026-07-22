@@ -48,6 +48,7 @@ setCase2ConnectionsRemoved,
 setShowRth,
   setShowMultimeter,
   guideEndpointHighlightActive = false,
+  highlightedTerminalIds = [],
 }) => {
   const containerRef = useRef(null)
   const instanceRef = useRef(null)
@@ -57,6 +58,8 @@ setShowRth,
   const [isLocked, setIsLocked] = useState(false)
   const experimentCaseRef = useRef(experimentCase)
   const autoConnectingRef = useRef(false)
+  const [connectedTerminalIds, setConnectedTerminalIds] = useState([])
+
   useEffect(() => {
     onCheckConnectionsRef.current = onCheckConnections
   }, [onCheckConnections])
@@ -140,6 +143,12 @@ instance.bind('connection', (info) => {
   const source = info.sourceId
   const target = info.targetId
 
+  
+  
+  
+  setConnectedTerminalIds((prev) => [
+  ...new Set([...prev, source, target]),
+])
   console.log('CONNECTED:', source, '→', target)
 
   const isPair = (a, b) =>
@@ -373,6 +382,16 @@ if (experimentCaseRef.current === 3) {
     }
 
     deleteConnectionsForTerminal(instanceRef.current, terminalId)
+    const terminals = new Set()
+
+instanceRef.current
+  .getAllConnections()
+  .forEach((connection) => {
+    terminals.add(connection.sourceId)
+    terminals.add(connection.targetId)
+  })
+
+setConnectedTerminalIds([...terminals])
     instanceRef.current.repaintEverything?.()
     const remainingConnections =
   instanceRef.current.getAllConnections()
@@ -496,22 +515,29 @@ if (experimentCase === 3) {
   setVoltage={setVoltage}
   voltage={voltage}
    showMultimeter={showMultimeter}
+    connectedTerminalIds={connectedTerminalIds}
+  highlightedTerminalIds={highlightedTerminalIds}
    
 />
 
      <div className="circuit-workspace">
 
     <div className="circuit-power-supply">
-  <PowerSupply
-    onTogglePower={onTogglePower}
-    powerOn={powerOn}
-    setVoltage={setVoltage}
-    voltage={voltage}
-    voltageLocked={voltageLocked}
-  />
+ <PowerSupply
+  connectedTerminalIds={connectedTerminalIds}
+  highlightedTerminalIds={highlightedTerminalIds}
+  onTogglePower={onTogglePower}
+  powerOn={powerOn}
+  setVoltage={setVoltage}
+  voltage={voltage}
+  voltageLocked={voltageLocked}
+   powerDisabled={experimentCase === 3}
+/>
 </div>
 
     <CircuitDiagram
+    connectedTerminalIds={connectedTerminalIds}
+  highlightedTerminalIds={highlightedTerminalIds}
       r1={r1}
       r2={r2}
       r3={r3}

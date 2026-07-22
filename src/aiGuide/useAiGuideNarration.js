@@ -32,6 +32,7 @@ export const useAiGuideNarration = ({
     [config, locale],
   )
   const [isPlaying, setIsPlaying] = useState(false)
+  const [activeStepId, setActiveStepId] = useState(null)
   const isActiveRef = useRef(false)
   const currentPlaybackRef = useRef(null)
   const runIdRef = useRef(0)
@@ -47,12 +48,13 @@ export const useAiGuideNarration = ({
     currentPlayback.stop()
   }, [])
 
-  const stop = useCallback(() => {
-    isActiveRef.current = false
-    runIdRef.current += 1
-    stopCurrentPlayback()
-    setIsPlaying(false)
-  }, [stopCurrentPlayback])
+const stop = useCallback(() => {
+  isActiveRef.current = false
+  runIdRef.current += 1
+  stopCurrentPlayback()
+  setActiveStepId(null)
+  setIsPlaying(false)
+}, [stopCurrentPlayback])
 
   const speakText = useCallback((text) => new Promise((resolve, reject) => {
     if (!canUseSpeechSynthesis()) {
@@ -197,15 +199,22 @@ export const useAiGuideNarration = ({
     const runId = runIdRef.current + 1
     runIdRef.current = runId
     stopCurrentPlayback()
-
+    setActiveStepId(step.id)
     try {
-      await playStep(step)
-      return runIdRef.current === runId
+    await playStep(step)
+
+const completed = runIdRef.current === runId
+
+if (completed) {
+  setActiveStepId(null)
+}
+
+return completed
     } catch (error) {
       if (runIdRef.current === runId) {
-        onError?.(error)
-      }
-
+  setActiveStepId(null)
+  onError?.(error)
+}
       return false
     }
   }, [guideConfig.steps, onError, playStep, stopCurrentPlayback])
@@ -248,6 +257,7 @@ export const useAiGuideNarration = ({
     isActiveRef.current = false
     runIdRef.current += 1
     stopCurrentPlayback()
+    setActiveStepId(null)
     setIsPlaying(false)
     onFinish?.(guideConfig)
   }, [guideConfig, onFinish, stopCurrentPlayback])
@@ -255,17 +265,19 @@ export const useAiGuideNarration = ({
   useEffect(() => addExclusiveAudioListener(AI_GUIDE_AUDIO_SOURCE_ID, () => {
     runIdRef.current += 1
     stopCurrentPlayback()
+    setActiveStepId(null)
   }), [stopCurrentPlayback])
 
   useEffect(() => stop, [stop])
 
   return {
-    config: guideConfig,
-    finish,
-    isPlaying,
-    playStepById,
-    playStepsById,
-    start,
-    stop,
-  }
+  config: guideConfig,
+  activeStepId,
+  finish,
+  isPlaying,
+  playStepById,
+  playStepsById,
+  start,
+  stop,
+}
 }
