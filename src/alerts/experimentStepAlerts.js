@@ -41,7 +41,7 @@ const ALERT_AUDIO = {
   ),
 
   case3Verified: getAlertAudio(
-    'After 2nd case connections, check.wav'
+    'Now check again for the 3rd case.wav'
   ),
 
   addFinalReading: getAlertAudio(
@@ -136,7 +136,7 @@ connectionsVerifiedCase2: {
 connectionsVerifiedCase3: {
   audio: ALERT_AUDIO.case3Verified,
   description:
-    'Connections Verified successfully. Now switch ON the power supply and set the required voltage value.',
+    'Connections Verified successfully.',
   icon: '✅',
   stepNumber: 2,
   target: '#check-button',
@@ -229,7 +229,7 @@ readingAddedCase1: {
 readingAddedCase2: {
   audio: ALERT_AUDIO.removeVoltmeter,
   description:
-    'Readings added to the observation table. Now turn OFF the power supply and remove the voltmeter connections 1 to 11 and 2 to 13.',
+    'Readings added to the observation table.Remove the voltmeter connections 1 to 11 and 2 to 13.',
   icon: '✅',
   stepNumber: 6,
   target: '#observation-table-panel',

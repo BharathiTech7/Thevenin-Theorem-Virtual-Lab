@@ -204,12 +204,10 @@ const ActionButtons = ({
   }>
         <strong>Case 3 (Measure IL):</strong>
         <ul>
-          <li>Connect Power Supply (7-9 and 8-10).</li>
-          <li>Connect Ammeter (3-11, 4-12 and 13-14).</li>
-          <li>Click CHECK.</li>
-          <li>Turn ON Power Supply.</li>
-          <li>Adjust Voltage.</li>
-          <li>Click ADD to record IL.</li>
+         <li>Connect Power Supply (7-9 and 8-10).</li>
+<li>Connect Ammeter (3-11, 4-12 and 13-14).</li>
+<li>Click CHECK.</li>
+<li>Click ADD to record IL.</li>
         </ul>
       </li>
     </ol>

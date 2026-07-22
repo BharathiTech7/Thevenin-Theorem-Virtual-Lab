@@ -120,7 +120,7 @@
     },
     {
       "id": 24,
-      "text": "Readings added to the observation table. Now turn OFF the power supply and remove the voltmeter connections 1 to 11 and 2 to 13.",
+      "text": "Readings added to the observation table.Remove the voltmeter connections 1 to 11 and 2 to 13.",
       "audio": "/audios/After reading is added for the second case.wav"
     },
     {
@@ -146,7 +146,7 @@
     {
       "id": 29,
       "text": "Connections Verified successfully. Now switch ON the power supply and set the required voltage value.",
-      "audio": "/audios/After 2nd case connections, check.wav"   
+      "audio": "/audios/Now check again for the 3rd case.wav"   
   
     },
     
