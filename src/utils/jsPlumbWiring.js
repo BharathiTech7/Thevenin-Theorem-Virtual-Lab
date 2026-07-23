@@ -211,7 +211,7 @@ export const addTerminalEndpoint = (instance, terminalId, type) => {
     return
   }
 
-  instance.addEndpoint(element, {
+  const endpoint = instance.addEndpoint(element, {
     uuid: terminalId,
     endpoint: ['Dot', { radius: getEndpointRadius(element) }],
     cssClass: getEndpointCssClass(terminalId, type),
@@ -226,6 +226,14 @@ export const addTerminalEndpoint = (instance, terminalId, type) => {
     paintStyle: getEndpointPaintStyle(element, type),
     hoverPaintStyle: getEndpointPaintStyle(element, type, 'hover'),
   })
+
+  const terminalTitle =
+    element.getAttribute('title') || element.getAttribute('aria-label')
+
+  if (terminalTitle && endpoint?.canvas) {
+    endpoint.canvas.setAttribute('aria-label', terminalTitle)
+    endpoint.canvas.setAttribute('title', terminalTitle)
+  }
 }
 
 export const addAllEndpoints = (

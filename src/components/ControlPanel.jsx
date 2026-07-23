@@ -1,10 +1,15 @@
 import ObservationTable from './ObservationTable.jsx'
+import ReportControls from './ReportControls.jsx'
 import ResistanceSlider from './ResistanceSlider.jsx'
 import SectionCard from './SectionCard.jsx'
 
 const ControlPanel = ({
   locked,
+  minReadings,
+  onGenerateReport,
   observations,
+  readingCount,
+  reportGenerated,
   rl,
   r1,
   r2,
@@ -67,6 +72,13 @@ const ControlPanel = ({
     </SectionCard>
 
     <ObservationTable observations={observations} />
+
+    <ReportControls
+      minReadings={minReadings}
+      onGenerateReport={onGenerateReport}
+      readingCount={readingCount}
+      reportGenerated={reportGenerated}
+    />
   </>
 )
 

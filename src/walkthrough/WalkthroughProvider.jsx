@@ -7,6 +7,9 @@ import WalkthroughOverlay from './components/WalkthroughOverlay.jsx'
 import './walkthrough.css'
 
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max)
+const SCROLL_SETTLE_FRAMES = 4
+const SCROLL_SETTLE_TIMEOUT = 1200
+const SCROLL_SETTLE_THRESHOLD = 0.5
 
 const getElementRect = (element) => {
   if (!element) {
@@ -26,6 +29,25 @@ const getElementRect = (element) => {
     right: rect.right,
     top: rect.top,
     width: rect.width,
+  }
+}
+
+const getViewportCenterRect = () => {
+  const visualViewport = window.visualViewport
+  const viewportLeft = visualViewport?.offsetLeft ?? 0
+  const viewportTop = visualViewport?.offsetTop ?? 0
+  const viewportWidth = visualViewport?.width ?? window.innerWidth
+  const viewportHeight = visualViewport?.height ?? window.innerHeight
+  const left = viewportLeft + viewportWidth / 2
+  const top = viewportTop + viewportHeight / 2
+
+  return {
+    bottom: top,
+    height: 0,
+    left,
+    right: left,
+    top,
+    width: 0,
   }
 }
 
@@ -108,36 +130,105 @@ const WalkthroughProvider = ({
   }, [moveToStep])
 
   useEffect(() => {
-    if (!isOpen || !activeTargetSelector) {
+    if (!isOpen) {
       return undefined
+    }
+
+    let animationFrame = null
+    const showFallback = () => {
+      animationFrame = window.requestAnimationFrame(() => {
+        setTargetRect(getViewportCenterRect())
+        setIsPositioningTarget(false)
+      })
+
+      return () => window.cancelAnimationFrame(animationFrame)
+    }
+
+    if (!activeTargetSelector) {
+      return showFallback()
     }
 
     const target = document.querySelector(activeTargetSelector)
 
-    target?.scrollIntoView({
-      behavior: 'auto',
+    if (!target) {
+      return showFallback()
+    }
+
+    let cancelled = false
+    let lastRect = null
+    let stableFrames = 0
+    const startedAt = performance.now()
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    const trackTargetUntilSettled = () => {
+      if (cancelled) {
+        return
+      }
+
+      const nextRect = getElementRect(target)
+
+      if (!nextRect) {
+        setTargetRect(getViewportCenterRect())
+        setIsPositioningTarget(false)
+        return
+      }
+
+      setTargetRect(nextRect)
+
+      if (lastRect) {
+        const movement = Math.max(
+          Math.abs(nextRect.left - lastRect.left),
+          Math.abs(nextRect.top - lastRect.top),
+        )
+
+        stableFrames = movement <= SCROLL_SETTLE_THRESHOLD
+          ? stableFrames + 1
+          : 0
+      }
+
+      const timedOut =
+        performance.now() - startedAt >= SCROLL_SETTLE_TIMEOUT
+
+      if (stableFrames >= SCROLL_SETTLE_FRAMES || timedOut) {
+        setIsPositioningTarget(false)
+        return
+      }
+
+      lastRect = nextRect
+      animationFrame = window.requestAnimationFrame(
+        trackTargetUntilSettled,
+      )
+    }
+
+    target.scrollIntoView({
+      behavior: reduceMotion ? 'auto' : 'smooth',
       block: 'center',
-      inline: 'center',
+      inline: 'nearest',
     })
 
-    let secondAnimationFrame = null
-    const animationFrame = window.requestAnimationFrame(() => {
-      secondAnimationFrame = window.requestAnimationFrame(() => {
-        readActiveTarget()
-        setIsPositioningTarget(false)
-      })
-    })
+    animationFrame = window.requestAnimationFrame(
+      trackTargetUntilSettled,
+    )
 
     return () => {
-      window.cancelAnimationFrame(animationFrame)
-      if (secondAnimationFrame) {
-        window.cancelAnimationFrame(secondAnimationFrame)
+      cancelled = true
+
+      if (animationFrame) {
+        window.cancelAnimationFrame(animationFrame)
       }
+
+      window.scrollTo({
+        behavior: 'auto',
+        left: window.scrollX,
+        top: window.scrollY,
+      })
     }
-  }, [activeTargetSelector, isOpen, readActiveTarget])
+  }, [activeTargetSelector, isOpen])
 
   useEffect(() => {
-    if (!isOpen || isPositioningTarget) {
+    if (!isOpen) {
       return undefined
     }
 
@@ -151,7 +242,20 @@ const WalkthroughProvider = ({
       animationFrame = window.requestAnimationFrame(readActiveTarget)
     }
 
+    const target = activeTargetSelector
+      ? document.querySelector(activeTargetSelector)
+      : null
+    const resizeObserver = target
+      ? new ResizeObserver(scheduleRefresh)
+      : null
+
+    resizeObserver?.observe(target)
+    window.addEventListener('scroll', scheduleRefresh, {
+      capture: true,
+      passive: true,
+    })
     window.addEventListener('resize', scheduleRefresh)
+    window.visualViewport?.addEventListener('scroll', scheduleRefresh)
     window.visualViewport?.addEventListener('resize', scheduleRefresh)
 
     return () => {
@@ -159,10 +263,51 @@ const WalkthroughProvider = ({
         window.cancelAnimationFrame(animationFrame)
       }
 
+      resizeObserver?.disconnect()
+      window.removeEventListener('scroll', scheduleRefresh, true)
       window.removeEventListener('resize', scheduleRefresh)
+      window.visualViewport?.removeEventListener('scroll', scheduleRefresh)
       window.visualViewport?.removeEventListener('resize', scheduleRefresh)
     }
-  }, [isOpen, isPositioningTarget, readActiveTarget])
+  }, [activeTargetSelector, isOpen, readActiveTarget])
+
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined
+    }
+
+    const bodyStyle = document.body.style
+    const documentStyle = document.documentElement.style
+    const originalStyles = {
+      body: {
+        height: bodyStyle.height,
+        left: bodyStyle.left,
+        overflow: bodyStyle.overflow,
+        position: bodyStyle.position,
+        right: bodyStyle.right,
+        top: bodyStyle.top,
+        width: bodyStyle.width,
+      },
+      document: {
+        height: documentStyle.height,
+        overflow: documentStyle.overflow,
+        position: documentStyle.position,
+      },
+    }
+    const closeForPageChange = () => close()
+
+    window.addEventListener('hashchange', closeForPageChange)
+    window.addEventListener('pagehide', closeForPageChange)
+    window.addEventListener('popstate', closeForPageChange)
+
+    return () => {
+      Object.assign(bodyStyle, originalStyles.body)
+      Object.assign(documentStyle, originalStyles.document)
+      window.removeEventListener('hashchange', closeForPageChange)
+      window.removeEventListener('pagehide', closeForPageChange)
+      window.removeEventListener('popstate', closeForPageChange)
+    }
+  }, [close, isOpen])
 
   useEffect(() => {
     if (!isOpen || !activeTargetSelector) {

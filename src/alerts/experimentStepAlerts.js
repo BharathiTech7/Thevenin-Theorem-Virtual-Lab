@@ -36,12 +36,16 @@ const ALERT_AUDIO = {
     'After the voltage value is set.wav'
   ),
 
+  powerOn: getAlertAudio(
+    'Regulated DC Power Supply.wav'
+  ),
+
   removeVoltmeter: getAlertAudio(
     'After reading is added for the second case.wav'
   ),
 
   case3Verified: getAlertAudio(
-    'Now check again for the 3rd case.wav'
+    'Power supply turned ON for the 3rd case.wav'
   ),
 
   addFinalReading: getAlertAudio(
@@ -115,7 +119,7 @@ export const EXPERIMENT_ALERTS = {
   connectionsVerified: {
   audio: ALERT_AUDIO.case1Verified,
   description:
-    'Connections verified successfully. The digital multimeter is now displaying the Thevenin resistance value. Click ADD to add the reading to the observation table.',
+    'Connections verified successfully. The digital multimeter is now displaying the Thevenin resistance value. Now Click ADD button to add the reading to the observation table.',
   icon: '✅',
   stepNumber: 2,
   target: '#check-button',
@@ -128,7 +132,7 @@ connectionsVerifiedCase2: {
     'Connections verified successfully. Now switch ON the power supply and set the required voltage value.',
   icon: '✅',
   stepNumber: 2,
-  target: '#check-button',
+  target: '#power-toggle-button',
   title: 'Connections Verified',
   type: 'success',
 },
@@ -136,10 +140,10 @@ connectionsVerifiedCase2: {
 connectionsVerifiedCase3: {
   audio: ALERT_AUDIO.case3Verified,
   description:
-    'Connections Verified successfully.',
+    'Connections verified successfully. The reading is displayed on the ammeter. Click ADD to record the reading.',
   icon: '✅',
   stepNumber: 2,
-  target: '#check-button',
+  target: '#add-reading-button',
   title: 'Connections Verified',
   type: 'success',
 },
@@ -169,6 +173,7 @@ connectionsVerifiedCase3: {
     type: 'success',
   },
   powerOn: {
+  audio: ALERT_AUDIO.powerOn,
   description:
     'Power supply switched ON successfully.',
   icon: '⚡',
@@ -252,7 +257,7 @@ readingAddedCase2: {
   icon: '🧮',
   stepNumber: 7,
   target: '#calculation-panel',
-  title: 'Calculation Ready',
+  title: 'Theoretical Verification',
   type: 'info',
 },
 

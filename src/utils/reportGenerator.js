@@ -741,6 +741,15 @@ tr:nth-child(even) {
   width: min(100%, 960px);
   margin: 20px auto 0;
 }
+.report-footer {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid #d6e1ec;
+  color: #52677c;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
 .print-btn,
 .download-btn {
   padding: 12px 24px;
@@ -831,6 +840,8 @@ tr:nth-child(even) {
     margin: 0;
     padding: 0;
     background: #ffffff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   .report-page {
     width: 100%;
@@ -848,10 +859,23 @@ tr:nth-child(even) {
     font-size: 22px;
   }
   .report-graph-card #report-graph {
+    width: 100%;
+    height: 320px;
     min-height: 320px;
+    max-height: 320px;
+    overflow: hidden;
   }
-  .section,
+  .report-graph-card #report-graph svg,
+  .report-graph-card #report-graph canvas,
+  .report-graph-card #report-graph img {
+    width: 100% !important;
+    height: 320px !important;
+    object-fit: contain;
+  }
   .header-row,
+  .section,
+  .report-table,
+  table,
   .info-grid,
   .report-graph-card,
   .graph,
@@ -929,6 +953,7 @@ tr:nth-child(even) {
         <li>KCL check at the junction: I<sub>1</sub> = I<sub>2</sub> + I<sub>3</sub></li>
       </ul>
     </div>
+    <footer class="report-footer">&copy; 2026 Virtual Labs, IIT Roorkee</footer>
   </div>
 
   <div class="report-page report-page--results">
@@ -969,6 +994,7 @@ tr:nth-child(even) {
         </div>
       </div>
     </div>
+    <footer class="report-footer">&copy; 2026 Virtual Labs, IIT Roorkee</footer>
   </div>
 
   <div class="report-page report-page--graph">
@@ -986,6 +1012,7 @@ tr:nth-child(even) {
         </div>
       </div>
     </div>
+    <footer class="report-footer">&copy; 2026 Virtual Labs, IIT Roorkee</footer>
   </div>
   </main>
 

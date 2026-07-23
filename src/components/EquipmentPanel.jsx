@@ -1,19 +1,14 @@
 import Ammeter from './Ammeter.jsx'
 import DigitalMultimeter from './DigitalMultimeter.jsx'
-import PowerSupply from './PowerSupply.jsx'
 import Voltmeter from './Voltmeter.jsx'
 
 const EquipmentPanel = ({
   connectedTerminalIds = [],
   highlightedTerminalIds = [],
-  onTogglePower,
   powerOn,
   readings,
   experimentCase,
-  setVoltage,
-  voltage,
   showMultimeter,
-  voltageLocked,
 }) => (
   
   <section className="equipment-panel" id="equipment-panel">

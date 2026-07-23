@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import ElectricalText from '../components/ElectricalText.jsx'
 
 const EXIT_DURATION = 180
 const AUDIO_COMPLETE_HOLD_DURATION = 10000
@@ -191,8 +192,8 @@ const handleEnded = () => {
           <div className="lab-alert-card__meta">
             <span>{type.toUpperCase()}</span>
           </div>
-          <h2 id={titleId}>{title}</h2>
-          {description ? <p id={descriptionId}>{description}</p> : null}
+          <h2 id={titleId}><ElectricalText text={title} /></h2>
+          {description ? <p id={descriptionId}><ElectricalText text={description} /></p> : null}
         </div>
 
         <div className="lab-alert-card__tools">

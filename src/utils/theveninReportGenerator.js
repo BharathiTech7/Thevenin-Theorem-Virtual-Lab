@@ -14,8 +14,6 @@ export const generateTheveninReport = ({
   vth,
   rth,
   observedIL,
-  userCalculatedIL,
-  verificationResult,
   sessionStart,
 }) => {
   const iitLogoSrc =
@@ -91,10 +89,6 @@ body {
 }
 .report-page:last-of-type {
   margin-bottom: 0;
-}
-.report-page--results {
-  break-before: page;
-  page-break-before: always;
 }
 h1,
 h2,
@@ -436,6 +430,15 @@ tr:nth-child(even) {
   width: min(100%, 960px);
   margin: 16px auto 0;
 }
+.report-footer {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid #d6e1ec;
+  color: #52677c;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
 .print-btn,
 .download-btn {
   padding: 10px 20px;
@@ -459,9 +462,99 @@ tr:nth-child(even) {
   box-shadow: 0 6px 14px rgba(31, 45, 61, 0.12);
 }
 .pdf-exporting .report-page {
+  width: 700px !important;
   border-color: transparent !important;
   box-shadow: none !important;
   margin-bottom: 0 !important;
+  padding: 8px 12px !important;
+  break-inside: avoid-page !important;
+  page-break-inside: avoid !important;
+}
+.pdf-exporting {
+  padding: 0 !important;
+  background: #ffffff !important;
+}
+.pdf-exporting .header-row {
+  grid-template-columns: 150px minmax(0, 1fr) 86px !important;
+  gap: 14px !important;
+  margin-bottom: 8px !important;
+}
+.pdf-exporting .report-title-block {
+  padding-bottom: 6px !important;
+}
+.pdf-exporting .section {
+  padding: 10px 12px !important;
+  margin-bottom: 8px !important;
+}
+.pdf-exporting .section > h2:first-child {
+  margin-bottom: 7px !important;
+  padding-bottom: 5px !important;
+}
+.pdf-exporting .report-overview-top {
+  margin-bottom: 5px !important;
+}
+.pdf-exporting .report-experiment-title {
+  margin-bottom: 7px !important;
+}
+.pdf-exporting .info-grid {
+  gap: 8px !important;
+  margin-top: 6px !important;
+}
+.pdf-exporting .info-card {
+  padding: 6px 8px !important;
+}
+.pdf-exporting .summary-card {
+  padding: 8px 10px !important;
+  gap: 6px !important;
+}
+.pdf-exporting .summary-sub-section h3 {
+  margin-bottom: 3px !important;
+}
+.pdf-exporting .summary-sub-section p,
+.pdf-exporting .conclusion-text {
+  line-height: 1.34 !important;
+}
+.pdf-exporting .summary-list li {
+  margin-bottom: 1px !important;
+}
+.pdf-exporting .calc-formula {
+  padding: 4px 8px !important;
+}
+.pdf-exporting .param-grid {
+  gap: 7px !important;
+  margin-top: 6px !important;
+}
+.pdf-exporting .param-card {
+  padding: 6px 9px !important;
+}
+.pdf-exporting .results-stack {
+  gap: 8px !important;
+}
+.pdf-exporting .results-card {
+  padding: 9px 10px !important;
+  gap: 5px !important;
+}
+.pdf-exporting th,
+.pdf-exporting td {
+  padding: 6px 8px !important;
+}
+.pdf-exporting .calc-block {
+  padding: 7px 9px !important;
+  gap: 3px !important;
+}
+.pdf-exporting .report-footer {
+  margin-top: 8px !important;
+  padding-top: 7px !important;
+}
+.pdf-exporting .report-page--overview {
+  break-after: auto !important;
+  page-break-after: auto !important;
+}
+.pdf-exporting .report-page--results {
+  break-before: auto !important;
+  page-break-before: auto !important;
+  break-after: auto !important;
+  page-break-after: auto !important;
 }
 @media (max-width: 768px) {
   body {
@@ -492,7 +585,7 @@ tr:nth-child(even) {
 @media print {
   @page {
     size: A4;
-    margin: 10mm;
+    margin: 12mm;
   }
   .print-btn,
   .download-btn,
@@ -503,25 +596,106 @@ tr:nth-child(even) {
     margin: 0;
     padding: 0;
     background: #ffffff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
   .report-page {
     width: 100%;
     margin: 0;
-    padding: 14px 16px;
+    padding: 8px 12px;
     border: none;
     box-shadow: none;
     border-radius: 0;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
   }
   .header-row {
     grid-template-columns: 150px minmax(0, 1fr) 86px;
     gap: 14px;
+    margin-bottom: 8px;
+  }
+  .report-title-block {
+    padding-bottom: 6px;
+  }
+  .section {
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .section > h2:first-child {
+    margin-bottom: 7px;
+    padding-bottom: 5px;
+  }
+  .report-overview-top {
+    margin-bottom: 5px;
+  }
+  .report-experiment-title {
+    margin-bottom: 7px;
+  }
+  .info-grid {
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .info-card {
+    padding: 6px 8px;
+  }
+  .summary-card {
+    padding: 8px 10px;
+    gap: 6px;
+  }
+  .summary-sub-section h3 {
+    margin-bottom: 3px;
+  }
+  .summary-sub-section p,
+  .conclusion-text {
+    line-height: 1.34;
+  }
+  .summary-list li {
+    margin-bottom: 1px;
+  }
+  .calc-formula {
+    padding: 4px 8px;
+  }
+  .param-grid {
+    gap: 7px;
+    margin-top: 6px;
+  }
+  .param-card {
+    padding: 6px 9px;
+  }
+  .results-stack {
+    gap: 8px;
+  }
+  .results-card {
+    padding: 9px 10px;
+    gap: 5px;
+  }
+  th,
+  td {
+    padding: 6px 8px;
+  }
+  .calc-block {
+    padding: 7px 9px;
+    gap: 3px;
+  }
+  .report-footer {
+    margin-top: 8px;
+    padding-top: 7px;
+  }
+  .report-page--overview {
+    break-after: page;
+    page-break-after: always;
   }
   .report-page--results {
     break-before: page;
     page-break-before: always;
+    break-after: auto;
+    page-break-after: auto;
   }
-  .section,
   .header-row,
+  .results-card,
+  .table-shell,
+  table,
+  .calc-block,
   .info-grid,
   .summary-sub-section,
   thead,
@@ -632,6 +806,8 @@ tr:nth-child(even) {
         </div>
       </div>
 
+      <footer class="report-footer">&copy; 2026 Virtual Labs, IIT Roorkee</footer>
+
     </div>
 
     <div class="report-page report-page--results">
@@ -640,27 +816,27 @@ tr:nth-child(even) {
         <h2>Experiment Parameters</h2>
         <div class="param-grid">
           <div class="param-card">
-            <span class="param-label">R1</span>
+            <span class="param-label">R<sub>1</sub></span>
             <span class="param-value">${r1} &Omega;</span>
           </div>
           <div class="param-card">
-            <span class="param-label">R2</span>
+            <span class="param-label">R<sub>2</sub></span>
             <span class="param-value">${r2} &Omega;</span>
           </div>
           <div class="param-card">
-            <span class="param-label">R3</span>
+            <span class="param-label">R<sub>3</sub></span>
             <span class="param-value">${r3} &Omega;</span>
           </div>
           <div class="param-card">
-            <span class="param-label">RL</span>
+            <span class="param-label">R<sub>L</sub></span>
             <span class="param-value">${rl} &Omega;</span>
           </div>
           <div class="param-card">
-            <span class="param-label">VTH</span>
+            <span class="param-label">V<sub>TH</sub></span>
             <span class="param-value">${vth.toFixed(3)} V</span>
           </div>
           <div class="param-card">
-            <span class="param-label">RTH</span>
+            <span class="param-label">R<sub>TH</sub></span>
             <span class="param-value">${rth.toFixed(3)} &Omega;</span>
           </div>
         </div>
@@ -729,6 +905,8 @@ tr:nth-child(even) {
         </div>
       </div>
 
+      <footer class="report-footer">&copy; 2026 Virtual Labs, IIT Roorkee</footer>
+
     </div>
 
   </main>
@@ -740,41 +918,98 @@ tr:nth-child(even) {
 
   <script>
     function ensureHtml2Pdf() {
-      return new Promise(function(resolve, reject) {
-        if (window.html2pdf) return resolve();
+      function loadScript(source, isReady) {
+        if (isReady()) {
+          return Promise.resolve();
+        }
+
+        return new Promise(function(resolve, reject) {
         var script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
-        script.onload = resolve;
+          script.src = source;
+          script.onload = function() {
+            if (isReady()) {
+              resolve();
+              return;
+            }
+
+            reject(new Error('The PDF dependency did not initialize.'));
+          };
         script.onerror = reject;
         document.head.appendChild(script);
-      });
+        });
+      }
+
+      return Promise.all([
+        loadScript(
+          'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+          function() { return Boolean(window.html2canvas); }
+        ),
+        loadScript(
+          'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
+          function() { return Boolean(window.jspdf && window.jspdf.jsPDF); }
+        )
+      ]);
     }
 
     function downloadReport() {
       ensureHtml2Pdf().then(function() {
-        var element = document.getElementById('report-document') || document.body;
-        var opts = {
-          margin: [0.2, 0.2, 0.2, 0.2],
-          filename: 'thevenin-simulation-report.pdf',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: {
-            scale: 2,
-            useCORS: true,
-            scrollX: 0,
-            scrollY: 0,
-            onclone: function(clonedDoc) {
-              clonedDoc.body.classList.add('pdf-exporting');
+        var reportPages = Array.from(document.querySelectorAll('.report-page'));
+
+        if (!window.html2canvas || !window.jspdf || !window.jspdf.jsPDF || reportPages.length !== 2) {
+          throw new Error('The two-page PDF renderer is unavailable.');
+        }
+
+        var pageWidth = 210;
+        var pageHeight = 297;
+        var pageMargin = 12;
+        var availableWidth = pageWidth - (pageMargin * 2);
+        var availableHeight = pageHeight - (pageMargin * 2);
+        var pdf = new window.jspdf.jsPDF({
+          unit: 'mm',
+          format: 'a4',
+          orientation: 'portrait'
+        });
+
+        document.body.classList.add('pdf-exporting');
+
+        return reportPages.reduce(function(sequence, reportPage, index) {
+          return sequence.then(function() {
+            return window.html2canvas(reportPage, {
+              scale: 2,
+              useCORS: true,
+              backgroundColor: '#ffffff',
+              scrollX: 0,
+              scrollY: 0
+            });
+          }).then(function(canvas) {
+            var widthScale = availableWidth / canvas.width;
+            var heightScale = availableHeight / canvas.height;
+            var renderScale = Math.min(widthScale, heightScale);
+            var renderWidth = canvas.width * renderScale;
+            var renderHeight = canvas.height * renderScale;
+            var renderX = (pageWidth - renderWidth) / 2;
+
+            if (index > 0) {
+              pdf.addPage('a4', 'portrait');
             }
-          },
-          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
-          pagebreak: {
-            mode: ['css', 'legacy'],
-            before: ['.report-page--results'],
-            avoid: ['.header-row', '.report-overview', '.info-grid', '.summary-sub-section', '.results-card', 'thead', 'tr']
-          }
-        };
-        return window.html2pdf().set(opts).from(element).save();
-      }).catch(function() {
+
+            pdf.addImage(
+              canvas.toDataURL('image/jpeg', 0.98),
+              'JPEG',
+              renderX,
+              pageMargin,
+              renderWidth,
+              renderHeight
+            );
+          });
+        }, Promise.resolve()).then(function() {
+          pdf.save('thevenin-simulation-report.pdf');
+        }).finally(function() {
+          document.body.classList.remove('pdf-exporting');
+        });
+      }).catch(function(error) {
+        document.body.classList.remove('pdf-exporting');
+        console.error('Unable to generate the report PDF.', error);
         alert('Unable to download the report automatically. Please use your browser\\'s Save as PDF option.');
       });
     }

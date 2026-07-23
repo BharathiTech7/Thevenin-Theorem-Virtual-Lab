@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import SectionCard from './SectionCard.jsx'
+import ElectricalText from './ElectricalText.jsx'
 import {
   AddIcon,
   AiGuide,
@@ -15,7 +16,7 @@ import {
 const buttons = [
   {
     id: 'instruction-button',
-    label: 'INSTRUCTION',
+    label: 'INSTRUCTIONS',
     tone: 'action-button--gold',
     Icon: ButtonIcon,
     opensInstructions: true,
@@ -29,7 +30,7 @@ const buttons = [
   },
   {
   id: 'auto-connect-button',
-  label: 'AUTO',
+  label: 'AUTO CONNECT',
   tone: 'action-button--blue',
  Icon: AutoConnectIcon,
   handlerName: 'onAutoConnect',
@@ -73,6 +74,17 @@ const buttons = [
  
 ]
 
+const instructionOrder = [
+  'step1',
+  'case1',
+  'case2',
+  'case3',
+  'step3',
+  'step4',
+  'step5',
+  'step6',
+]
+
 const ActionButtons = ({
   activeButtons = {},
   disabledButtons = {},
@@ -86,6 +98,54 @@ const ActionButtons = ({
    activeInstructionStep,
 }) => {
   const [instructionsOpen, setInstructionsOpen] = useState(false)
+  const instructionsBodyRef = useRef(null)
+  const activeInstructionIndex = instructionOrder.indexOf(activeInstructionStep)
+  const getInstructionProps = (stepId) => {
+    const stepIndex = instructionOrder.indexOf(stepId)
+    const state =
+      stepIndex < activeInstructionIndex
+        ? 'completed'
+        : stepIndex === activeInstructionIndex
+          ? 'active'
+          : 'pending'
+
+    return {
+      'aria-current': state === 'active' ? 'step' : undefined,
+      'aria-disabled': state === 'pending' ? 'true' : undefined,
+      className: `action-step action-step--${state}`,
+      'data-instruction-step': stepId,
+    }
+  }
+
+  useEffect(() => {
+    if (!instructionsOpen || !instructionsBodyRef.current) {
+      return
+    }
+
+    const activeStep = instructionsBodyRef.current.querySelector(
+      `[data-instruction-step="${activeInstructionStep}"]`,
+    )
+
+    const body = instructionsBodyRef.current
+    const bodyRect = body.getBoundingClientRect()
+    const stepRect = activeStep?.getBoundingClientRect()
+
+    if (!stepRect) {
+      return
+    }
+
+    const nextScrollTop =
+      body.scrollTop
+      + stepRect.top
+      - bodyRect.top
+      - (body.clientHeight - stepRect.height) / 2
+
+    body.scrollTo({
+      behavior: 'smooth',
+      top: Math.max(0, nextScrollTop),
+    })
+  }, [activeInstructionStep, instructionsOpen])
+
   const handlers = {
   onAdd,
   onCalculate,
@@ -97,7 +157,14 @@ const ActionButtons = ({
 }
 
   return (
-    <SectionCard className="action-buttons-card h-[176px]" icon="buttons" id="action-buttons-panel" title="ACTION BUTTONS">
+    <SectionCard
+      className={`action-buttons-card h-[176px] ${
+        instructionsOpen ? 'action-buttons-card--instructions-open' : ''
+      }`}
+      icon="buttons"
+      id="action-buttons-panel"
+      title="ACTION BUTTONS"
+    >
       <div className="action-buttons__grid">
         {buttons.map(({ id, label, tone, Icon, handlerName, opensInstructions }) => {
           const handler = handlers[handlerName]
@@ -150,98 +217,72 @@ const ActionButtons = ({
             </button>
           </div>
 
-          <div className="action-instructions-panel__body">
+          <div
+            className="action-instructions-panel__body"
+            ref={instructionsBodyRef}
+          >
             <ol className="action-instructions-panel__steps">
 
-  <li  className={
-    activeInstructionStep === 'step1'
-      ? 'action-step-active'
-      : ''
-  }>
-    <strong>STEP 1:</strong> Set the values of resistances R1, R2, R3 and RL using the sliders.
+  <li {...getInstructionProps('step1')}>
+    <strong>STEP 1:</strong>{' '}
+    <ElectricalText text="Set the values of resistances R1, R2, R3 and RL using the sliders." />
   </li>
 
   <li>
     <strong>STEP 2:</strong> Perform the following cases.
     
     <ol className="action-instructions-panel__substeps" type="a">
-      <li   className={
-    activeInstructionStep === 'case1'
-      ? 'action-step-active'
-      : ''
-  }>
-  <strong>Case 1 (Measure RTH):</strong>
+      <li {...getInstructionProps('case1')}>
+  <strong>Case 1 (Measure <ElectricalText text="RTH" />):</strong>
   <ul>
     <li>Short circuit terminals (9-10).</li>
     <li>Connect Multimeter (5-11 and 6-13).</li>
     <li>Click CHECK.</li>
-    <li>Click ADD to record RTH.</li>
+    <li>Click ADD to record <ElectricalText text="RTH" />.</li>
     <li>Remove connections (9-10), (5-11), (6-13) by clicking the corresponding terminal labels.</li>
   </ul>
 </li>
 
-      <li  className={
-    activeInstructionStep === 'case2'
-      ? 'action-step-active'
-      : ''
-  }>
-  <strong>Case 2 (Measure VTH):</strong>
+      <li {...getInstructionProps('case2')}>
+  <strong>Case 2 (Measure <ElectricalText text="VTH" />):</strong>
   <ul>
     <li>Connect Power Supply (7-9 and 8-10).</li>
     <li>Connect Voltmeter (1-11 and 2-13).</li>
     <li>Click CHECK.</li>
     <li>Turn ON Power Supply.</li>
     <li>Adjust Voltage.</li>
-    <li>Click ADD to record VTH.</li>
+    <li>Click ADD to record <ElectricalText text="VTH" />.</li>
     <li>Remove connections (1-11 and 2-13) by clicking the corresponding terminal labels.</li>
   </ul>
 </li>
 
-      <li  className={
-    activeInstructionStep === 'case3'
-      ? 'action-step-active'
-      : ''
-  }>
-        <strong>Case 3 (Measure IL):</strong>
+      <li {...getInstructionProps('case3')}>
+        <strong>Case 3 (Measure <ElectricalText text="IL" />):</strong>
         <ul>
          <li>Connect Power Supply (7-9 and 8-10).</li>
 <li>Connect Ammeter (3-11, 4-12 and 13-14).</li>
 <li>Click CHECK.</li>
-<li>Click ADD to record IL.</li>
+<li>Click ADD to record <ElectricalText text="IL" />.</li>
         </ul>
       </li>
     </ol>
   </li>
 
-  <li className={
-    activeInstructionStep === 'step3'
-      ? 'action-step-active'
-      : ''
-  }>
-    <strong>STEP 3:</strong> Click CALCULATE to calculate load current (IL).
+  <li {...getInstructionProps('step3')}>
+    <strong>STEP 3:</strong>{' '}
+    <ElectricalText text="Click CALCULATE to calculate load current (IL)." />
   </li>
 
-  <li  className={
-    activeInstructionStep === 'step4'
-      ? 'action-step-active'
-      : ''
-  }>
-    <strong>STEP 4:</strong> Enter the manually calculated IL value and click VERIFY.
+  <li {...getInstructionProps('step4')}>
+    <strong>STEP 4:</strong>{' '}
+    <ElectricalText text="Enter the manually calculated IL value and click VERIFY." />
   </li>
 
-  <li  className={
-    activeInstructionStep === 'step5'
-      ? 'action-step-active'
-      : ''
-  }>
+  <li {...getInstructionProps('step5')}>
     <strong>STEP 5:</strong> Click PRINT to print the experiment report.
   </li>
 
-  <li className={
-    activeInstructionStep === 'step5'
-      ? 'action-step-active'
-      : ''
-  }>
+  <li {...getInstructionProps('step6')}>
     <strong>STEP 6:</strong> Click RESET to restart the experiment.
   </li>
   <li>
