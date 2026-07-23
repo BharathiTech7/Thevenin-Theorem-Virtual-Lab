@@ -92,7 +92,7 @@
   --jtk-endpoint-hover-outline-width: 2.1;
   --jtk-endpoint-hover-stroke: #64748b;
   --jtk-endpoint-hover-stroke-width: 1.4;
-  --terminal-size: 32px;
+  --terminal-size: 35px;
   --terminal-neutral: #7c8da1;
   --terminal-neutral-rgb: 124, 141, 161;
   --terminal-accent: #64748b;
@@ -339,7 +339,7 @@
 */
 .connection-lab .jtk-endpoint--terminal-1,
 .connection-terminal--endpoint-1 {
-  --jtk-endpoint-offset-x: -6px;
+  --jtk-endpoint-offset-x: -7px;
   --jtk-endpoint-offset-y: -12px;
 }
 
@@ -407,7 +407,7 @@
 .connection-lab .jtk-endpoint--terminal-7,
 .connection-terminal--endpoint-7 {
   --jtk-endpoint-offset-x: -1px;
-  --jtk-endpoint-offset-y: -6px;
+  --jtk-endpoint-offset-y: -20px;
 }
 
 .connection-terminal--endpoint-7 {
@@ -418,7 +418,7 @@
 .connection-lab .jtk-endpoint--terminal-8,
 .connection-terminal--endpoint-8 {
   --jtk-endpoint-offset-x: -21px;
-  --jtk-endpoint-offset-y: -5px;
+  --jtk-endpoint-offset-y: -20px;
 }
 
 .connection-terminal--endpoint-8 {
@@ -538,13 +538,13 @@
 }
 
 .terminal-number-label--endpoint-7 {
-  top: 225px;
-  left: 58px;
+  top: 205px;
+  left: 59px;
 }
 
 .terminal-number-label--endpoint-8 {
-  top: 225px;
-  left: 103px;
+  top: 205px;
+  left: 104px;
 }
 
 .terminal-number-label--endpoint-9 {

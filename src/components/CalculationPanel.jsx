@@ -1,6 +1,6 @@
-import React from 'react';
 import { useLabAlerts } from '../alerts/useLabAlerts.js';
 import { EXPERIMENT_ALERTS } from '../alerts/experimentStepAlerts.js'
+import ElectricalText from './ElectricalText.jsx';
 const CalculationPanel = ({
   calculationDone,
   calculatedValues,
@@ -79,7 +79,7 @@ const CalculationPanel = ({
             <h3>Resistance Values</h3>
             <div className="values-inline-group">
               <div className="inline-input-item">
-                <span className="inline-label">R₁:</span>
+                <span className="inline-label">R<sub>1</sub>:</span>
                 <div className="inline-display">
                   {calculationDone && r1 !== '' ? Number(r1).toFixed(1) : ''}
                 </div>
@@ -87,7 +87,7 @@ const CalculationPanel = ({
               </div>
               
               <div className="inline-input-item">
-                <span className="inline-label">R₂:</span>
+                <span className="inline-label">R<sub>2</sub>:</span>
                 <div className="inline-display">
                   {calculationDone && r2 !== '' ? Number(r2).toFixed(1) : ''}
                 </div>
@@ -95,7 +95,7 @@ const CalculationPanel = ({
               </div>
               
               <div className="inline-input-item">
-                <span className="inline-label">R₃:</span>
+                <span className="inline-label">R<sub>3</sub>:</span>
                 <div className="inline-display">
                   {calculationDone && r3 !== '' ? Number(r3).toFixed(1) : ''}
                 </div>
@@ -128,7 +128,7 @@ const CalculationPanel = ({
         <div className="calc-field">
           <div className="calc-label">Thevenin Equivalent Voltage:</div>
           <div className="calc-input-group">
-            <div className="calc-prefix">Vth</div>
+            <div className="calc-prefix">V<sub>TH</sub></div>
             <div className="calc-display">
               {calculationDone ? Number(vth).toFixed(3) : ''}
             </div>
@@ -140,7 +140,7 @@ const CalculationPanel = ({
         <div className="calc-field">
           <div className="calc-label">Thevenin Equivalent Resistance:</div>
           <div className="calc-input-group">
-            <div className="calc-prefix">Rth</div>
+            <div className="calc-prefix">R<sub>TH</sub></div>
             <div className="calc-display">
               {calculationDone ? Number(rth).toFixed(3) : ''}
             </div>
@@ -152,7 +152,7 @@ const CalculationPanel = ({
         <div className="calc-field">
           <div className="calc-label">Load Resistance:</div>
           <div className="calc-input-group">
-            <div className="calc-prefix">RL</div>
+            <div className="calc-prefix">R<sub>L</sub></div>
             <div className="calc-display">
               {calculationDone ? Number(rl).toFixed(3) : ''}
             </div>
@@ -160,18 +160,14 @@ const CalculationPanel = ({
           </div>
         </div>
 
-        {/* Formula Display */}
-        <div className="formula-heading">Formula:</div>
-        <div className="formula-panel">
-          IL = VTH / (RTH + RL)
-        </div>
-
         {/* Verification Result Cards */}
         <div className="results-section">
           <fieldset className="result-card">
             <legend>Observed Results</legend>
             <div className="result-row">
-              <span className="result-label">Observed Load Current (IL):</span>
+              <span className="result-label">
+                Observed Load Current (<ElectricalText text="IL" />):
+              </span>
               <div className="result-display">
                 {calculationDone ? Number(observedIL).toFixed(6) : ''}
               </div>
@@ -182,7 +178,9 @@ const CalculationPanel = ({
           <fieldset className="result-card">
             <legend>Verification</legend>
             <div className="result-row">
-              <span className="result-label">Calculated Load Current (IL):</span>
+              <span className="result-label">
+                Calculated Load Current (<ElectricalText text="IL" />):
+              </span>
               <input
                 type="number"
                 step="0.000001"

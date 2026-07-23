@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useFocusTrap } from '../hooks/useFocusTrap.js'
+import ElectricalText from '../../components/ElectricalText.jsx'
 import {
   addExclusiveAudioListener,
   dispatchExclusiveAudioStart,
@@ -61,16 +62,33 @@ const getCandidatePosition = (rect, size, placement) => {
 }
 
 const getPopupPosition = (rect, size, preferredPlacement) => {
-  const viewportWidth = window.innerWidth
-  const viewportHeight = window.innerHeight
-  const maxLeft = Math.max(EDGE_GAP, viewportWidth - size.width - EDGE_GAP)
-  const maxTop = Math.max(EDGE_GAP, viewportHeight - size.height - EDGE_GAP)
+  const visualViewport = window.visualViewport
+  const viewportLeft = visualViewport?.offsetLeft ?? 0
+  const viewportTop = visualViewport?.offsetTop ?? 0
+  const viewportWidth = visualViewport?.width ?? window.innerWidth
+  const viewportHeight = visualViewport?.height ?? window.innerHeight
+  const minLeft = viewportLeft + EDGE_GAP
+  const minTop = viewportTop + EDGE_GAP
+  const maxLeft = Math.max(
+    minLeft,
+    viewportLeft + viewportWidth - size.width - EDGE_GAP,
+  )
+  const maxTop = Math.max(
+    minTop,
+    viewportTop + viewportHeight - size.height - EDGE_GAP,
+  )
   const placements = getPlacementOrder(preferredPlacement)
 
   for (const placement of placements) {
     const candidate = getCandidatePosition(rect, size, placement)
-    const fitsHorizontally = candidate.left >= EDGE_GAP && candidate.left + size.width <= viewportWidth - EDGE_GAP
-    const fitsVertically = candidate.top >= EDGE_GAP && candidate.top + size.height <= viewportHeight - EDGE_GAP
+    const fitsHorizontally =
+      candidate.left >= minLeft
+      && candidate.left + size.width
+        <= viewportLeft + viewportWidth - EDGE_GAP
+    const fitsVertically =
+      candidate.top >= minTop
+      && candidate.top + size.height
+        <= viewportTop + viewportHeight - EDGE_GAP
 
     if (fitsHorizontally && fitsVertically) {
       return {
@@ -85,8 +103,8 @@ const getPopupPosition = (rect, size, preferredPlacement) => {
 
   return {
     placement: preferredPlacement,
-    left: clamp(fallback.left, EDGE_GAP, maxLeft),
-    top: clamp(fallback.top, EDGE_GAP, maxTop),
+    left: clamp(fallback.left, minLeft, maxLeft),
+    top: clamp(fallback.top, minTop, maxTop),
   }
 }
 
@@ -222,21 +240,12 @@ useEffect(() => (
       <div className="walkthrough-popup__header">
         <div>
           <p className="walkthrough-popup__eyebrow">Guided Walkthrough</p>
-          <h2 id={titleId}>{activeStep.title}</h2>
+          <h2 id={titleId}><ElectricalText text={activeStep.title} /></h2>
         </div>
-
-        <button
-          aria-label="Exit walkthrough"
-          className="walkthrough-popup__icon-button"
-          onClick={onClose}
-          type="button"
-        >
-          <span aria-hidden="true">&times;</span>
-        </button>
       </div>
 
       <p className="walkthrough-popup__description" id={descriptionId}>
-        {activeStep.description}
+        <ElectricalText text={activeStep.description} />
       </p>
 
       <div className="walkthrough-popup__progress" aria-hidden="true">
@@ -260,7 +269,7 @@ useEffect(() => (
         </button>
       </div>
 
-      <div className="walkthrough-popup__actions">
+      <div className={`walkthrough-popup__actions${canGoNext ? '' : ' walkthrough-popup__actions--last'}`}>
         <button
           className="walkthrough-popup__button walkthrough-popup__button--secondary"
           disabled={!canGoPrevious}
@@ -269,13 +278,15 @@ useEffect(() => (
         >
           Previous
         </button>
-       <button
-  className="walkthrough-popup__button walkthrough-popup__button--secondary"
-  onClick={onSkip}
-  type="button"
->
-  Skip
-</button>
+        {canGoNext ? (
+          <button
+            className="walkthrough-popup__button walkthrough-popup__button--secondary"
+            onClick={onSkip}
+            type="button"
+          >
+            Skip
+          </button>
+        ) : null}
         <button
           className="walkthrough-popup__button walkthrough-popup__button--primary"
           data-autofocus

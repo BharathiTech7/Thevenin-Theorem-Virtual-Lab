@@ -40,14 +40,12 @@ const ConnectionLab = ({
   showRth,
   showMultimeter,
   playStepById,
-   playStepsById,
    case1ConnectionsRemoved,
 setCase1ConnectionsRemoved,
 case2ConnectionsRemoved,
 setCase2ConnectionsRemoved,
 setShowRth,
   setShowMultimeter,
-  guideEndpointHighlightActive = false,
   highlightedTerminalIds = [],
 }) => {
   const containerRef = useRef(null)
@@ -279,7 +277,7 @@ if (experimentCaseRef.current === 3) {
   }
 
   if (result.isCorrect) {
-    playStepById?.(29) // replace with your Case-3 completion step if different
+    playStepById?.(29)
   }
 
   return

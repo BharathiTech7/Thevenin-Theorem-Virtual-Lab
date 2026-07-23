@@ -74,10 +74,10 @@ export const AiGuide = () => (
 
 export const SlidersIcon = () => (
   <svg aria-hidden="true" viewBox="0 0 32 32">
-    <path d="M8 5v22M16 5v22M24 5v22M5 11h6M13 20h6M21 14h6" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2.4" />
-    <circle cx="8" cy="11" fill="#efe3d2" r="3.3" stroke="currentColor" strokeWidth="2" />
-    <circle cx="16" cy="20" fill="#efe3d2" r="3.3" stroke="currentColor" strokeWidth="2" />
-    <circle cx="24" cy="14" fill="#efe3d2" r="3.3" stroke="currentColor" strokeWidth="2" />
+    <path d="M5 8h22M5 16h22M5 24h22M11 5v6M20 13v6M14 21v6" fill="none" stroke="currentColor" strokeLinecap="round" strokeWidth="2.4" />
+    <circle cx="11" cy="8" fill="#efe3d2" r="3.3" stroke="currentColor" strokeWidth="2" />
+    <circle cx="20" cy="16" fill="#efe3d2" r="3.3" stroke="currentColor" strokeWidth="2" />
+    <circle cx="14" cy="24" fill="#efe3d2" r="3.3" stroke="currentColor" strokeWidth="2" />
   </svg>
 )
 

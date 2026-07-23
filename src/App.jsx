@@ -5,7 +5,6 @@ import ConnectionLab from './components/ConnectionLab.jsx'
 import ActionButtons from './components/ActionButtons.jsx'
 import ControlPanel from './components/ControlPanel.jsx'
 import HeaderBoard from './components/HeaderBoard.jsx'
-import ReportControls from './components/ReportControls.jsx'
 import WalkthroughStartButton from './walkthrough/components/WalkthroughStartButton.jsx'
 import { EXPERIMENT_ALERTS } from './alerts/experimentStepAlerts.js'
 import { useLabAlerts } from './alerts/useLabAlerts.js'
@@ -17,8 +16,8 @@ import { generateTheveninReport } from './utils/theveninReportGenerator.js'
  
 const BASE_WIDTH = 1440
 const BASE_HEIGHT = 960
-const CONTENT_HEIGHT = 2200
-const PANEL_MAX_SCALE = 0.9
+const DEFAULT_CONTENT_HEIGHT = 1800
+const PANEL_MAX_SCALE = 1
 const PANEL_VIEWPORT_MARGIN = 24
 const MIN_OBSERVATION_READINGS = 1
 const MAX_OBSERVATIONS = 10
@@ -48,6 +47,8 @@ const getScale = () => {
 const App = () => {
   const { clearAlerts, showStepAlert } = useLabAlerts()
   const [scale, setScale] = useState(getScale)
+  const [contentHeight, setContentHeight] = useState(DEFAULT_CONTENT_HEIGHT)
+  const postSimulationContentRef = useRef(null)
 const [r1, setR1] = useState(0.1)
 const [r2, setR2] = useState(0.1)
 const [r3, setR3] = useState(0.1)
@@ -61,11 +62,11 @@ const [calculatedValues, setCalculatedValues] = useState(null)
 const [userCalculatedIL, setUserCalculatedIL] = useState('')
 const [verificationResult, setVerificationResult] = useState('')
 const [experimentCase, setExperimentCase] = useState(1)
-const calculationReady = experimentCase > 3
 const [measuredRth, setMeasuredRth] = useState(null)
 const [measuredVth, setMeasuredVth] = useState(null)
 const [measuredIl, setMeasuredIl] = useState(null)
   const [reportGenerated, setReportGenerated] = useState(false)
+  const [reportPrinted, setReportPrinted] = useState(false)
   const [status, setStatus] = useState('Make the connections, click CHECK, then set the resistance values.')
   const [checkRequest, setCheckRequest] = useState(0)
   const [resetRequest, setResetRequest] = useState(0)
@@ -78,8 +79,6 @@ const walkthroughCompletedRef = useRef(false)
 const resistanceIntroPlayedRef = useRef(false)
 const { isOpen: walkthroughOpen } = useWalkthrough()
 const voltageGuidePlayedRef = useRef(false)
-const [guideEndpointHighlightActive, setGuideEndpointHighlightActive] =
-  useState(false)
 const resistancesConfigured =
   Number(r1) !== 0.1 &&
   Number(r2) !== 0.1 &&
@@ -93,6 +92,41 @@ const resistancesConfigured =
 
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  useEffect(() => {
+    const content = postSimulationContentRef.current
+
+    if (!content) {
+      return undefined
+    }
+
+    const updateContentHeight = () => {
+      const nextHeight = Math.ceil(content.offsetTop + content.offsetHeight)
+
+      setContentHeight((currentHeight) => (
+        currentHeight === nextHeight ? currentHeight : nextHeight
+      ))
+    }
+
+    updateContentHeight()
+
+    const resizeObserver = new ResizeObserver(updateContentHeight)
+    resizeObserver.observe(content)
+    window.addEventListener('load', updateContentHeight)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('load', updateContentHeight)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleAfterPrint = () => setReportPrinted(true)
+
+    window.addEventListener('afterprint', handleAfterPrint)
+    return () => window.removeEventListener('afterprint', handleAfterPrint)
+  }, [])
+
 const handleAutoConnect = () => {
   setAutoConnectRequest((prev) => prev + 1)
 }
@@ -121,8 +155,6 @@ const [showMultimeter, setShowMultimeter] = useState(false)
       || getObservationSignature(row) === currentReadingSignature
   ))
   const readingCount = observations.length
-const canGenerateReport = readingCount >= MIN_OBSERVATION_READINGS
-
   const handleAiGuideStart = useCallback(() => {
     setStatus('AI Guide narration started.')
   }, [])
@@ -142,7 +174,6 @@ const {
   stop: stopAiGuide,
   playStepById,
   playStepsById,
-  finish,
 } = useAiGuideNarration({
     onError: handleAiGuideError,
     onFinish: handleAiGuideFinish,
@@ -181,7 +212,7 @@ useEffect(() => {
 }, [
   aiGuidePlaying,
   resistancesConfigured,
-  playStepById,
+  playStepsById,
 ])
 useEffect(() => {
   if (!case1ConnectionsRemoved) {
@@ -252,7 +283,7 @@ useEffect(() => {
     if (readingCount >= MAX_OBSERVATIONS) {
       setStatus('Observation table is full. Reset the experiment for a new run.')
       showStepAlert(EXPERIMENT_ALERTS.minimumReadingsRequired, {
-        description: 'The observation table already contains the maximum 10 readings.',
+        description: 'The observation table already contains the maximum number of readings.',
         title: 'Observation Table Is Full',
       })
       return
@@ -325,6 +356,7 @@ else if (experimentCase === 3) {
 }
   
     setReportGenerated(false)
+    setReportPrinted(false)
     setStatus('Reading added to the observation table.')
 
 //    if (nextObservationCount === MIN_OBSERVATION_READINGS) {
@@ -348,6 +380,7 @@ setCalculatedValues(null)
 setVerificationResult('')
 setUserCalculatedIL('')
     setReportGenerated(false)
+    setReportPrinted(false)
     setCheckRequest(0)
     setExperimentCase(1)
     setConnectionsVerified(false)
@@ -361,7 +394,7 @@ setUserCalculatedIL('')
 walkthroughCompletedRef.current = false
 resistanceIntroPlayedRef.current = false
 voltageGuidePlayedRef.current = false
-  }, [showStepAlert, stopAiGuide])
+  }, [playStepById, showStepAlert, stopAiGuide])
 
   const handleReset = () => {
     clearAlerts()
@@ -370,17 +403,6 @@ voltageGuidePlayedRef.current = false
 
 
 const handlePrint = () => {
-  if (readingCount < MIN_OBSERVATION_READINGS) {
-    showStepAlert({
-      title: 'Print Not Available Yet',
-      description:
-        'Complete the experiment and calculate the results before printing the report.',
-      type: 'warning',
-    })
-    return
-  }
-  playStepById(36)
-  showStepAlert(EXPERIMENT_ALERTS.printLayoutGenerated)
   window.print()
 }
 const handleGenerateReport = () => {
@@ -422,7 +444,7 @@ const handleGenerateReport = () => {
 }
 
   const scaledWidth = Math.ceil(BASE_WIDTH * scale)
-  const scaledHeight = Math.ceil(CONTENT_HEIGHT * scale)
+  const scaledHeight = Math.ceil(contentHeight * scale)
   const handleCheckConnections = useCallback((result) => {
 
   if (result.isCorrect) {
@@ -431,14 +453,6 @@ const handleGenerateReport = () => {
       setShowRth(true)
       setShowMultimeter(true)
       playStepById(14)
-    }
-
-    else if (experimentCase === 2) {
-      playStepById(22)
-    }
-
-    else if (experimentCase === 3) {
-      playStepById(29)
     }
 
     setConnectionsVerified(true)
@@ -541,6 +555,7 @@ if (powerOn) {
 
   setPowerOn(true)
   setStatus('Power supply switched on. Adjust voltage and add the reading.')
+  clearAlerts()
   showStepAlert(EXPERIMENT_ALERTS.powerOn)
 }
 
@@ -614,6 +629,26 @@ const guideHighlights = {
 
 const highlightedTerminalIds =
   guideHighlights[Number(activeStepId)] ?? []
+const verificationSucceeded =
+  verificationResult.includes('Verified Successfully')
+const activeInstructionStep =
+  !resistancesConfigured
+    ? 'step1'
+    : experimentCase === 1 ||
+        (experimentCase === 2 && !case1ConnectionsRemoved)
+      ? 'case1'
+      : experimentCase === 2 ||
+          (experimentCase === 3 && !case2ConnectionsRemoved)
+        ? 'case2'
+        : experimentCase === 3
+          ? 'case3'
+          : !calculationDone
+            ? 'step3'
+            : !verificationSucceeded
+              ? 'step4'
+              : !reportPrinted
+                ? 'step5'
+                : 'step6'
 console.log("ACTIVE STEP =", activeStepId)
 console.log("HIGHLIGHT IDS =", highlightedTerminalIds)
   return (
@@ -628,36 +663,23 @@ console.log("HIGHLIGHT IDS =", highlightedTerminalIds)
         <div
           id="app-scale"
           style={{
-            height: `${CONTENT_HEIGHT}px`,
-            transform: `scale(${scale})`,
+            height: `${contentHeight}px`,
+            zoom: scale,
           }}
         >
           <main className="simulation-shell" id="walkthrough-demo-experiment">
             <HeaderBoard />
-            <WalkthroughStartButton variant="side-tab" />
+            <WalkthroughStartButton
+              highlighted={Number(activeStepId) === 1}
+              variant="side-tab"
+            />
             {/* <StatusBar status={status} /> */}
             <span className="sr-only" role="status" aria-live="polite">{status}</span>
 
             <section className="workspace-grid">
               <aside className="left-panel">
                 <ActionButtons
-                 activeInstructionStep={
-    !resistancesConfigured
-      ? 'step1'
-      : experimentCase === 1
-      ? 'case1'
-      : experimentCase === 2
-      ? 'case2'
-      : experimentCase === 3
-      ? 'case3'
-      : !calculationDone
-      ? 'step3'
-      : verificationResult === ''
-      ? 'step4'
-      : !reportGenerated
-      ? 'step5'
-      : 'step6'
-  }
+                  activeInstructionStep={activeInstructionStep}
                   activeButtons={{
                     onAiGuide: aiGuidePlaying,
                   }}
@@ -679,7 +701,11 @@ console.log("HIGHLIGHT IDS =", highlightedTerminalIds)
 
                 <ControlPanel
   locked={powerOn}
+  minReadings={MIN_OBSERVATION_READINGS}
+  onGenerateReport={handleGenerateReport}
   observations={observations}
+  readingCount={readingCount}
+  reportGenerated={reportGenerated}
   rl={rl}
   r1={r1}
   r2={r2}
@@ -728,23 +754,21 @@ console.log("HIGHLIGHT IDS =", highlightedTerminalIds)
 
 
 
-<ReportControls
-  minReadings={MIN_OBSERVATION_READINGS}
-  onGenerateReport={handleGenerateReport}
-  readingCount={readingCount}
-  reportGenerated={reportGenerated}
-/>
-
 </main>
-<CalculationPanel
-  calculationDone={calculationDone}
-  calculatedValues={calculatedValues}
-  verificationResult={verificationResult}
-  userCalculatedIL={userCalculatedIL}
-  setUserCalculatedIL={setUserCalculatedIL}
-  setVerificationResult={setVerificationResult}
-  playStepById={playStepById}
-/>
+<div className="post-simulation-content" ref={postSimulationContentRef}>
+  <CalculationPanel
+    calculationDone={calculationDone}
+    calculatedValues={calculatedValues}
+    verificationResult={verificationResult}
+    userCalculatedIL={userCalculatedIL}
+    setUserCalculatedIL={setUserCalculatedIL}
+    setVerificationResult={setVerificationResult}
+    playStepById={playStepById}
+  />
+  <footer className="site-footer">
+    © 2026 Virtual Labs, IIT Roorkee
+  </footer>
+</div>
         </div>
       </div>
     </div>

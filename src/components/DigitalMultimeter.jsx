@@ -58,11 +58,14 @@ if (resistance > 0) {
         id="5-endpoint"
 className={`connection-terminal connection-terminal--meter connection-terminal--meter-plus connection-terminal--endpoint-5${getTerminalConnectedClass(connectedTerminalIds, '5-endpoint')}${getTerminalHighlightClass(highlightedTerminalIds, '5-endpoint')}`}
         data-polarity="plus"
+        aria-label="Digital multimeter positive terminal 5"
+        title="Digital multimeter positive terminal 5"
       />
 
       <span
 className={`terminal-number-label terminal-number-label--meter-plus terminal-number-label--endpoint-5${getTerminalNumberHighlightClass(highlightedTerminalIds, '5-endpoint')}`}
         data-terminal-id="5-endpoint"
+        title="Digital multimeter positive terminal 5"
       >
         5
       </span>
@@ -71,11 +74,14 @@ className={`terminal-number-label terminal-number-label--meter-plus terminal-num
         id="6-endpoint"
 className={`connection-terminal connection-terminal--meter connection-terminal--meter-minus connection-terminal--endpoint-6${getTerminalConnectedClass(connectedTerminalIds, '6-endpoint')}${getTerminalHighlightClass(highlightedTerminalIds, '6-endpoint')}`}
         data-polarity="minus"
+        aria-label="Digital multimeter negative terminal 6"
+        title="Digital multimeter negative terminal 6"
       />
 
       <span
 className={`terminal-number-label terminal-number-label--meter-minus terminal-number-label--endpoint-6${getTerminalNumberHighlightClass(highlightedTerminalIds, '6-endpoint')}`}
         data-terminal-id="6-endpoint"
+        title="Digital multimeter negative terminal 6"
       >
         6
       </span>
@@ -83,7 +89,7 @@ className={`terminal-number-label terminal-number-label--meter-minus terminal-nu
 <div className="multimeter-display">
   {showValue
     ? `${resistance.toFixed(2)} Ω`
-    : '0.00 Ω'}
+    : ''}
 </div>
     </article>
   )

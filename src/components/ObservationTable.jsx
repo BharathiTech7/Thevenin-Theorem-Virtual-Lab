@@ -1,19 +1,19 @@
 import SectionCard from './SectionCard.jsx'
 
-const OBSERVATION_ROW_COUNT = 10
+const OBSERVATION_ROW_COUNT = 1
 const emptyRows = Array.from({ length: OBSERVATION_ROW_COUNT })
 
 const ObservationTable = ({ observations }) => (
-  <SectionCard className="h-[360px]" icon="table" id="observation-table-panel" title="OBSERVATION TABLE">
+  <SectionCard className="observation-table-card" icon="table" id="observation-table-panel" title="OBSERVATION TABLE">
     <div className="observation-table-wrap">
       <table className="observation-table">
 <thead>
   <tr>
     <th>S.No</th>
-    <th>VTH (V)</th>
-    <th>RTH (Ω)</th>
-    <th>RL (Ω)</th>
-    <th>IL (A)</th>
+    <th>V<sub>TH</sub> (V)</th>
+    <th>R<sub>TH</sub> (&Omega;)</th>
+    <th>R<sub>L</sub> (&Omega;)</th>
+    <th>I<sub>L</sub> (A)</th>
   </tr>
 </thead>
         <tbody>

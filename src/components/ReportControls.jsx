@@ -1,25 +1,39 @@
 import { useState } from 'react'
 import { FormulaIcon, PdfIcon } from './Icons.jsx'
-const formulas = [
+import ElectricalText from './ElectricalText.jsx'
+
+const formulaSections = [
   {
-    symbol: 'RTH',
-    expression: 'RTH = R3 + (R1 × R2)/(R1 + R2)',
-    description: 'Thevenin equivalent resistance',
+    description: 'Thevenin resistance (RTH​) is the equivalent resistance of a linear electrical network as seen from the load terminals after removing the load resistance and deactivating all independent sources. It represents the internal resistance of the circuit in its Thevenin equivalent.',
+    formula: 'R3 + (R1 × R2) / (R1 + R2)',
+    formulaLead: 'Direct Formula like Rth =',
+    heading: 'Steps to Calculate RTH',
+    id: 'rth',
+    steps: [
+      'Remove the load resistance (RL​).',
+      'Replace all independent voltage sources with short circuits and all independent current sources with open circuits.',
+      'Calculate the equivalent resistance seen from the load terminals. This equivalent resistance is the Thevenin resistance (RTH​).',
+    ],
   },
   {
-    symbol: 'VTH',
-    expression: 'VTH = VS × (R2/(R1 + R2))',
-    description: 'Thevenin equivalent voltage',
+    description: 'Thevenin voltage (VTH) is the open-circuit voltage measured across the load terminals after removing the load resistance (RL​).',
+    formula: 'VS × (R2 / (R1 + R2))',
+    formulaLead: 'Direct Formula like Vth =',
+    heading: 'Steps to Calculate VTH',
+    id: 'vth',
+    steps: [
+      'Remove the load resistance (RL​).',
+      'Keep all independent sources active.',
+      'Calculate the voltage across the open terminals using an appropriate circuit analysis method.',
+      'The voltage obtained across the open terminals is the Thevenin voltage (VTH​).',
+    ],
   },
   {
-    symbol: 'IL',
-    expression: 'IL = VTH/(RTH + RL)',
-    description: 'Load current through RL',
-  },
-  {
-    symbol: 'R1||R2',
-    expression: '(R1 × R2)/(R1 + R2)',
-    description: 'Parallel resistance of R1 and R2',
+    description: 'Load Current (IL​) is the current flowing through the load resistor when it is connected to the Thevenin equivalent circuit.',
+    formula: 'VTH / (RTH + RL)',
+    formulaLead: 'IL =',
+    id: 'il',
+    steps: [],
   },
 ]
 const ReportControls = ({
@@ -39,40 +53,44 @@ const ReportControls = ({
   <div className="report-controls">
 
     {formulasOpen && (
-      <aside className="floating-formula-panel">
+      <aside
+        aria-labelledby="formula-panel-title"
+        className="floating-formula-panel"
+      >
 
         <div className="floating-formula-panel__header">
-          <h3>Experiment Equations</h3>
+          <h3 id="formula-panel-title">Equations</h3>
         </div>
 
-        <dl className="floating-formula-panel__list">
-
-          {formulas.map((formula) => (
-            <div
-              key={formula.symbol}
-              className="floating-formula-panel__item"
+        <div className="floating-formula-panel__content">
+          {formulaSections.map((section) => (
+            <section
+              className="floating-formula-panel__section"
+              key={section.id}
             >
-              <dt>{formula.symbol}</dt>
+              <p className="floating-formula-panel__description">
+                <ElectricalText text={section.description} />
+              </p>
 
-              <dd>
-                <span className="floating-formula-panel__equation">
-                  {formula.expression}
-                </span>
+              {section.heading ? (
+                <h4><ElectricalText text={section.heading} /></h4>
+              ) : null}
 
-                <span className="floating-formula-panel__description">
-                  {formula.description}
-                </span>
-              </dd>
-            </div>
+              {section.steps.length > 0 ? (
+                <ol className="floating-formula-panel__steps">
+                  {section.steps.map((step) => (
+                    <li key={step}><ElectricalText text={step} /></li>
+                  ))}
+                </ol>
+              ) : null}
+
+              <p className="floating-formula-panel__formula">
+                <strong><ElectricalText text={section.formulaLead} /></strong>{' '}
+                <span><ElectricalText text={section.formula} /></span>
+              </p>
+            </section>
           ))}
-
-        </dl>
-
-        <p className="floating-formula-panel__note">
-          Thevenin Verification:
-          <br />
-          IL = VTH / (RTH + RL)
-        </p>
+        </div>
 
       </aside>
     )}
@@ -98,7 +116,7 @@ const ReportControls = ({
       onClick={() => setFormulasOpen((current) => !current)}
     >
       <FormulaIcon />
-      <span>Formulas</span>
+      <span>Equations</span>
     </button>
 
   </div>
