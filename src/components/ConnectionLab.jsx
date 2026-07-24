@@ -7,6 +7,7 @@ import { EXPERIMENT_ALERTS } from '../alerts/experimentStepAlerts.js'
 import {
   addAllEndpoints,
   deleteConnectionsForTerminal,
+  hasConnectionBetween,
   lockJsPlumbCircuit,
   resolveJsPlumb,
  validateTheveninConnections,
@@ -50,6 +51,7 @@ const ConnectionLab = ({
   voltage,
   resistancesConfigured,
   autoConnectRequest,
+  aiGuidePlaying,
   showRth,
   showMultimeter,
   playStepById,
@@ -69,6 +71,7 @@ setShowRth,
   const [isLocked, setIsLocked] = useState(false)
   const experimentCaseRef = useRef(experimentCase)
   const autoConnectingRef = useRef(false)
+  const aiGuidePlayingRef = useRef(aiGuidePlaying)
   const [connectedTerminalIds, setConnectedTerminalIds] = useState([])
 
   useEffect(() => {
@@ -77,6 +80,9 @@ setShowRth,
 useEffect(() => {
   experimentCaseRef.current = experimentCase
 }, [experimentCase])
+useEffect(() => {
+  aiGuidePlayingRef.current = aiGuidePlaying
+}, [aiGuidePlaying])
   useEffect(() => {
     let cancelled = false
     
@@ -202,7 +208,10 @@ instance.bind('connection', (info) => {
       wrongConnectionPlaying = true
 
       playStepById?.(9)
-      showStepAlert(EXPERIMENT_ALERTS.wrongConnection)
+      showStepAlert(
+        EXPERIMENT_ALERTS.connectionsWrong,
+        aiGuidePlayingRef.current ? { audio: '#' } : {},
+      )
       setTimeout(() => {
         wrongConnectionPlaying = false
       }, 1800)
@@ -215,44 +224,43 @@ instance.bind('connection', (info) => {
   // CASE 2
   //
   if (experimentCaseRef.current === 2) {
-    if (isPair('7-endpoint', '9-endpoint')) {
-      playStepById?.(18)
+    const result = validateTheveninConnections(
+      instanceRef.current,
+      2,
+    )
+
+    if (result.isCorrect) {
+      playStepById?.(21)
       return
     }
 
-    if (isPair('8-endpoint', '10-endpoint')) {
-      playStepById?.(19)
+    const isRequiredCase2Pair =
+      isPair('7-endpoint', '9-endpoint')
+      || isPair('8-endpoint', '10-endpoint')
+      || isPair('1-endpoint', '11-endpoint')
+      || isPair('2-endpoint', '13-endpoint')
+
+    if (isRequiredCase2Pair) {
+      if (!hasConnectionBetween(instanceRef.current, '7-endpoint', '9-endpoint')) {
+        playStepById?.(17)
+      } else if (!hasConnectionBetween(instanceRef.current, '8-endpoint', '10-endpoint')) {
+        playStepById?.(18)
+      } else if (!hasConnectionBetween(instanceRef.current, '1-endpoint', '11-endpoint')) {
+        playStepById?.(19)
+      } else if (!hasConnectionBetween(instanceRef.current, '2-endpoint', '13-endpoint')) {
+        playStepById?.(20)
+      }
       return
     }
-
-    if (isPair('1-endpoint', '11-endpoint')) {
-      playStepById?.(20)
-      return
-    }
-
-   if (isPair('2-endpoint', '13-endpoint')) {
-
-  const result = validateTheveninConnections(
-    instanceRef.current,
-    2,
-  )
-
-  if (result.totalConnections !== 4) {
-    return
-  }
-
-  if (result.isCorrect) {
-    playStepById?.(21)
-  }
-
-  return
-}
 
     if (!wrongConnectionPlaying) {
       wrongConnectionPlaying = true
 
       playStepById?.(9)
-      showStepAlert(EXPERIMENT_ALERTS.wrongConnection)
+      showStepAlert(
+        EXPERIMENT_ALERTS.connectionsWrong,
+        aiGuidePlayingRef.current ? { audio: '#' } : {},
+      )
 console.log("CURRENT CASE =", experimentCase)
       setTimeout(() => {
         wrongConnectionPlaying = false
@@ -267,45 +275,44 @@ console.log("CURRENT CASE =", experimentCase)
 // CASE 3
 //
 if (experimentCaseRef.current === 3) {
+    const result = validateTheveninConnections(
+      instanceRef.current,
+      3,
+    )
 
-    if (isPair('3-endpoint', '11-endpoint')) {
+    if (result.isCorrect) {
+      playStepById?.(29)
+      return
+    }
+
+    const isRequiredCase3Pair =
+      isPair('3-endpoint', '11-endpoint')
+      || isPair('4-endpoint', '12-endpoint')
+      || isPair('13-endpoint', '14-endpoint')
+
+    if (isRequiredCase3Pair) {
+      if (!hasConnectionBetween(instanceRef.current, '3-endpoint', '11-endpoint')) {
+        playStepById?.(26)
+      } else if (!hasConnectionBetween(instanceRef.current, '4-endpoint', '12-endpoint')) {
         playStepById?.(27)
-        return
-    }
-
-    if (isPair('4-endpoint', '12-endpoint')) {
+      } else if (!hasConnectionBetween(instanceRef.current, '13-endpoint', '14-endpoint')) {
         playStepById?.(28)
-        return
+      }
+      return
     }
-
-    if (isPair('13-endpoint', '14-endpoint')) {
-
-  const result = validateTheveninConnections(
-    instanceRef.current,
-    3,
-  )
-
-  if (result.totalConnections !== 5) {
-    return
-  }
-
-  if (result.isCorrect) {
-    playStepById?.(29)
-  }
-
-  return
-}
 
     if (!wrongConnectionPlaying) {
         wrongConnectionPlaying = true
 
         playStepById?.(9)
-        showStepAlert(EXPERIMENT_ALERTS.wrongConnection)
-        showStepAlert(EXPERIMENT_ALERTS.connectionErrorFound, {
-  title: 'Wrong Connection',
-  description:
-    'This wire connection is incorrect. Please follow the circuit diagram and try again.',
-})
+        showStepAlert(
+          EXPERIMENT_ALERTS.connectionsWrong,
+          {
+            ...(aiGuidePlayingRef.current ? { audio: '#' } : {}),
+            description:
+              'Connections are wrong. Please follow the circuit diagram and try again.',
+          },
+        )
         setTimeout(() => {
             wrongConnectionPlaying = false
         }, 1800)
@@ -520,17 +527,11 @@ if (!result?.success) {
 }
 
   instanceRef.current.repaintEverything?.()
-  if (experimentCase === 1) {
   playStepById?.(11)
-}
-
-if (experimentCase === 2) {
-  playStepById?.(11)
-}
-
-if (experimentCase === 3) {
-  playStepById?.(11)
-}
+  showStepAlert(
+    EXPERIMENT_ALERTS.autoConnectCompleted,
+    aiGuidePlayingRef.current ? { audio: '#' } : {},
+  )
   setTimeout(() => {
   autoConnectingRef.current = false
 }, 500)

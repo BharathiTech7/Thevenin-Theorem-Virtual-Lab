@@ -44,10 +44,6 @@ const ALERT_AUDIO = {
     'After reading is added for the second case.wav'
   ),
 
-  case3Verified: getAlertAudio(
-    'Power supply turned ON for the 3rd case.wav'
-  ),
-
   addFinalReading: getAlertAudio(
     'After reading is added for the third case.wav'
   ),
@@ -90,6 +86,16 @@ export const EXPERIMENT_ALERTS = {
     target: '#circuit-panel',
     title: 'Connection Mode Activated',
     type: 'info',
+  },
+  autoConnectCompleted: {
+    audio: ALERT_AUDIO.autoConnect,
+    description:
+      'Auto Connect completed successfully. Click CHECK button to verify the circuit connections.',
+    icon: '✅',
+    stepNumber: 1,
+    target: '#check-button',
+    title: 'Auto Connect Completed',
+    type: 'success',
   },
   circuitConnectionsCompleted: {
     description: 'The default wiring path has been placed on the apparatus.',
@@ -138,21 +144,31 @@ connectionsVerifiedCase2: {
 },
 
 connectionsVerifiedCase3: {
-  audio: ALERT_AUDIO.case3Verified,
+  audio: ALERT_AUDIO.case2Verified,
   description:
-    'Connections verified successfully. Switch ON the power supply at the same voltage setting used in Case 2, then click ADD to record the ammeter reading.',
+    'Connections verified successfully. Turn ON the power supply at the same voltage setting used in Case 2.',
   icon: '✅',
   stepNumber: 2,
   target: '#power-toggle-button',
   title: 'Connections Verified',
   type: 'success',
 },
-  connectionErrorFound: {
+  connectionsWrong: {
     audio: ALERT_AUDIO.wrongCon,
+    description: 'Connections are wrong. Please check the wiring and try again.',
     icon: '⚠️',
     stepNumber: 2,
     target: '#circuit-panel',
-    title: 'Connection Error Found - Please Recheck Wiring',
+    title: 'Connections are wrong',
+    type: 'error',
+  },
+  someConnectionsWrong: {
+    audio: ALERT_AUDIO.wrongCon,
+    description: 'Some connections are wrong. Please check the wiring and try again.',
+    icon: '⚠️',
+    stepNumber: 2,
+    target: '#circuit-panel',
+    title: 'Some connections are wrong',
     type: 'error',
   },
   adjustResistance: {
@@ -343,9 +359,9 @@ wrongConnection: {
   type: 'error',
 },
 reportGenerated: {
-  title: 'Report Generated',
+  title: 'Report Ready',
   description:
-    'Your report has been generated successfully and opened in a new tab.',
+    'Your report is ready. Click OK to generate and open it in a new tab.',
   icon: '✅',
   type: 'success',
 },

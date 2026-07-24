@@ -6,12 +6,13 @@ import LabAlertSpotlight from './LabAlertSpotlight.jsx'
 import './labAlerts.css'
 
 const DEFAULT_DURATIONS = {
-  error: 6500,
-  info: 4200,
-  success: 3800,
-  warning: 5600,
+  error: 9000,
+  info: 7000,
+  success: 7000,
+  warning: 9000,
 }
 
+const MIN_READABLE_DURATION = 7000
 const DEFAULT_ICONS = {
   error: '❌',
   info: '🎛️',
@@ -86,11 +87,26 @@ const alertReducer = (state, action) => {
         centerAlert: state.centerAlert?.id === action.id ? null : state.centerAlert,
         topRightAlerts: state.topRightAlerts.filter((alert) => alert.id !== action.id),
       })
-    case 'enqueue':
+    case 'enqueue': {
+      const replacesCurrentCenterAlert =
+        action.alert.placement === 'center'
+        && state.centerAlert
+        && !state.centerAlert.critical
+        && !state.centerAlert.requiresConfirmation
+
+      if (replacesCurrentCenterAlert) {
+        return {
+          ...state,
+          centerAlert: action.alert,
+          queue: state.queue.filter((alert) => alert.placement !== 'center'),
+        }
+      }
+
       return pumpAlertQueue({
         ...state,
         queue: [...state.queue, action.alert],
       })
+    }
     default:
       return state
   }
@@ -123,11 +139,11 @@ useEffect(() => {
     const audioSource = event.detail?.audio
     const alertId = event.detail?.id
 
+    stopAlertAudio('replaced')
+
     if (!isConfiguredAudioSource(audioSource)) return
 
     dispatchExclusiveAudioStart(ALERT_AUDIO_SOURCE_ID)
-
-    stopAlertAudio()
 
     const audio = new Audio(audioSource)
 
@@ -225,7 +241,9 @@ useEffect(() => {
     return {
       ...alert,
       critical,
-      duration: requiresConfirmation ? null : alert.duration ?? DEFAULT_DURATIONS[type],
+      duration: requiresConfirmation
+        ? null
+        : Math.max(alert.duration ?? DEFAULT_DURATIONS[type], MIN_READABLE_DURATION),
       icon: alert.icon ?? DEFAULT_ICONS[type],
       id,
       placement,
@@ -291,11 +309,12 @@ useEffect(() => {
   const clearAlerts = useCallback(() => {
     const currentState = alertStateRef.current
 
+    stopAlertAudio('cleared')
     currentState.queue.forEach(releaseDedupeKey)
     currentState.topRightAlerts.forEach(releaseDedupeKey)
     releaseDedupeKey(currentState.centerAlert)
     dispatchAlert({ type: 'clear' })
-  }, [releaseDedupeKey])
+  }, [releaseDedupeKey, stopAlertAudio])
 
   const { centerAlert, topRightAlerts } = alertState
 

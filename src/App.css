@@ -789,10 +789,33 @@
   --ammeter-needle-width: 90px;
   --ammeter-needle-height: 90px;
   --ammeter-needle-origin-x: 40%;
-  --ammeter-needle-origin-y: 50%;
+  --ammeter-needle-origin-y: 55%;
   filter: none;
   transform: none;
 }
+
+/*
+ * Manual needle positioning
+ * Change these values independently to align each needle with its meter dial.
+ */
+.ammeter--voltmeter {
+  --ammeter-needle-top: 114px;
+  --ammeter-needle-left: 70px;
+  --ammeter-needle-width: 90px;
+  --ammeter-needle-height: 90px;
+  --ammeter-needle-origin-x: 40%;
+  --ammeter-needle-origin-y: 55%;
+}
+
+.ammeter--A1 {
+  --ammeter-needle-top: 112px;
+  --ammeter-needle-left: 70px;
+  --ammeter-needle-width: 90px;
+  --ammeter-needle-height: 90px;
+  --ammeter-needle-origin-x: 40%;
+  --ammeter-needle-origin-y: 55%;
+}
+
 .ammeter__image {
   position: absolute;
   top: 0;

@@ -293,58 +293,48 @@ export const validateTheveninConnections = (
 
   const totalConnections = getAllConnections(instance).length
 
-  const checkPair = (a, b) =>
-    hasConnectionBetween(instance, a, b)
+  const validatePairs = (requiredPairs) => {
+    const matchedCount = requiredPairs.filter(([firstId, secondId]) => (
+      hasConnectionBetween(instance, firstId, secondId)
+    )).length
+
+    return {
+      isCorrect:
+        matchedCount === requiredPairs.length
+        && totalConnections === requiredPairs.length,
+      matchedCount,
+      totalConnections,
+    }
+  }
 
   // CASE 1
   if (experimentCase === 1) {
-
-    const isCorrect =
-      checkPair('9-endpoint', '10-endpoint') &&
-      checkPair('5-endpoint', '11-endpoint') &&
-      checkPair('6-endpoint', '13-endpoint') &&
-      totalConnections === 3
-
-    return {
-      isCorrect,
-      matchedCount: isCorrect ? 3 : 0,
-      totalConnections,
-    }
+    return validatePairs([
+      ['9-endpoint', '10-endpoint'],
+      ['5-endpoint', '11-endpoint'],
+      ['6-endpoint', '13-endpoint'],
+    ])
   }
 
   // CASE 2
   if (experimentCase === 2) {
-
-    const isCorrect =
-      checkPair('7-endpoint', '9-endpoint') &&
-      checkPair('8-endpoint', '10-endpoint') &&
-      checkPair('1-endpoint', '11-endpoint') &&
-      checkPair('2-endpoint', '13-endpoint') &&
-      totalConnections === 4
-
-    return {
-      isCorrect,
-      matchedCount: isCorrect ? 4 : 0,
-      totalConnections,
-    }
+    return validatePairs([
+      ['7-endpoint', '9-endpoint'],
+      ['8-endpoint', '10-endpoint'],
+      ['1-endpoint', '11-endpoint'],
+      ['2-endpoint', '13-endpoint'],
+    ])
   }
 
   // CASE 3
   if (experimentCase === 3) {
-
-    const isCorrect =
-      checkPair('7-endpoint', '9-endpoint') &&
-      checkPair('8-endpoint', '10-endpoint') &&
-      checkPair('3-endpoint', '11-endpoint') &&
-      checkPair('4-endpoint', '12-endpoint') &&
-      checkPair('13-endpoint', '14-endpoint') &&
-      totalConnections === 5
-
-    return {
-      isCorrect,
-      matchedCount: isCorrect ? 5 : 0,
-      totalConnections,
-    }
+    return validatePairs([
+      ['7-endpoint', '9-endpoint'],
+      ['8-endpoint', '10-endpoint'],
+      ['3-endpoint', '11-endpoint'],
+      ['4-endpoint', '12-endpoint'],
+      ['13-endpoint', '14-endpoint'],
+    ])
   }
 
   return {

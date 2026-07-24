@@ -45,7 +45,7 @@ const getScale = () => {
 
 
 const App = () => {
-  const { clearAlerts, showStepAlert } = useLabAlerts()
+  const { clearAlerts, confirmAlert, showStepAlert } = useLabAlerts()
   const [scale, setScale] = useState(getScale)
   const [contentHeight, setContentHeight] = useState(DEFAULT_CONTENT_HEIGHT)
   const postSimulationContentRef = useRef(null)
@@ -164,7 +164,7 @@ const handleAiGuideFinish = useCallback(() => {
 }, [])
 
   const handleAiGuideError = useCallback(() => {
-    setStatus('AI Guide narration could not start. Add audio files or use a browser with speech synthesis.')
+    setStatus('AI Guide could not play its configured audio file.')
   }, [])
 
 const {
@@ -250,7 +250,7 @@ useEffect(() => {
   const recordObservation = () => {
     if (!connectionsVerified) {
       setStatus('Check the circuit connections before adding readings.')
-      showStepAlert(EXPERIMENT_ALERTS.connectionErrorFound, {
+      showStepAlert(EXPERIMENT_ALERTS.connectionsWrong, {
         description: 'Verify the wiring before storing current readings.',
         stepNumber: 6,
         target: '#check-button',
@@ -313,7 +313,10 @@ useEffect(() => {
   setMeasuredRth(readings.rth)
 
   playStepById(15)
-  showStepAlert(EXPERIMENT_ALERTS.readingAddedCase1)
+  showStepAlert(
+    EXPERIMENT_ALERTS.readingAddedCase1,
+    aiGuidePlaying ? { audio: '#' } : {},
+  )
   setConnectionsVerified(false)
   voltageGuidePlayedRef.current = false
   setExperimentCase(2)
@@ -331,7 +334,10 @@ else if (experimentCase === 2) {
 
    setMeasuredVth(readings.vth)
    playStepById(24)
-   showStepAlert(EXPERIMENT_ALERTS.readingAddedCase2)
+   showStepAlert(
+     EXPERIMENT_ALERTS.readingAddedCase2,
+     aiGuidePlaying ? { audio: '#' } : {},
+   )
    setPowerOn(false)
    setVoltageLocked(true)
 setConnectionsVerified(false)
@@ -350,7 +356,10 @@ else if (experimentCase === 3) {
 
   setMeasuredIl(readings.il)
   playStepById(31)
-  showStepAlert(EXPERIMENT_ALERTS.readingAdded)
+  showStepAlert(
+    EXPERIMENT_ALERTS.readingAdded,
+    aiGuidePlaying ? { audio: '#' } : {},
+  )
   setConnectionsVerified(false)
   setExperimentCase(4)
   
@@ -410,7 +419,7 @@ voltageGuidePlayedRef.current = false
 const handlePrint = () => {
   window.print()
 }
-const handleGenerateReport = () => {
+const handleGenerateReport = async () => {
   if (!calculationDone) {
     window.alert('Please click CALCULATE before generating report.')
     return
@@ -418,6 +427,20 @@ const handleGenerateReport = () => {
 
   if (readingCount < MIN_OBSERVATION_READINGS) {
     window.alert('Please add at least one observation.')
+    return
+  }
+
+  clearAlerts()
+  setStatus('Report is ready. Click OK to open it in a new tab.')
+  playStepById?.(37)
+
+  const shouldOpenReport = await confirmAlert({
+    ...EXPERIMENT_ALERTS.reportGenerated,
+    confirmLabel: 'OK',
+  })
+
+  if (!shouldOpenReport) {
+    setStatus('Report opening cancelled.')
     return
   }
 
@@ -440,8 +463,6 @@ const handleGenerateReport = () => {
 
   setReportGenerated(true)
   setStatus('Report generated and opened in a new tab.')
-  playStepById?.(37)
-  showStepAlert(EXPERIMENT_ALERTS.reportGenerated)
 }
 
   const scaledWidth = Math.ceil(BASE_WIDTH * scale)
@@ -449,6 +470,7 @@ const handleGenerateReport = () => {
   const handleCheckConnections = useCallback((result) => {
 
   if (result.isCorrect) {
+    clearAlerts()
 
     if (experimentCase === 1) {
       setShowRth(true)
@@ -475,13 +497,24 @@ const handleGenerateReport = () => {
     }
 
     if (experimentCase === 1) {
-  showStepAlert(EXPERIMENT_ALERTS.connectionsVerified)
+  showStepAlert(
+    EXPERIMENT_ALERTS.connectionsVerified,
+    aiGuidePlaying ? { audio: '#' } : {},
+  )
 }
 else if (experimentCase === 2) {
-  showStepAlert(EXPERIMENT_ALERTS.connectionsVerifiedCase2)
+  playStepById(22)
+  showStepAlert(
+    EXPERIMENT_ALERTS.connectionsVerifiedCase2,
+    aiGuidePlaying ? { audio: '#' } : {},
+  )
 }
 else if (experimentCase === 3) {
-  showStepAlert(EXPERIMENT_ALERTS.connectionsVerifiedCase3)
+  playStepById(38)
+  showStepAlert(
+    EXPERIMENT_ALERTS.connectionsVerifiedCase3,
+    aiGuidePlaying ? { audio: '#' } : {},
+  )
 }
 
     return
@@ -495,7 +528,7 @@ else if (experimentCase === 3) {
 
     setStatus('Please make the connections first.')
 
-    showStepAlert(EXPERIMENT_ALERTS.connectionErrorFound, {
+    showStepAlert(EXPERIMENT_ALERTS.connectionsWrong, {
       description:
         'No circuit wires were found. Drag node connections before checking.',
       type: 'warning',
@@ -504,7 +537,7 @@ else if (experimentCase === 3) {
     return
   }
 
-  if (result.matchedCount <= 1) {
+  if (result.matchedCount === 0) {
     playStepById(9)
   } else {
     playStepById(10)
@@ -514,11 +547,14 @@ else if (experimentCase === 3) {
     'Invalid connections. Please check the wiring and try again.'
   )
 
-  showStepAlert(EXPERIMENT_ALERTS.connectionErrorFound, {
-    description: 'Some Connections are wrong.',
-  })
+  showStepAlert(
+    result.matchedCount === 0
+      ? EXPERIMENT_ALERTS.connectionsWrong
+      : EXPERIMENT_ALERTS.someConnectionsWrong,
+    aiGuidePlaying ? { audio: '#' } : {},
+  )
 
-}, [experimentCase, playStepById, showStepAlert])
+}, [aiGuidePlaying, clearAlerts, experimentCase, playStepById, showStepAlert])
 
   const handleCheck = () => {
     setCheckRequest((current) => current + 1)
@@ -555,7 +591,17 @@ if (powerOn) {
       : 'Power supply switched on. Adjust voltage and add the reading.'
   )
   clearAlerts()
-  showStepAlert(EXPERIMENT_ALERTS.powerOn)
+  showStepAlert(
+    EXPERIMENT_ALERTS.powerOn,
+    experimentCase === 3
+      ? {
+          audio: aiGuidePlaying ? '#' : EXPERIMENT_ALERTS.powerOn.audio,
+          description:
+            'Power supply switched ON at the Case 2 voltage setting. Click ADD to record IL.',
+          target: '#add-reading-button',
+        }
+      : {},
+  )
   if (experimentCase === 3) {
     playStepById(30)
   }
@@ -577,21 +623,20 @@ const handleVoltageChange = useCallback((nextVoltage) => {
   ) {
     voltageGuidePlayedRef.current = true
     playStepById(23)
-  }
-
-  if (
-    powerOn &&
-    experimentCase === 3 &&
-    !voltageGuidePlayedRef.current
-  ) {
-    voltageGuidePlayedRef.current = true
-    playStepById(30)
+    clearAlerts()
+    showStepAlert(
+      EXPERIMENT_ALERTS.adjustVoltage,
+      aiGuidePlaying ? { audio: '#' } : {},
+    )
   }
 
 }, [
+  aiGuidePlaying,
+  clearAlerts,
   powerOn,
   experimentCase,
   playStepById,
+  showStepAlert,
   voltageLocked,
 ])
 
@@ -724,6 +769,7 @@ console.log("HIGHLIGHT IDS =", highlightedTerminalIds)
                 experimentCase={experimentCase}
                   key={`connection-lab-${resetRequest}`}
                   autoConnectRequest={autoConnectRequest}
+                  aiGuidePlaying={aiGuidePlaying}
                   checkRequest={checkRequest}
                   onCheckConnections={handleCheckConnections}
                   powerOn={powerOn}
