@@ -145,7 +145,7 @@
     },
     {
       "id": 29,
-      "text": "Case 3 connections are complete. Click on the Check button to verify the connections, then switch the power supply back on at the same voltage setting used in Case 2.",
+      "text": "Case 3 connections are complete. Click on the Check button to verify the connections.",
       "audio": "/audios/Now check again for the 3rd case.wav"   
   
     },
@@ -189,6 +189,11 @@
       "id": 37,
       "text": "Your report has been generated successfully. Click OK to view your report.",
       "audio": "/audios/Generate Report button click.wav"
+    },
+    {
+      "id": 38,
+      "text": "Connections verified successfully. Turn ON the power supply at the same voltage setting used in Case 2.",
+      "audio": "/audios/After 2nd case connections, check.wav"
     }
   ]
 }

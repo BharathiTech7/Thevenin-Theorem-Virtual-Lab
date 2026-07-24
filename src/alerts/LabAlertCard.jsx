@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import ElectricalText from '../components/ElectricalText.jsx'
 
 const EXIT_DURATION = 180
-const AUDIO_COMPLETE_HOLD_DURATION = 10000
 
 const isConfiguredAudioSource = (audioSource) => (
   typeof audioSource === 'string' &&
@@ -54,10 +53,7 @@ const hasProgressTimer =
   Number.isFinite(duration) &&
   duration > 0
 
-const timerDuration =
-  waitsForAudio
-    ? AUDIO_COMPLETE_HOLD_DURATION
-    : duration
+const timerDuration = duration
 
 const showProgressTimer =
   hasProgressTimer &&
@@ -108,8 +104,10 @@ useEffect(() => {
   useEffect(() => {
   if (!waitsForAudio) return
 
-const handleEnded = () => {
-  setAudioPlaybackComplete(true)
+const handleEnded = (event) => {
+  if (event.detail?.id === id) {
+    setAudioPlaybackComplete(true)
+  }
 }
 
   window.addEventListener(
