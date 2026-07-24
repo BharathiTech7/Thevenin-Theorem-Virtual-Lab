@@ -776,7 +776,7 @@ tr:nth-child(even) {
 
           <div class="summary-sub-section">
             <h3>Simulation Summary</h3>
-            <p>Thevenin's Theorem states that any two-terminal linear network can be represented by an equivalent circuit consisting of a single voltage source (V<sub>TH</sub>) in series with an equivalent resistance (R<sub>TH</sub>). This simplifies complex circuit analysis and allows easy determination of load current through R<sub>L</sub>.</p>
+            <p> The guided walkthrough familiarised the user with the simulation interface. The resistance values were selected, and the Thevenin resistance (R<sub>th</sub>) was measured using the digital multimeter. The Thevenin voltage (V<sub>th</sub>) was then measured using the voltmeter, followed by measurement of the load current (I<sub>L</sub>) using the ammeter. All measured readings were recorded in the observation table. Thereafter, the theoretical value of the load current was calculated using Thevenin's Theorem and compared with the measured value to verify the theorem.</p>
           </div>
 
           <div class="summary-sub-section" style="margin-bottom: 0;">
@@ -873,11 +873,7 @@ tr:nth-child(even) {
           <div class="results-card">
             <h3>Conclusion</h3>
             <p class="conclusion-text">
-              Thevenin&rsquo;s Theorem has been verified successfully. The load current I<sub>L</sub>
-              computed from the Thevenin equivalent circuit matches the observed value, confirming
-              that any linear two-terminal network can be replaced by a single voltage source
-              V<sub>TH</sub> in series with a resistance R<sub>TH</sub>.
-            </p>
+             Thevenin’s Theorem has been verified successfully. The measured load current matches the theoretical value for the given resistive DC circuit.            </p>
           </div>
 
         </div>
