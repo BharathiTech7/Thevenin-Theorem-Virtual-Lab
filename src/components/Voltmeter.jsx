@@ -1,13 +1,14 @@
 import voltmeterImg from '../assets/Voltmeter.png'
 import needleImg from '../assets/needle.png'
-const METER_MAX_VOLTAGE = 30
-const DIAL_START_ANGLE = -99
-const DIAL_SWEEP_ANGLE = 180
 import {
   getTerminalConnectedClass,
   getTerminalHighlightClass,
   getTerminalNumberHighlightClass,
 } from '../utils/terminalHighlight.js'
+import { getMeterNeedleAngle } from '../utils/meterScale.js'
+
+// Match the 0-50 V scale printed on the voltmeter artwork.
+const METER_MAX_VOLTAGE = 50
 
 const Voltmeter = ({
   connectedTerminalIds = [],
@@ -15,20 +16,20 @@ const Voltmeter = ({
   value = 0,
   powerOn,
 }) => {
-  const voltage = Number.isFinite(value) ? value : 0
- const displayVoltage = powerOn && voltage > 0 ? voltage : 0
- const ratio = Math.min(
-  Math.max(displayVoltage / METER_MAX_VOLTAGE, 0),
-  1,
-)
-
-  const angle = DIAL_START_ANGLE + ratio * DIAL_SWEEP_ANGLE
+  const numericValue = Number(value)
+  const voltage = Number.isFinite(numericValue) ? numericValue : 0
+  const displayVoltage = powerOn && voltage > 0 ? voltage : 0
+  const angle = getMeterNeedleAngle({
+    maxValue: METER_MAX_VOLTAGE,
+    value: displayVoltage,
+  })
 
   return (
     <article
       className="ammeter ammeter--voltmeter"
       id="voltmeter"
-      aria-label="Voltmeter"
+      aria-label={`Voltmeter reading ${displayVoltage.toFixed(2)} volts`}
+      title={`${displayVoltage.toFixed(2)} V`}
     >
       <img
         src={voltmeterImg}

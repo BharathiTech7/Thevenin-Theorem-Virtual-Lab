@@ -416,31 +416,27 @@ const handleGenerateReport = () => {
     return
   }
 
-  // Start audio immediately
-  playStepById?.(37)
-
-  // Show alert
-  showStepAlert({
-    ...EXPERIMENT_ALERTS.reportGenerated,
-
-    onConfirm: () => {
-      setReportGenerated(true)
-
-      generateTheveninReport({
-        observations,
-        r1,
-        r2,
-        r3,
-        rl,
-        vth: calculatedValues?.vth ?? 0,
-        rth: calculatedValues?.rth ?? 0,
-        observedIL: calculatedValues?.observedIL ?? 0,
-        userCalculatedIL,
-        verificationResult,
-        sessionStart,
-      })
-    },
+  const reportOpened = generateTheveninReport({
+    observations,
+    r1,
+    r2,
+    r3,
+    rl,
+    vth: calculatedValues?.vth ?? 0,
+    rth: calculatedValues?.rth ?? 0,
+    observedIL: calculatedValues?.observedIL ?? 0,
+    sessionStart,
   })
+
+  if (!reportOpened) {
+    setStatus('The report window was blocked. Allow popups and try again.')
+    return
+  }
+
+  setReportGenerated(true)
+  setStatus('Report generated and opened in a new tab.')
+  playStepById?.(37)
+  showStepAlert(EXPERIMENT_ALERTS.reportGenerated)
 }
 
   const scaledWidth = Math.ceil(BASE_WIDTH * scale)

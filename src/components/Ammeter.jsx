@@ -1,13 +1,15 @@
 import ammeterImg from '../assets/Ammeter.png'
 import needleImg from '../assets/needle.png'
-const METER_MAX_CURRENT = 5
-const DIAL_START_ANGLE = -99
-const DIAL_SWEEP_ANGLE = 180
 import {
   getTerminalConnectedClass,
   getTerminalHighlightClass,
   getTerminalNumberHighlightClass,
 } from '../utils/terminalHighlight.js'
+import { getMeterNeedleAngle } from '../utils/meterScale.js'
+
+// The 0-5 dial is used on its 0-0.5 A range for this experiment.
+const METER_MAX_CURRENT = 0.5
+
 const ammeterImages = {
   A1: ammeterImg,
 }
@@ -27,16 +29,21 @@ const Ammeter = ({
   powerOn,
 }) => {
   const terminals = terminalNumbers[label]
-  const current = Number.isFinite(value) ? value : 0
+  const numericValue = Number(value)
+  const current = Number.isFinite(numericValue) ? numericValue : 0
   const displayCurrent = powerOn && current > 0 ? current : 0
- const ratio = Math.min(
-  Math.max(displayCurrent / METER_MAX_CURRENT, 0),
-  1,
-)
-  const angle = DIAL_START_ANGLE + ratio * DIAL_SWEEP_ANGLE
+  const angle = getMeterNeedleAngle({
+    maxValue: METER_MAX_CURRENT,
+    value: displayCurrent,
+  })
 
   return (
-    <article className={`ammeter ammeter--${label}`} id={`ammeter-${label.toLowerCase()}`} aria-label={`${label} ammeter`}>
+    <article
+      className={`ammeter ammeter--${label}`}
+      id={`ammeter-${label.toLowerCase()}`}
+      aria-label={`${label} ammeter reading ${displayCurrent.toFixed(4)} amperes`}
+      title={`${displayCurrent.toFixed(4)} A`}
+    >
       <img
         src={ammeterImages[label]}
         alt={`${label} ammeter`}

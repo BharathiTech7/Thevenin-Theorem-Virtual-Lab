@@ -70,13 +70,13 @@ className={`terminal-number-label terminal-number-label--circuit terminal-number
         </Fragment>
       ))}
 
-     <span className="resistor-value left-[77px] top-[177px]">{r1} &Omega;</span>
+     <span className="resistor-value left-[89px] top-[170px]">{r1} &Omega;</span>
 
-<span className="resistor-value left-[252px] top-[270px]">{r2} &Omega;</span>
+<span className="resistor-value left-[282px] top-[220px]">{r2} &Omega;</span>
 
-<span className="resistor-value left-[300px] top-[177px]">{r3} &Omega;</span>
+<span className="resistor-value left-[300px] top-[164px]">{r3} &Omega;</span>
 
-<span className="resistor-value left-[487px] top-[270px]">
+<span className="resistor-value left-[390px] top-[220px]">
   {rl}&Omega;
 </span>
     </div>

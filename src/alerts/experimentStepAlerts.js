@@ -345,11 +345,9 @@ wrongConnection: {
 reportGenerated: {
   title: 'Report Generated',
   description:
-    'Your report has been generated successfully. Click OK to view your report.',
+    'Your report has been generated successfully and opened in a new tab.',
   icon: '✅',
   type: 'success',
-  requiresConfirmation: true,
-  confirmLabel: 'OK',
 },
 resistanceRequired: {
   audio: ALERT_AUDIO.resistanceRequired,

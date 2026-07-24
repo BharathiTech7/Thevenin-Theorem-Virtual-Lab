@@ -1025,7 +1025,7 @@ tr:nth-child(even) {
   if (!reportWindow) {
     URL.revokeObjectURL(reportUrl)
     window.alert('Unable to open report window.')
-    return
+    return false
   }
 
   window.setTimeout(() => {
@@ -1033,4 +1033,6 @@ tr:nth-child(even) {
   }, 60000)
 
   reportWindow.focus()
+
+  return true
 }
