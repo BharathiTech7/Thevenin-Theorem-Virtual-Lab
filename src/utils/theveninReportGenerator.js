@@ -25,9 +25,9 @@ export const generateTheveninReport = ({
   const reportDate = new Date()
   const sessionEnd = reportDate.getTime()
 
-  const reportDateText = reportDate.toLocaleDateString(undefined, {
-    day: '2-digit',
-    month: 'short',
+  const reportDateText = reportDate.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
     year: 'numeric',
   })
 
@@ -231,6 +231,11 @@ p {
 .summary-list li {
   margin-bottom: 2px;
 }
+.apparatus-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 24px;
+}
 .table-shell {
   display: block;
   width: 100%;
@@ -404,6 +409,8 @@ tr:nth-child(even) {
   font-weight: 600;
 }
 .calc-row .calc-value {
+  position: relative;
+  right: 610px;
   font-weight: 700;
   color: #16324b;
 }
@@ -728,7 +735,6 @@ tr:nth-child(even) {
         >
         <div class="report-title-block">
           <h1>Virtual Labs Simulation Report</h1>
-          <p class="report-subtitle">Basic Electrical Science Lab</p>
         </div>
         <img
           src="${escapeHtml(iitLogoSrc)}"
@@ -739,11 +745,11 @@ tr:nth-child(even) {
 
       <div class="section report-overview">
         <div class="report-overview-top">
-          <p class="badge">Basic Electrical Science Lab</p>
+          <p class="badge">AI-Enhanced Basic Electrical Science Lab</p>
           <p class="report-stamp">Generated on ${escapeHtml(reportDateText)}</p>
         </div>
         <p class="report-experiment-label">Experiment Title</p>
-        <p class="report-experiment-title">Verification of Thevenin&rsquo;s Theorem</p>
+        <p class="report-experiment-title">TO VERIFY THEVENIN'S THEOREM</p>
         <div class="info-grid">
           <div class="info-card">
             <span class="label">Start Time:</span>
@@ -761,7 +767,7 @@ tr:nth-child(even) {
       </div>
 
       <div class="section">
-        <h2>Summary</h2>
+        <h2>Experiment Summary</h2>
         <div class="summary-card">
           <div class="summary-sub-section">
             <h3>Aim</h3>
@@ -769,39 +775,27 @@ tr:nth-child(even) {
           </div>
 
           <div class="summary-sub-section">
-            <h3>Theory</h3>
-            <p>Thevenin's Theorem states that any two-terminal linear network can be represented by an equivalent circuit consisting of a single voltage source (V<sub>TH</sub>) in series with an equivalent resistance (R<sub>TH</sub>). This simplifies complex circuit analysis and allows easy determination of load current through R<sub>L</sub>.</p>
-          </div>
-
-          <div class="summary-sub-section">
-            <h3>Learning Objectives</h3>
-            <ul class="summary-list">
-              <li>Measure Thevenin Voltage (V<sub>TH</sub>)</li>
-              <li>Measure Thevenin Resistance (R<sub>TH</sub>)</li>
-              <li>Calculate Load Current (I<sub>L</sub>)</li>
-              <li>Verify Thevenin's Theorem experimentally</li>
-              <li>Compare theoretical and observed values</li>
-            </ul>
-          </div>
-
-          <div class="summary-sub-section">
-            <h3>Formulae</h3>
-            <div class="calc-block" style="padding: 6px 10px; gap: 2px; background: transparent;">
-              <div class="calc-formula">R<sub>TH</sub> = R<sub>3</sub> + ((R<sub>1</sub> &times; R<sub>2</sub>) / (R<sub>1</sub> + R<sub>2</sub>))</div>
-              <div class="calc-formula">V<sub>TH</sub> = V<sub>S</sub> &times; (R<sub>2</sub> / (R<sub>1</sub> + R<sub>2</sub>))</div>
-              <div class="calc-formula">I<sub>L</sub> = V<sub>TH</sub> / (R<sub>TH</sub> + R<sub>L</sub>)</div>
-            </div>
+            <h3>Simulation Summary</h3>
+            <p> The guided walkthrough familiarised the user with the simulation interface. The resistance values were selected, and the Thevenin resistance (R<sub>th</sub>) was measured using the digital multimeter. The Thevenin voltage (V<sub>th</sub>) was then measured using the voltmeter, followed by measurement of the load current (I<sub>L</sub>) using the ammeter. All measured readings were recorded in the observation table. Thereafter, the theoretical value of the load current was calculated using Thevenin's Theorem and compared with the measured value to verify the theorem.</p>
           </div>
 
           <div class="summary-sub-section" style="margin-bottom: 0;">
-            <h3>Components and Input Ranges</h3>
-            <ul class="summary-list">
-              <li>Power Supply: 1V &ndash; 30V</li>
-              <li>R<sub>L</sub>: 100&Omega; &ndash; 300&Omega; (Step 50&Omega;)</li>
-              <li>R<sub>1</sub>: 0.1&Omega; &ndash; 10&Omega;</li>
-              <li>R<sub>2</sub>: 0.1&Omega; &ndash; 10&Omega;</li>
-              <li>R<sub>3</sub>: 0.1&Omega; &ndash; 10&Omega;</li>
-            </ul>
+            <h3>Apparatus Used</h3>
+            <div class="apparatus-grid">
+              <ul class="summary-list">
+                <li>Power Supply: 30V DC</li>
+                <li>AC/DC Voltmeter: 0 - 50 V</li>
+                <li>AC/DC Ammeter: 0 - 5 A</li>
+                <li>Digital Multimeter: 30V DC</li>
+                <li>R<sub>L</sub>: 100&Omega; &ndash; 300&Omega;</li>
+              </ul>
+              <ul class="summary-list">
+                <li>R<sub>1</sub>: 0.1&Omega; &ndash; 10&Omega;</li>
+                <li>R<sub>2</sub>: 0.1&Omega; &ndash; 10&Omega;</li>
+                <li>R<sub>3</sub>: 0.1&Omega; &ndash; 10&Omega;</li>
+                <li>Connecting Leads</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -868,26 +862,10 @@ tr:nth-child(even) {
           </div>
 
           <div class="results-card">
-            <h3>Calculations</h3>
-            <div class="calc-block">
-              <div class="calc-row">
-                <span class="calc-label">V<sub>TH</sub></span>
-                <span class="calc-value">${vth.toFixed(3)} V</span>
-              </div>
-              <div class="calc-row">
-                <span class="calc-label">R<sub>TH</sub></span>
-                <span class="calc-value">${rth.toFixed(3)} &Omega;</span>
-              </div>
-              <div class="calc-row">
-                <span class="calc-label">R<sub>L</sub></span>
-                <span class="calc-value">${rl} &Omega;</span>
-              </div>
-              <div class="calc-formula">
-                I<sub>L</sub> = V<sub>TH</sub> / (R<sub>TH</sub> + R<sub>L</sub>)
-              </div>
-              <div class="calc-row">
-                <span class="calc-label">Observed I<sub>L</sub></span>
-                <span class="calc-value">${observedIL.toFixed(6)} A</span>
+            <h3>Theoretical Verification</h3>
+                         <div class="calc-row">
+                <span class="calc-label">Calculated Load Current (I<sub>L</sub>):</span>
+                <span class="calc-value">${observedIL.toFixed(4)} A</span>
               </div>
             </div>
           </div>
@@ -895,11 +873,7 @@ tr:nth-child(even) {
           <div class="results-card">
             <h3>Conclusion</h3>
             <p class="conclusion-text">
-              Thevenin&rsquo;s Theorem has been verified successfully. The load current I<sub>L</sub>
-              computed from the Thevenin equivalent circuit matches the observed value, confirming
-              that any linear two-terminal network can be replaced by a single voltage source
-              V<sub>TH</sub> in series with a resistance R<sub>TH</sub>.
-            </p>
+             Thevenin’s Theorem has been verified successfully. The measured load current matches the theoretical value for the given resistive DC circuit.            </p>
           </div>
 
         </div>
@@ -1025,7 +999,7 @@ tr:nth-child(even) {
   if (!reportWindow) {
     URL.revokeObjectURL(reportUrl)
     window.alert('Unable to open report window.')
-    return
+    return false
   }
 
   window.setTimeout(() => {
@@ -1033,4 +1007,6 @@ tr:nth-child(even) {
   }, 60000)
 
   reportWindow.focus()
+
+  return true
 }

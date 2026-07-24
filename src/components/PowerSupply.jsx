@@ -13,7 +13,6 @@ const PowerSupply = ({
   setVoltage,
   voltage,
   voltageLocked,
-   powerDisabled,
 }) => {
  const displayedVoltage = powerOn ? `${voltage} V` : ''
 
@@ -69,10 +68,7 @@ className={`terminal-number-label terminal-number-label--power-minus terminal-nu
   id="power-toggle-button"
   aria-label={powerOn ? 'Switch power supply off' : 'Switch power supply on'}
   aria-pressed={powerOn}
-  className={`power-supply__button ${
-    powerDisabled ? 'power-supply__button--disabled' : ''
-  }`}
-  disabled={powerDisabled}
+  className="power-supply__button"
   onClick={onTogglePower}
   type="button"
 />

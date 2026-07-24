@@ -332,6 +332,7 @@ else if (experimentCase === 2) {
    setMeasuredVth(readings.vth)
    playStepById(24)
    showStepAlert(EXPERIMENT_ALERTS.readingAddedCase2)
+   setPowerOn(false)
    setVoltageLocked(true)
 setConnectionsVerified(false)
 voltageGuidePlayedRef.current = false
@@ -357,7 +358,11 @@ else if (experimentCase === 3) {
   
     setReportGenerated(false)
     setReportPrinted(false)
-    setStatus('Reading added to the observation table.')
+    setStatus(
+      experimentCase === 2
+        ? 'Case 2 reading added. The power supply switched off automatically; its voltage setting and connections are retained for Case 3.'
+        : 'Reading added to the observation table.'
+    )
 
 //    if (nextObservationCount === MIN_OBSERVATION_READINGS) {
 //   showStepAlert(EXPERIMENT_ALERTS.sufficientData)
@@ -416,31 +421,27 @@ const handleGenerateReport = () => {
     return
   }
 
-  // Start audio immediately
-  playStepById?.(37)
-
-  // Show alert
-  showStepAlert({
-    ...EXPERIMENT_ALERTS.reportGenerated,
-
-    onConfirm: () => {
-      setReportGenerated(true)
-
-      generateTheveninReport({
-        observations,
-        r1,
-        r2,
-        r3,
-        rl,
-        vth: calculatedValues?.vth ?? 0,
-        rth: calculatedValues?.rth ?? 0,
-        observedIL: calculatedValues?.observedIL ?? 0,
-        userCalculatedIL,
-        verificationResult,
-        sessionStart,
-      })
-    },
+  const reportOpened = generateTheveninReport({
+    observations,
+    r1,
+    r2,
+    r3,
+    rl,
+    vth: calculatedValues?.vth ?? 0,
+    rth: calculatedValues?.rth ?? 0,
+    observedIL: calculatedValues?.observedIL ?? 0,
+    sessionStart,
   })
+
+  if (!reportOpened) {
+    setStatus('The report window was blocked. Allow popups and try again.')
+    return
+  }
+
+  setReportGenerated(true)
+  setStatus('Report generated and opened in a new tab.')
+  playStepById?.(37)
+  showStepAlert(EXPERIMENT_ALERTS.reportGenerated)
 }
 
   const scaledWidth = Math.ceil(BASE_WIDTH * scale)
@@ -542,21 +543,22 @@ else if (experimentCase === 3) {
   }
 
 if (powerOn) {
-
-    if (voltageLocked) {
-        return
-    }
-
     setPowerOn(false)
-    setVoltage(0)
     setStatus('Power supply switched off.')
     return
 }
 
   setPowerOn(true)
-  setStatus('Power supply switched on. Adjust voltage and add the reading.')
+  setStatus(
+    experimentCase === 3
+      ? `Power supply switched on at the previous setting of ${voltage} V. Add the reading.`
+      : 'Power supply switched on. Adjust voltage and add the reading.'
+  )
   clearAlerts()
   showStepAlert(EXPERIMENT_ALERTS.powerOn)
+  if (experimentCase === 3) {
+    playStepById(30)
+  }
 }
 
 
