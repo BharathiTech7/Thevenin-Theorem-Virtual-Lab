@@ -7,6 +7,7 @@ import { EXPERIMENT_ALERTS } from '../alerts/experimentStepAlerts.js'
 import {
   addAllEndpoints,
   deleteConnectionsForTerminal,
+  lockJsPlumbCircuit,
   resolveJsPlumb,
  validateTheveninConnections,
  autoConnectTheveninCircuit,
@@ -18,6 +19,18 @@ import {
 const getJsPlumbZoom = (scale) => (
   Number.isFinite(scale) && scale > 0 ? scale : 1
 )
+
+const isRetainedPowerConnection = (connection) => {
+  const source = connection.sourceId || connection.source?.id
+  const target = connection.targetId || connection.target?.id
+
+  return (
+    (source === '7-endpoint' && target === '9-endpoint') ||
+    (source === '9-endpoint' && target === '7-endpoint') ||
+    (source === '8-endpoint' && target === '10-endpoint') ||
+    (source === '10-endpoint' && target === '8-endpoint')
+  )
+}
 
 const ConnectionLab = ({
   checkRequest,
@@ -342,6 +355,19 @@ if (experimentCaseRef.current === 3) {
     }, 0)
   }, [scale])
 
+  useEffect(() => {
+    if (experimentCase !== 3 || !instanceRef.current) {
+      return
+    }
+
+    instanceRef.current
+      .getAllConnections()
+      .filter(isRetainedPowerConnection)
+      .forEach((connection) => {
+        connection.setDetachable?.(false)
+      })
+  }, [experimentCase])
+
   
 
   useEffect(() => {
@@ -354,7 +380,10 @@ if (experimentCaseRef.current === 3) {
   experimentCase
 )
 
-
+    if (experimentCase === 3 && result.isCorrect) {
+      lockJsPlumbCircuit(instanceRef.current, containerRef.current)
+      setIsLocked(true)
+    }
 
     onCheckConnectionsRef.current?.(result)
   }, [checkRequest])
@@ -376,6 +405,13 @@ if (experimentCaseRef.current === 3) {
     const terminalId = label.dataset.terminalId
 
     if (!terminalId || !instanceRef.current) {
+      return
+    }
+
+    if (
+      experimentCase === 3 &&
+      ['7-endpoint', '8-endpoint', '9-endpoint', '10-endpoint'].includes(terminalId)
+    ) {
       return
     }
 
@@ -529,7 +565,6 @@ if (experimentCase === 3) {
   setVoltage={setVoltage}
   voltage={voltage}
   voltageLocked={voltageLocked}
-   powerDisabled={experimentCase === 3}
 />
 </div>
 

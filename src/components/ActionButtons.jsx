@@ -259,9 +259,10 @@ const ActionButtons = ({
       <li {...getInstructionProps('case3')}>
         <strong>Case 3 (Measure <ElectricalText text="IL" />):</strong>
         <ul>
-         <li>Connect Power Supply (7-9 and 8-10).</li>
+<li>Keep the existing Power Supply connections (7-9 and 8-10) unchanged.</li>
 <li>Connect Ammeter (3-11, 4-12 and 13-14).</li>
 <li>Click CHECK.</li>
+<li>Turn ON the Power Supply at the same voltage setting used in Case 2.</li>
 <li>Click ADD to record <ElectricalText text="IL" />.</li>
         </ul>
       </li>

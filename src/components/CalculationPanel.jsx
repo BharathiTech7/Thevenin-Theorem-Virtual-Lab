@@ -154,7 +154,7 @@ const CalculationPanel = ({
           <div className="calc-input-group">
             <div className="calc-prefix">R<sub>L</sub></div>
             <div className="calc-display">
-              {calculationDone ? Number(rl).toFixed(3) : ''}
+              {calculationDone ? Number(rl).toFixed(0) : ''}
             </div>
             <div className="calc-suffix">Ω</div>
           </div>

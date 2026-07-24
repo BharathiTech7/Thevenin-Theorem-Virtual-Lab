@@ -140,10 +140,10 @@ connectionsVerifiedCase2: {
 connectionsVerifiedCase3: {
   audio: ALERT_AUDIO.case3Verified,
   description:
-    'Connections verified successfully. The reading is displayed on the ammeter. Click ADD to record the reading.',
+    'Connections verified successfully. Switch ON the power supply at the same voltage setting used in Case 2, then click ADD to record the ammeter reading.',
   icon: '✅',
   stepNumber: 2,
-  target: '#add-reading-button',
+  target: '#power-toggle-button',
   title: 'Connections Verified',
   type: 'success',
 },
@@ -234,7 +234,7 @@ readingAddedCase1: {
 readingAddedCase2: {
   audio: ALERT_AUDIO.removeVoltmeter,
   description:
-    'Readings added to the observation table.Remove the voltmeter connections 1 to 11 and 2 to 13.',
+    'Reading added to the observation table. The power supply switched OFF automatically. Keep connections 7-9 and 8-10 unchanged, and remove only the voltmeter connections 1-11 and 2-13.',
   icon: '✅',
   stepNumber: 6,
   target: '#observation-table-panel',
