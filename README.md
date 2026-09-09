@@ -180,7 +180,7 @@ This allows students to maintain a record of the completed virtual experiment.
 ## 📂 Project Structure
 
 The project follows a component-based React architecture.
-
+``` text
 
 src/
 ├── components/
